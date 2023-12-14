@@ -26,8 +26,6 @@ const Login = () => {
         URLData
       );
 
-      console.log(data);
-
       if (data.success) {
         console.log(data)
       }

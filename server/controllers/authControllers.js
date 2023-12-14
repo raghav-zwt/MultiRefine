@@ -8,6 +8,7 @@ const getAccessToken = async (req, res) => {
         const { code } = req.body;
         console.log(code);
         const accessToken = await getWebFlowAccessToken(code);
+        
         return accessToken;
     } catch (error) {
         console.error('Error getting access token:', error.message);
