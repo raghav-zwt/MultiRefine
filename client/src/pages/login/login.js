@@ -8,6 +8,7 @@ const Login = () => {
   const webflowAuthUrl = `https://webflow.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
 
   window.location.href = webflowAuthUrl;
+  
   return (
     <>
       <Layout>
