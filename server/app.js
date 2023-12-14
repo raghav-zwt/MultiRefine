@@ -3,7 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
 import bodyParser from "body-parser";
-import authRouter from "./routes/authRoutes.js";
+import webflowAuthRoutes from "./routes/webflowAuthRoutes.js";
 import { dbConnect } from "./db/dbConnect.js";
 import { dotenvFile } from "./helper/dotenv.js"
 const PORT = process.env.PORT || 8080;
@@ -22,7 +22,7 @@ app.use(morgan("dev"));
 
 dbConnect;
 
-app.use("/auth", authRouter);
+app.use("/webflowAuth", webflowAuthRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${process.env.PORT || 8080}`); 
