@@ -1,7 +1,9 @@
 import express from "express";
-import { getAccessToken } from "../controllers/authControllers.js";
+import { auth, authCallBack } from "../controllers/authControllers.js";
 const router = express.Router();
 
-router.get("/getAccessToken", getAccessToken);
+router.get("/login", auth);
+
+router.get("/login/auth", authCallBack);
 
 export default router;
