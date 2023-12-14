@@ -8,9 +8,8 @@ const Login = ({ location }) => {
     const code = params.get('code');
 
     if (code) {
-      // Exchange the authorization code for an access token
       axios
-        .post('https://webflow.com/oauth/token', {
+        .post('https://api.webflow.com/oauth/access_token', {
           code,
           client_id: "b58d8c02048a8a3f58c8e1a04144490b5b6b202db956a8d5ab0da2a2ce40b9f4",
           client_secret: "cd193df6bf7332ce5c0793ac09d048613ac9c85284779dfb43710bbde9f23d91",
@@ -32,7 +31,7 @@ const Login = ({ location }) => {
   return (
     <>
       <Layout>
-        <h1>Login - {urlCode}</h1>
+        <h1>Login</h1>
       </Layout>
     </>
   )
