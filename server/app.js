@@ -23,7 +23,7 @@ app.use(morgan("dev"));
 
 dbConnect;
 
-app.use("/auth", authRouter);
+app.use("/api/v1", authRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${process.env.PORT || 8080}`); 
