@@ -3,31 +3,41 @@ import axios from "axios";
 
 dotenvFile;
 
-const auth = async (req, res) => {
+const getAccessToken = async (req, res) => {
     try {
-        const webflowAuthUrl = `https://webflow.com/oauth/authorize?client_id=".${process.env.WEBFLOW_CLIENT_KEY}."&response_type=code&state=".${process.env.WEBFLOW_SECRET_KEY}`;
-        res.redirect(webflowAuthUrl);
+        const { code } = req.body;
+        const accessToken = await getWebFlowAccessToken(code);
+        res.json({ message: 'Success', accessToken });
     } catch (error) {
         console.error('Error getting access token:', error.message);
         throw error;
     }
 };
 
-const authCallBack = async (wcode) => {
-    const code = req.query.code;
-    const tokenUrl = 'https://api.webflow.com/oauth/access_token';
+const getWebFlowAccessToken = async (wcode) => {
+    const clientId = process.env.WEBFLOW_CLIENT_KEY;
+    const clientSecret = process.env.WEBFLOW_SECRET_KEY;
+    const redirectUri = process.env.WEBFLOW_REDIRECT_URI;
+    const authorizationCode = wcode;
 
-    const response = await axios.post(tokenUrl, {
-        code,
-        client_id: process.env.WEBFLOW_CLIENT_KEY,
-        client_secret: process.env.WEBFLOW_SECRET_KEY,
-        redirect_uri: process.env.WEBFLOW_REDIRECT_URI,
+    const data = {
         grant_type: 'authorization_code',
-    });
+        client_id: clientId,
+        client_secret: clientSecret,
+        redirect_uri: redirectUri,
+        code: authorizationCode,
+    }
+
+    console.log(data)
+
+    const response = await axios.post('https://api.webflow.com/oauth/access_token', data);
 
     const accessToken = response.data.access_token;
-
-    res.send('Authorization successful!', accessToken);
+    console.log('Access Token:', accessToken);
 };
 
-export { auth, authCallBack }
+const authorizedByUser = (bearerTokenAccess) => {
+    // Your existing implementation
+};
+
+export { getAccessToken }
