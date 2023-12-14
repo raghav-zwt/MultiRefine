@@ -15,8 +15,6 @@ const Login = () => {
     // eslint-disable-next-line
   }, []);
 
-  console.log(process.env.REACT_APP_API_URL);
-
   const webflowAccessToken = async (code) => {
     const URLData = new FormData();
     const url = code; 
