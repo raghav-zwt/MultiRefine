@@ -10,20 +10,25 @@ const Login = () => {
     const code = urlSearchParams.get('code');
     if (code) {
       setUrlCode(code)
-      webflowAccessToken();
+      webflowAccessToken(code);
     }
     // eslint-disable-next-line
   }, []);
 
-  const webflowAccessToken = async () => {
-    const formData = new FormData();
-    formData.append("code", urlCode);
+  console.log(process.env.REACT_APP_API_URL);
+
+  const webflowAccessToken = async (code) => {
+    const URLData = new FormData();
+    const url = code; 
+    URLData.append("code", url);
 
     try {
       const { data } = await axios.post(
-        `${process.env.REACT_APP_JGAPI_V1}/blog/add`,
-        formData
+        `${process.env.REACT_APP_API_URL}/auth/getAccessToken`,
+        URLData
       );
+
+      console.log(data);
 
       if (data.success) {
         console.log(data)
