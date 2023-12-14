@@ -3,40 +3,22 @@ import Layout from "../../layouts/layout.js"
 import axios from "axios";
 
 const Login = () => {
-  const [urlCode, setUrlCode] = useState("")
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const code = urlSearchParams.get('code');
-    if (code) {
-      setUrlCode(code)
-      webflowAccessToken();
-    }
-    // eslint-disable-next-line
+    axios.get(process.env.REACT_APP_API_URL) 
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
   }, []);
-
-  const webflowAccessToken = async () => {
-    const formData = new FormData();
-    formData.append("code", urlCode);
-
-    try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL}`,
-        formData
-      );
-
-      if (data.success) {
-        console.log(data)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   return (
     <>
       <Layout>
-        <h1>Login - {urlCode}</h1>
+        <h1>Login - {data}</h1>
       </Layout>
     </>
   )
