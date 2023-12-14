@@ -23,7 +23,7 @@ const Login = () => {
 
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/auth`,
+        `${process.env.REACT_APP_API_URL}/auth/getAccessToken`,
         URLData
       );
 
