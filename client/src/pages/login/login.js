@@ -21,7 +21,7 @@ const Login = () => {
 
     try {
       const { data } = await axios.post(
-        `${process.env.REACT_APP_JGAPI_V1}/blog/add`,
+        `${process.env.REACT_APP_API_URL}/auth/login`,
         formData
       );
 
