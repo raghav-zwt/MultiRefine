@@ -28,6 +28,8 @@ const getWebFlowAccessToken = async (wcode) => {
         code: authorizationCode,
     }
 
+    console.log(data)
+
     const response = await axios.post('https://api.webflow.com/oauth/access_token', data);
 
     const accessToken = response.data.access_token;
