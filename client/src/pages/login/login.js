@@ -13,7 +13,7 @@ const Login = ({ location }) => {
           code,
           client_id: "b58d8c02048a8a3f58c8e1a04144490b5b6b202db956a8d5ab0da2a2ce40b9f4",
           client_secret: "cd193df6bf7332ce5c0793ac09d048613ac9c85284779dfb43710bbde9f23d91",
-          redirect_uri: "https://multirefine-api.onrender.com/login/auth",
+          redirect_uri: "https://multirefine-api.onrender.com/login",
           grant_type: 'authorization_code',
         })
         .then((response) => {
