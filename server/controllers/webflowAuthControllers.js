@@ -40,6 +40,7 @@ const webflowAuthorized = async (req, res) => {
 };
 
 const webflowAuthorizedBy = async (req, res) => {
+    console.log(req.body);
     try {
         const token = req.body.tokenApi;
 
