@@ -4,8 +4,6 @@ import axios from "axios";
 dotenvFile;
 
 const clientID = process.env.WEBFLOW_CLIENT_KEY;
-const clientSecret = process.env.WEBFLOW_SECRET_KEY;
-const redirectURI = process.env.WEBFLOW_REDIRECT_URI;
 
 const webflowAuth = async (req, res) => {
     const authUrl = `https://webflow.com/oauth/authorize?response_type=code&client_id=${clientID}&scope=assets%3Aread+assets%3Awrite+authorized_user%3Aread+cms%3Aread+cms%3Awrite+custom_code%3Aread+custom_code%3Awrite+forms%3Aread+forms%3Awrite+pages%3Aread+pages%3Awrite+sites%3Aread+sites%3Awrite+users%3Aread+users%3Awrite+ecommerce%3Aread+ecommerce%3Awrite+site_activity%3Aread`;
@@ -18,7 +16,10 @@ const webflowAuthorized = async (req, res) => {
         const encodedRedirectUri = redirect_uri;
 
         console.log(code);
-        if (!code) throw new Error("No authorization code provided");
+
+        if (!code) {
+            res.status(error.response.status || 500).json({ error: 'Code not found during authentication' });
+        };
 
         const tokenResponse = await axios.post('https://api.webflow.com/oauth/access_token', {
             code,
@@ -44,7 +45,9 @@ const webflowAuthorizedBy = async (req, res) => {
     try {
         const token = req.body.tokenApi;
 
-        console.log(token);
+        if (!token) {
+            res.status(error.response ? error.response.status : 500).json({ error: 'Token not found' });
+        }
 
         const apiUrl = 'https://api.webflow.com/v2/token/authorized_by';
 
@@ -56,6 +59,11 @@ const webflowAuthorizedBy = async (req, res) => {
         });
 
         const webflowAuthorizedUser = response.data;
+
+        if (!webflowAuthorizedUser) {
+            res.status(error.response ? error.response.status : 500).json({ error: 'Error in authorized' });
+        }
+
         res.json(webflowAuthorizedUser);
     } catch (error) {
         console.error('Error fetching Webflow user data:', error.message);
