@@ -26,7 +26,7 @@ const webflowAuthCallback = async (req, res) => {
 
     const accessToken = response.data.access_token;
 
-    res.send('Authorization successful! You can close this window.');
+    res.send('Authorization successful! You can close this window.', accessToken);
 };
 
 
