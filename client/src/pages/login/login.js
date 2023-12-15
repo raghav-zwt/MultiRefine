@@ -40,7 +40,7 @@ const Login = () => {
       const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
       const tokenApi = token;
       const response = await axios.post(apiUrl, { tokenApi });
-      setAuthorized(response);
+      setAuthorized(response.data);
     } catch (error) {
       console.error('Error making API request:', error.message);
     }
