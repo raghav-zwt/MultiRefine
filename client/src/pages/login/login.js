@@ -41,6 +41,8 @@ const Login = () => {
       setAuthorized(response.data);
     } catch (error) {
       console.error('Error making API request:', error.message);
+
+      
     }
   };
 
