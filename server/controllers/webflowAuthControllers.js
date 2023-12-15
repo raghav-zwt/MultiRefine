@@ -5,7 +5,7 @@ dotenvFile;
 
 const clientID = process.env.WEBFLOW_CLIENT_KEY;
 const clientSecret = process.env.WEBFLOW_SECRET_KEY;
-const redirectURI = 'https://jenil-gohel.vercel.app/';
+const redirectURI = process.env.WEBFLOW_REDIRECT_URI;
 
 const webflowAuth = async (req, res) => {
     const authUrl = `https://webflow.com/oauth/authorize?response_type=code&client_id=${clientID}`;
@@ -16,7 +16,7 @@ const webflowAuthorized = async (req, res) => {
     try {
         const code = req.body.code;
 
-        const tokenResponse = await axios.post('https://api.webflow.com/oauth/access_token', {
+        const tokenResponse = await axios.post('https://api.webflow.com/oauth/token', {
             code,
             client_id: clientID,
             client_secret: clientSecret,
@@ -24,15 +24,13 @@ const webflowAuthorized = async (req, res) => {
             grant_type: 'authorization_code',
         });
 
-        console.log(tokenResponse);
+        console.log('Token Response:', tokenResponse.data);
 
         const accessToken = tokenResponse.data.access_token;
-
-        console.log(accessToken)
-        res.redirect(`${process.env.WEBFLOW_REDIRECT_URI}/?code=${accessToken}`);
+        res.json({ access_token: accessToken });
     } catch (error) {
-        console.error('Error exchanging code for access code:', error.message);
-        res.status(500).send('Error during authentication');
+        console.error('Error exchanging code for access token:', error.message);
+        res.status(error.response.status || 500).json({ error: 'Error during authentication' });
     }
 };
 
