@@ -45,7 +45,6 @@ const Login = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       console.log('API Response:', response.data);
     } catch (error) {
       console.error('Error making API request:', error.message);
