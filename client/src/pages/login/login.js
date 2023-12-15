@@ -21,8 +21,8 @@ const Login = () => {
       const encodedRedirectUri = `${process.env.REACT_APP_API_URL}/login`;
 
       const response = await axios.post(apiUrl, {
-        client_id: "b58d8c02048a8a3f58c8e1a04144490b5b6b202db956a8d5ab0da2a2ce40b9f4",
-        client_secret: "cd193df6bf7332ce5c0793ac09d048613ac9c85284779dfb43710bbde9f23d91",
+        client_id: process.env.REACT_APP_CLIENT_ID,
+        client_secret: process.env.REACT_APP_CLIENT_SECRET,
         redirect_URI: encodedRedirectUri,
         code: authorizationCode,
         grant_type: 'authorization_code',
