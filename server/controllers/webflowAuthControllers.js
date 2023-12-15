@@ -8,7 +8,7 @@ const clientSecret = process.env.WEBFLOW_SECRET_KEY;
 const redirectURI = process.env.WEBFLOW_REDIRECT_URI;
 
 const webflowAuth = async (req, res) => {
-    const authUrl = `https://webflow.com/oauth/authorize?response_type=code&client_id=${clientID}`;
+    const authUrl = `https://webflow.com/oauth/authorize?response_type=code&client_id=${clientID}&scope=assets%3Aread+assets%3Awrite+authorized_user%3Aread+cms%3Aread+cms%3Awrite+custom_code%3Aread+custom_code%3Awrite+forms%3Aread+forms%3Awrite+pages%3Aread+pages%3Awrite+sites%3Aread+sites%3Awrite+users%3Aread+users%3Awrite+ecommerce%3Aread+ecommerce%3Awrite+site_activity%3Aread`;
     res.redirect(authUrl);
 };
 
