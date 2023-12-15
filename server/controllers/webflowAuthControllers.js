@@ -3,37 +3,35 @@ import axios from "axios";
 
 dotenvFile;
 
+const clientID = process.env.WEBFLOW_CLIENT_KEY;
+const clientSecret = process.env.WEBFLOW_SECRET_KEY;
+const redirectURI = process.env.WEBFLOW_REDIRECT_URI;
+
 const webflowAuth = async (req, res) => {
+    const authURL = `https://api.webflow.com/oauth/authorize?response_type=code&client_id=${clientID}&redirect_uri=${redirectURI}`;
+    res.redirect(authURL);
+};
+
+const webflowAuthCallback = async (req, res) => {
+    const code = req.query.code;
+    const tokenURL = 'https://api.webflow.com/oauth/access_token';
+
     try {
-        const { code } = req.query;
-        const clientId = 'YOUR_WEBFLOW_CLIENT_ID';
-        const clientSecret = 'YOUR_WEBFLOW_CLIENT_SECRET';
-        const redirectUri = 'http://localhost:3001/webflow-auth';
-
-        const tokenResponse = await axios.post('https://api.webflow.com/oauth/token', {
-            grant_type: 'authorization_code',
-            client_id: clientId,
-            client_secret: clientSecret,
+        const response = await axios.post(tokenURL, {
             code,
-            redirect_uri: redirectUri,
+            client_id: clientID,
+            client_secret: clientSecret,
+            redirect_uri: redirectURI,
+            grant_type: 'authorization_code',
         });
 
-        const accessToken = tokenResponse.data.access_token;
+        const accessToken = response.data.access_token;
 
-        const userResponse = await axios.get('https://api.webflow.com/info', {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-
-        const user = userResponse.data;
-
-        res.json(user);
+        res.send('Authorization successful!', accessToken);
     } catch (error) {
-        console.error('Error:', error.response ? error.response.data : error.message);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).send('Error during authorization.');
     }
 };
 
 
-export { webflowAuth }
+export { webflowAuth, webflowAuthCallback }

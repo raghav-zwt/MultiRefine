@@ -11,18 +11,22 @@ const app = express();
 
 dotenvFile;
 
+var corsOptions = {
+  origin: ['https://multi-refine.vercel.app', 'http://localhost:8080']
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,
 }));
 app.use(express.json());
-app.use(cors());
 app.use(helmet());
 app.use(morgan("dev"));
 
 dbConnect;
 
-app.use("/webflowAuth", webflowAuthRoutes);
+app.use("/webflow-auth", webflowAuthRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${process.env.PORT || 8080}`); 
