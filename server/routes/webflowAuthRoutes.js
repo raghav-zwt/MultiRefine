@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.get("/authorize", webflowAuth);
 
-router.get("/webflow-auth-callback", webflowAuthCallback);
+router.get("/callback", webflowAuthCallback);
 
 export default router;

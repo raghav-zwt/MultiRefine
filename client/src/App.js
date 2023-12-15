@@ -8,7 +8,7 @@ function App() {
   return (
     <Routes>
       <Route path={""} element={<Home />}></Route>
-      <Route path={"/authorize"} element={<Login />}></Route>
+      <Route path={"/callback"} element={<Login />}></Route>
       <Route path={"*"} element={<ErrorPage />}></Route>
     </Routes>
   );
