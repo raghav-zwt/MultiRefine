@@ -13,11 +13,9 @@ const webflowAuth = async (req, res) => {
 };
 
 const webflowAuthorized = async (req, res) => {
-    const code = req.body.code;
-
-    console.log(code);
-
     try {
+        const code = req.body.code;
+
         const tokenResponse = await axios.post('https://api.webflow.com/oauth/access_token', {
             code,
             client_id: clientID,

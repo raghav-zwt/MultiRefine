@@ -6,7 +6,6 @@ const Login = () => {
 
   const [token, setToken] = useState(null);
 
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const authorizationCode = params.get('code');
