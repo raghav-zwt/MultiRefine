@@ -29,7 +29,7 @@ const webflowAuthorized = async (req, res) => {
 
         console.log(sfsd);
 
-        const tokenResponse = await axios.post('https://api.webflow.com/oauth/token',
+        const tokenResponse = await axios.post('https://api.webflow.com/oauth/access_token',
             `code=${code}&client_id=${clientID}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&grant_type=authorization_code`, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
