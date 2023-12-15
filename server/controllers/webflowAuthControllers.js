@@ -39,4 +39,28 @@ const webflowAuthorized = async (req, res) => {
     }
 };
 
+app.get('/webflowAuthorizedUser', async (req, res) => {
+    try {
+        const token = req.body.token;
+
+        console.log(token);
+
+        const apiUrl = 'https://api.webflow.com/v2/token/authorized_by';
+
+        const response = await axios.post(apiUrl, null, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        console.log(response)
+
+        const webflowAuthorizedUser = response.data;
+        res.json(webflowAuthorizedUser);
+    } catch (error) {
+        console.error('Error fetching Webflow user data:', error.message);
+        res.status(error.response ? error.response.status : 500).json({ error: 'Error fetching user data' });
+    }
+});
+
 export { webflowAuth, webflowAuthorized }

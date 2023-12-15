@@ -38,7 +38,7 @@ const Login = () => {
 
   const fetchData = async () => {
     try {
-      const apiUrl = `${process.env.REACT_APP_API_URL}/data`;
+      const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
 
       const response = await axios.get(apiUrl, {
         headers: {
