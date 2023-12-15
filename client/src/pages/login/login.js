@@ -22,7 +22,6 @@ const Login = () => {
       const response = await axios.post(apiUrl, {
         code: authorizationCode,
       });
-
       const accessToken = response.data.access_token;
       console.log(accessToken);
       setToken(accessToken);
