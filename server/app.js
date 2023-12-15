@@ -22,7 +22,7 @@ app.use(morgan("dev"));
 
 dbConnect;
 
-app.use("/webflow-auth", webflowAuthRoutes);
+app.use("", webflowAuthRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${process.env.PORT || 8080}`); 

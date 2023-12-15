@@ -1,9 +1,10 @@
 import express from "express";
-import { webflowAuth, webflowAuthCallback } from "../controllers/webflowAuthControllers.js";
+import { webflowAuth, webflowAuthorized } from "../controllers/webflowAuthControllers.js";
 const router = express.Router();
 
-router.get("/authorize", webflowAuth);
+router.get("/auth", webflowAuth);
 
-router.get("/callback", webflowAuthCallback);
+router.get("/callback", webflowAuthorized);
+
 
 export default router;
