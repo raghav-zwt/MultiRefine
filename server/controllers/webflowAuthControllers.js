@@ -39,7 +39,7 @@ const webflowAuthorized = async (req, res) => {
     }
 };
 
-app.get('/webflowAuthorizedUser', async (req, res) => {
+const webflowAuthorizedBy = async (req, res) => {
     try {
         const token = req.body.token;
 
@@ -63,4 +63,4 @@ app.get('/webflowAuthorizedUser', async (req, res) => {
     }
 });
 
-export { webflowAuth, webflowAuthorized }
+export { webflowAuth, webflowAuthorized, webflowAuthorizedBy }
