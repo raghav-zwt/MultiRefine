@@ -29,7 +29,10 @@ const Login = () => {
       });
 
       const accessToken = response.data.access_token;
-      console.log(accessToken);
+
+      console.log(response);
+
+      console.log("===================>", accessToken);
       setToken(accessToken);
     } catch (error) {
       console.error('Error exchanging code for access token:', error.message);
@@ -41,6 +44,8 @@ const Login = () => {
       const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
   
       const tokenApi = token;
+
+      console.log("===================>", tokenApi);
   
       const response = await axios.post(apiUrl, { tokenApi });
   
