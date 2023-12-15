@@ -13,7 +13,11 @@ const webflowAuth = async (req, res) => {
 };
 
 const webflowAuthorized = async (req, res) => {
+    console.log(req, res);
+
     const code = req.query.code;
+
+    console.log(code);
 
     try {
         const tokenResponse = await axios.post('https://api.webflow.com/oauth/access_token', {
@@ -24,7 +28,11 @@ const webflowAuthorized = async (req, res) => {
             grant_type: 'authorization_code',
         });
 
+        console.log(tokenResponse);
+
         const accessToken = tokenResponse.data.access_token;
+
+        console.log(accessToken)
         res.redirect(`${process.env.WEBFLOW_REDIRECT_URI}/?code=${accessToken}`);
     } catch (error) {
         console.error('Error exchanging code for access code:', error.message);
