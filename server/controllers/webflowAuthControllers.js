@@ -8,7 +8,7 @@ const clientSecret = process.env.WEBFLOW_SECRET_KEY;
 const redirectURI = process.env.WEBFLOW_REDIRECT_URI;
 
 const webflowAuth = async (req, res) => {
-    const redirectUrl = `https://webflow.com/oauth/authorize?response_type=code&client_id=${clientID}&redirect_uri=${redirectURI}/callback`;
+    const redirectUrl = `https://webflow.com/oauth/authorize?response_type=code&client_id=${clientID}&redirect_uri=${redirectURI}`;
     res.redirect(redirectUrl);
 };
 
