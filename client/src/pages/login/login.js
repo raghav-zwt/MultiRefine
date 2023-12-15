@@ -50,14 +50,7 @@ const Login = () => {
         <div>
           {token ? (
             <div>
-              {authorized.map((e) => {
-                return <>
-                  id - {e.id}
-                  email - {e.email}
-                  firstName - {e.firstName}
-                  lastName - {e.lastName}
-                </>;
-              })}
+              {authorized.email}
               <h1>Authenticated!</h1>
               <button onClick={fetchData}>Fetch Data</button>
             </div>
