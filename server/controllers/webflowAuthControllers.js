@@ -15,7 +15,7 @@ const webflowAuth = async (req, res) => {
 const webflowAuthorized = async (req, res) => {
     try {
         const { code, client_id, client_secret, redirect_uri, grant_type } = req.body;
-        const encodedRedirectUri = encodeURIComponent(redirect_uri);
+        const encodedRedirectUri = redirect_uri;
 
         console.log(code);
         if (!code) throw new Error("No authorization code provided");
@@ -24,7 +24,7 @@ const webflowAuthorized = async (req, res) => {
             code,
             client_id,
             client_secret,
-            redirect_uri: encodedRedirectUri,
+            redirect_URI: encodedRedirectUri,
             grant_type,
         });
 
