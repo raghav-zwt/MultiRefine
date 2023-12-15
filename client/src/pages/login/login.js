@@ -7,8 +7,6 @@ const Login = () => {
   const [token, setToken] = useState(null);
   const [authorized, setAuthorized] = useState([]);
 
-  console.log(authorized);
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const authorizationCode = params.get('code');
@@ -52,6 +50,14 @@ const Login = () => {
         <div>
           {token ? (
             <div>
+              {authorized.map((e) => {
+                return <>
+                  id - {e.id}
+                  email - {e.email}
+                  firstName - {e.firstName}
+                  lastName - {e.lastName}
+                </>;
+              })}
               <h1>Authenticated!</h1>
               <button onClick={fetchData}>Fetch Data</button>
             </div>
