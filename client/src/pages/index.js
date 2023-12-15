@@ -1,24 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Layout from "../layouts/layout.js"
 
 const index = () => {
 
-  // useEffect(() => {
-  //   const getWebflowData = async () => {
-  //     const params = new URLSearchParams(window.location.search);
-  //     const code = params.get('code');
+  useEffect(() => {
+    const redirectToAuthorization = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/authorize`);
+        const { authorizationUrl } = await response.json();
 
-  //     if (code) {
-  //       const response = await axios.get(`http://localhost:3001/webflow-auth?code=${code}`);
-  //       const accessToken = response.data.accessToken;
+        window.location.href = authorizationUrl;
+      } catch (error) {
+        console.error('Error fetching authorization URL:', error);
+      }
+    };
 
-  //       // Now you can use the accessToken to make authorized requests to the Webflow API
-  //       console.log('Access Token:', accessToken);
-  //     }
-  //   };
-
-  //   getWebflowData();
-  // }, []);
+    redirectToAuthorization();
+  }, []);
 
   return (
     <>

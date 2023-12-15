@@ -8,29 +8,25 @@ const clientSecret = process.env.WEBFLOW_SECRET_KEY;
 const redirectURI = process.env.WEBFLOW_REDIRECT_URI;
 
 const webflowAuth = async (req, res) => {
-    const authURL = `https://api.webflow.com/oauth/authorize?response_type=code&client_id=${clientID}&redirect_uri=${redirectURI}`;
-    res.redirect(authURL);
+    const redirectUrl = `https://webflow.com/oauth/authorize?response_type=code&client_id=YOUR_CLIENT_ID&redirect_uri=http://localhost:${PORT}/callback`;
+    res.redirect(redirectUrl);
 };
 
 const webflowAuthCallback = async (req, res) => {
     const code = req.query.code;
-    const tokenURL = 'https://api.webflow.com/oauth/access_token';
 
-    try {
-        const response = await axios.post(tokenURL, {
-            code,
-            client_id: clientID,
-            client_secret: clientSecret,
-            redirect_uri: redirectURI,
-            grant_type: 'authorization_code',
-        });
+    // Exchange the code for an access token
+    const response = await axios.post('https://api.webflow.com/oauth/token', {
+        grant_type: 'authorization_code',
+        client_id: clientID,
+        client_secret: clientSecret,
+        code: code,
+        redirect_uri: redirectURI,
+    });
 
-        const accessToken = response.data.access_token;
+    const accessToken = response.data.access_token;
 
-        res.send('Authorization successful!', accessToken);
-    } catch (error) {
-        res.status(500).send('Error during authorization.');
-    }
+    res.send('Authorization successful! You can close this window.');
 };
 
 
