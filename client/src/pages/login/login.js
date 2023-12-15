@@ -20,10 +20,10 @@ const Login = () => {
       const apiUrl = `${process.env.REACT_APP_API_URL}/callback`;
 
       const response = await axios.post(apiUrl, {
-        code: authorizationCode,
         client_id: "b58d8c02048a8a3f58c8e1a04144490b5b6b202db956a8d5ab0da2a2ce40b9f4",
         client_secret: "cd193df6bf7332ce5c0793ac09d048613ac9c85284779dfb43710bbde9f23d91",
         redirect_uri: `${process.env.REACT_APP_API_URL}/login`,
+        code: authorizationCode,
         grant_type: 'authorization_code',
       });
       const accessToken = response.data.access_token;
