@@ -50,9 +50,10 @@ const Login = () => {
         <div>
           {token ? (
             <div>
-              {authorized.firstName} {authorized.lastName}
-              {authorized.id}
-              {authorized.email}
+              <br> {authorized.firstName} </br>
+              <br> {authorized.lastName} </br>
+              <br> {authorized.id} </br>
+              <br> {authorized.email} </br>
               <h1>Authenticated!</h1>
               <button onClick={fetchData}>Authorized User</button>
             </div>
