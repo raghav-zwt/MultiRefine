@@ -6,7 +6,7 @@ const HomePage = () => {
   useEffect(() => {
     const redirectToAuthorization = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/authorize`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/webflow-auth/authorize`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch authorization URL. Status: ${response.status}`);
