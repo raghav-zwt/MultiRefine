@@ -49,14 +49,24 @@ const Login = () => {
       <Layout>
         <div>
           {token ? (
-            <div>
-              <br> {authorized.firstName} </br>
-              <br> {authorized.lastName} </br>
-              <br> {authorized.id} </br>
-              <br> {authorized.email} </br>
-              <h1>Authenticated!</h1>
-              <button onClick={fetchData}>Authorized User</button>
-            </div>
+            <>
+              <div>
+                {authorized.firstName}
+              </div>
+              <div>
+                {authorized.lastName}
+              </div>
+              <div>
+                {authorized.id}
+              </div>
+              <div>
+                {authorized.email}
+              </div>
+              <div>
+                <h1>Authenticated!</h1>
+                <button onClick={fetchData}>Authorized User</button>
+              </div>
+            </>
           ) : (
             <a href={`${process.env.REACT_APP_API_URL}/auth`}>Login with Webflow</a>
           )}
