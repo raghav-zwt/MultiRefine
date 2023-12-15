@@ -40,11 +40,11 @@ const Login = () => {
     try {
       const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
 
-      const response = await axios.get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      // Assuming 'token' is defined or retrieved from your state
+      const tokenApi = token;
+
+      const response = await axios.post(apiUrl, { tokenApi });
+
       console.log('API Response:', response.data);
     } catch (error) {
       console.error('Error making API request:', error.message);
