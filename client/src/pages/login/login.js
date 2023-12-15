@@ -49,7 +49,7 @@ const Login = () => {
   
       const response = await axios.post(apiUrl, { tokenApi });
   
-      console.log('API Response:', response.data);
+      console.log('API Response:', response);
     } catch (error) {
       console.error('Error making API request:', error.message);
     }
