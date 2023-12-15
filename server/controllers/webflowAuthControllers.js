@@ -6,7 +6,17 @@ dotenvFile;
 const clientID = process.env.WEBFLOW_CLIENT_KEY;
 
 const webflowAuth = async (req, res) => {
+
+    if (!clientID) {
+        return res.status(401).json({ message: 'No auth URL provided' });
+    }
+
     const authUrl = `https://webflow.com/oauth/authorize?response_type=code&client_id=${clientID}&scope=assets%3Aread+assets%3Awrite+authorized_user%3Aread+cms%3Aread+cms%3Awrite+custom_code%3Aread+custom_code%3Awrite+forms%3Aread+forms%3Awrite+pages%3Aread+pages%3Awrite+sites%3Aread+sites%3Awrite+users%3Aread+users%3Awrite+ecommerce%3Aread+ecommerce%3Awrite+site_activity%3Aread`;
+    
+    if(!authUrl) {
+        return res.status(401).json({message: 'No auth url provided'});
+    }
+    
     res.redirect(authUrl);
 };
 
@@ -18,7 +28,7 @@ const webflowAuthorized = async (req, res) => {
         console.log(code);
 
         if (!code) {
-            res.status(error.response.status || 500).json({ error: 'Code not found during authentication' });
+            res.status(error.response.status || 500).json({ message: 'Code not found during authentication' });
         };
 
         const tokenResponse = await axios.post('https://api.webflow.com/oauth/access_token', {
@@ -36,7 +46,7 @@ const webflowAuthorized = async (req, res) => {
     } catch (error) {
         console.error('Error exchanging code for access token:', error.message);
         console.log('Error Response:', error.response.data);
-        res.status(error.response.status || 500).json({ error: 'Error during authentication' });
+        res.status(error.response.status || 500).json({ message: 'Error during authentication' });
     }
 };
 
@@ -46,7 +56,7 @@ const webflowAuthorizedBy = async (req, res) => {
         const token = req.body.tokenApi;
 
         if (!token) {
-            res.status(error.response ? error.response.status : 500).json({ error: 'Token not found' });
+            res.status(error.response ? error.response.status : 500).json({ message: 'Token not found' });
         }
 
         const apiUrl = 'https://api.webflow.com/v2/token/authorized_by';
@@ -61,13 +71,13 @@ const webflowAuthorizedBy = async (req, res) => {
         const webflowAuthorizedUser = response.data;
 
         if (!webflowAuthorizedUser) {
-            res.status(error.response ? error.response.status : 500).json({ error: 'Error in authorized' });
+            res.status(error.response ? error.response.status : 500).json({ message: 'Error in authorized' });
         }
 
         res.json(webflowAuthorizedUser);
     } catch (error) {
         console.error('Error fetching Webflow user data:', error.message);
-        res.status(error.response ? error.response.status : 500).json({ error: 'Error fetching user data' });
+        res.status(error.response ? error.response.status : 500).json({ message: 'Error fetching user data' });
     }
 };
 
