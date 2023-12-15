@@ -61,6 +61,6 @@ const webflowAuthorizedBy = async (req, res) => {
         console.error('Error fetching Webflow user data:', error.message);
         res.status(error.response ? error.response.status : 500).json({ error: 'Error fetching user data' });
     }
-});
+};
 
 export { webflowAuth, webflowAuthorized, webflowAuthorizedBy }
