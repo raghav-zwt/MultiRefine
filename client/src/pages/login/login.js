@@ -5,6 +5,7 @@ import axios from "axios"
 const Login = () => {
 
   const [token, setToken] = useState(null);
+  const [userInfo, setUserInfo] = useState("");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -49,7 +50,7 @@ const Login = () => {
   
       const response = await axios.post(apiUrl, { tokenApi });
   
-      console.log('API Response:', response);
+      setUserInfo(response.data)
     } catch (error) {
       console.error('Error making API request:', error.message);
     }
@@ -61,6 +62,7 @@ const Login = () => {
         <div>
           {token ? (
             <div>
+              {userInfo}
               <h1>Authenticated!</h1>
               <button onClick={fetchData}>Fetch Data</button>
             </div>
