@@ -25,9 +25,9 @@ const webflowAuthorized = async (req, res) => {
         });
 
         const accessToken = tokenResponse.data.access_token;
-        res.redirect(`${process.env.WEBFLOW_REDIRECT_URI}/?token=${accessToken}`);
+        res.redirect(`${process.env.WEBFLOW_REDIRECT_URI}/?code=${accessToken}`);
     } catch (error) {
-        console.error('Error exchanging code for access token:', error.message);
+        console.error('Error exchanging code for access code:', error.message);
         res.status(500).send('Error during authentication');
     }
 };
