@@ -6,18 +6,36 @@ const Login = () => {
 
   const [token, setToken] = useState(null);
 
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const accessToken = params.get('code');
+    const authorizationCode = params.get('code');
 
-    if (accessToken) {
-      setToken(accessToken);
+    if (authorizationCode) {
+      exchangeCodeForToken(authorizationCode);
     }
   }, []);
 
-  const fetchData = async () => {
+  const exchangeCodeForToken = async (authorizationCode) => {
     try {
       const apiUrl = `${process.env.REACT_APP_API_URL}/callback`;
+
+      const response = await axios.post(apiUrl, {
+        code: authorizationCode,
+      });
+
+      const accessToken = response.data.access_token;
+      console.log(accessToken);
+      setToken(accessToken);
+    } catch (error) {
+      console.error('Error exchanging code for access token:', error.message);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const apiUrl = `${process.env.REACT_APP_API_URL}/data`;
+
       const response = await axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -40,7 +58,7 @@ const Login = () => {
               <button onClick={fetchData}>Fetch Data</button>
             </div>
           ) : (
-            <a href={`${process.env.REACT_APP_API_URL}/auth`} >Login with Webflow</a>
+            <a href={`${process.env.REACT_APP_API_URL}/auth`}>Login with Webflow</a>
           )}
         </div>
       </Layout>

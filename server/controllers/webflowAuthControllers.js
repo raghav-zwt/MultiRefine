@@ -13,11 +13,7 @@ const webflowAuth = async (req, res) => {
 };
 
 const webflowAuthorized = async (req, res) => {
-    console.log(req.url); // Log the full URL for inspection
-
-    console.log(decodeURIComponent(req.query.code));
-
-    const code = req.query.code;
+    const code = req.body.code;
 
     console.log(code);
 
