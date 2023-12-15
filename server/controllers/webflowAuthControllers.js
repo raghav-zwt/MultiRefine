@@ -14,26 +14,17 @@ const webflowAuth = async (req, res) => {
 
 const webflowAuthorized = async (req, res) => {
     try {
-        const {code, client_id, client_secret, redirect_uri, grant_type} = req.body;
+        const { code, client_id, client_secret, redirect_uri, grant_type } = req.body;
+        const encodedRedirectUri = encodeURIComponent(redirect_uri);
 
         console.log(code);
         if (!code) throw new Error("No authorization code provided");
 
-        const sfsd = {
+        const tokenResponse = await axios.post('https://api.webflow.com/oauth/access_token', {
             code,
             client_id,
             client_secret,
-            redirect_uri,
-            grant_type,
-        }
-
-        console.log(sfsd);
-
-        const tokenResponse = await axios.post('https://api.webflow.com/oauth/access_token',  {
-            code,
-            client_id,
-            client_secret,
-            redirect_uri,
+            redirect_uri: encodedRedirectUri,
             grant_type,
         });
 
