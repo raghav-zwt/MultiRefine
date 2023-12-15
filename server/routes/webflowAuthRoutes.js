@@ -6,6 +6,6 @@ router.get("/auth", webflowAuth);
 
 router.post("/callback", webflowAuthorized);
 
-router.get("/webflowAuthorizedUser", webflowAuthorizedBy);
+router.post("/webflowAuthorizedUser", webflowAuthorizedBy);
 
 export default router;
