@@ -54,7 +54,7 @@ const Login = () => {
               {authorized.id}
               {authorized.email}
               <h1>Authenticated!</h1>
-              <button onClick={fetchData}>Fetch Data</button>
+              <button onClick={fetchData}>Authorized User</button>
             </div>
           ) : (
             <a href={`${process.env.REACT_APP_API_URL}/auth`}>Login with Webflow</a>
