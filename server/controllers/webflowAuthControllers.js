@@ -5,7 +5,7 @@ dotenvFile;
 
 const clientID = process.env.WEBFLOW_CLIENT_KEY;
 const clientSecret = process.env.WEBFLOW_SECRET_KEY;
-const redirectURI = encodeURIComponent(process.env.WEBFLOW_REDIRECT_URI);
+const redirectURI = process.env.WEBFLOW_REDIRECT_URI;
 
 const webflowAuth = async (req, res) => {
     const authUrl = `https://webflow.com/oauth/authorize?response_type=code&client_id=${clientID}`;
