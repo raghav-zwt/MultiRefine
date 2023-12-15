@@ -8,7 +8,7 @@ const Login = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const accessToken = params.get('token');
+    const accessToken = params.get('code');
 
     if (accessToken) {
       setToken(accessToken);
