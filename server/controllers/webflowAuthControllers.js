@@ -51,10 +51,12 @@ const webflowAuthorizedBy = async (req, res) => {
         const response = await axios.get(apiUrl, {
             headers: {
                 Authorization: `Bearer ${token}`,
+                accept: 'application/json'
             },
         });
 
         console.log(response);
+        console.log(response.json());
 
         const webflowAuthorizedUser = response.data;
         res.json(webflowAuthorizedUser);
