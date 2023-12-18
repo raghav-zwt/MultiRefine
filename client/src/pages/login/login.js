@@ -6,6 +6,7 @@ const Login = () => {
 
   const [token, setToken] = useState(null);
   const [authorized, setAuthorized] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -18,6 +19,7 @@ const Login = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
         const tokenApi = token;
         const response = await axios.post(apiUrl, { tokenApi });
@@ -26,6 +28,8 @@ const Login = () => {
         }
       } catch (error) {
         console.error('Error making API request:', error.message);
+      } finally {
+        setLoading(false); // Set loading to false after the API request is completed
       }
     };
 
@@ -36,6 +40,7 @@ const Login = () => {
 
   const exchangeCodeForToken = async (authorizationCode) => {
     try {
+      setLoading(true);
       const apiUrl = `${process.env.REACT_APP_API_URL}/callback`;
       const encodedRedirectUri = `${process.env.REACT_APP_API_URL}/login`;
       const response = await axios.post(apiUrl, {
@@ -49,6 +54,8 @@ const Login = () => {
       setToken(accessToken);
     } catch (error) {
       console.error('Error exchanging code for access token:', error.message);
+    } finally {
+      setLoading(false); // Set loading to false after the API request is completed
     }
   };
 
@@ -67,19 +74,26 @@ const Login = () => {
             <input type="password" id="password" className="input-field" placeholder="Password" />
           </div>
           <div className="input-group row">
-
             <div className="row">
               <input type="checkbox" id="remember" hidden />
               <label htmlFor="remember" className="custom-checkbox"></label>
               <label htmlFor="remember">Remember me?</label>
             </div>
-
             <div className="row">
-              <a href="/" target="_blank">Forgot password?</a>
+              <a href="/" target="_blank">
+                Forgot password?
+              </a>
             </div>
           </div>
           <div className="input-group">
-            <button> Login <i className="fa-solid fa-arrow-right"></i></button>
+            {loading ? (
+              <div>Loading...</div>
+            ) : (
+              <button>
+                {' '}
+                Login <i className="fa-solid fa-arrow-right"></i>
+              </button>
+            )}
           </div>
         </div>
       </div>
