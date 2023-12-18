@@ -29,11 +29,11 @@ const Login = () => {
         const response = await axios.post(apiUrl, { tokenApi });
         if (response.data) {
           setAuthorized(response.data);
-          toast.success("Webflow user authorized");
+          toast.success("Webflow user authorized, login here.");
         }
       } catch (error) {
         console.error('Error making API request:', error.message);
-        toast.error("Webflow user not authorized");
+        toast.error("Webflow user not authorized, login again.");
       } finally {
         setLoading(false);
       }
@@ -60,7 +60,7 @@ const Login = () => {
       setToken(accessToken);
     } catch (error) {
       console.error('Error exchanging code for access token:', error.message);
-      toast.error("Access token not authorized");
+      toast.error("Access token not authorized, try again.");
     } finally {
       setLoading(false);
     }
