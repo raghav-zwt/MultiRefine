@@ -18,7 +18,7 @@ const Login = () => {
       exchangeCodeForToken(authorizationCode);
     } 
     
-    if(authorizationCode.length < 64) {
+    if(authorizationCode?.length < 64) {
       toast.error("Webflow authorized code not found, try again.");
     }
   }, []);
