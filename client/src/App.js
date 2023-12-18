@@ -5,6 +5,8 @@ import Home from "./pages/index.js"
 import ErrorPage from "./pages/errorPage/errorPage.js"
 import ProfilePage from './pages/profile/profile.js';
 import FilterList from './pages/filterList/filterlist.js';
+import DetailPage from './pages/detailPage/detail.js';
+import SitePage from './pages/sitePage/site.js';
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       <Route path={"/login"} element={<Login />}></Route>
       <Route path={"/profile"} element={<ProfilePage />}></Route>
       <Route path={"/list"} element={<FilterList />}></Route>
+      <Route path={"/detail"} element={<DetailPage />}></Route>
+      <Route path={"/site"} element={<SitePage />}></Route>
       <Route path={"*"} element={<ErrorPage />}></Route>
     </Routes>
   );

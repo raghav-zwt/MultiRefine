@@ -4,8 +4,8 @@ import Layout from "../../layouts/layout.js";
 const ProfilePage = () => {
   return (
     <>
-    <Layout>
-    <div className="page-breadcrumb bg-white">
+      <Layout>
+        <div className="page-breadcrumb bg-white">
           <div className="row align-items-center">
             <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12">
               <h4 className="page-title">Profile page</h4>
@@ -19,7 +19,7 @@ const ProfilePage = () => {
                   href="/"
                   target="_blank"
                   className="btn btn-danger d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white"
-                  >Create Workflow</a
+                >Create Workflow</a
                 >
               </div>
             </div>
@@ -58,7 +58,7 @@ const ProfilePage = () => {
                     </div>
                     <div className="form-group mb-4">
                       <label for="example-email" className="col-md-12 p-0"
-                        >Email</label
+                      >Email</label
                       >
                       <div className="col-md-12 border-bottom p-0">
                         <input
@@ -116,7 +116,7 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
-    </Layout>
+      </Layout>
     </>
   )
 }
