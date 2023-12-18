@@ -94,7 +94,7 @@ const Login = () => {
               </div>
               <div className="input-group">
                 <button>
-                  Login <i className="fa-solid fa-arrow-right"></i>
+                  Login 
                 </button>
               </div>
             </div>
