@@ -5,7 +5,7 @@ import "./login.css"
 const Login = () => {
 
   const [token, setToken] = useState(null);
-  const [authorized, setAuthorized] = useState([]);
+  const [authorized, setAuthorized] = useState("false");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -22,7 +22,7 @@ const Login = () => {
         const tokenApi = token;
         const response = await axios.post(apiUrl, { tokenApi });
         if (response.data) {
-          setAuthorized(response.data);
+          setAuthorized("true");
         }
       } catch (error) {
         console.error('Error making API request:', error.message);
@@ -57,7 +57,7 @@ const Login = () => {
       <div className="main-wrapper">
         {authorized ?
           (<>
-            <h3>Verifying the user details</h3>
+            <h3>Verifying the user details  </h3>
           </>) : (
             <div className="wrapper">
 
