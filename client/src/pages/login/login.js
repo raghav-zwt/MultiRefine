@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Layout from "../../layouts/layout.js"
 import axios from "axios"
+import "./login.css"
 
 const Login = () => {
 
@@ -41,39 +41,47 @@ const Login = () => {
       setAuthorized(response.data);
     } catch (error) {
       console.error('Error making API request:', error.message);
-
-      
     }
   };
 
   return (
     <>
-      <Layout>
-        <div>
-          {token ? (
-            <>
-              <div>
-                {authorized.firstName}
-              </div>
-              <div>
-                {authorized.lastName}
-              </div>
-              <div>
-                {authorized.id}
-              </div>
-              <div>
-                {authorized.email}
-              </div>
-              <div>
-                <h1>Authenticated!</h1>
-                <button onClick={fetchData}>Authorized User</button>
-              </div>
-            </>
-          ) : (
-            <a href={`${process.env.REACT_APP_API_URL}/auth`}>Login with Webflow</a>
-          )}
+      <div className="main-wrapper">
+        <div className="wrapper">
+
+          <div className="heading">
+            <h2>Welcome!</h2>
+            <p>Sign In to your account</p>
+          </div>
+
+          <div className="input-group">
+            <input type="text" id="username" className="input-field" placeholder="Username" />
+          </div>
+
+          <div className="input-group">
+            <input type="password" id="password" className="input-field" placeholder="Password" />
+          </div>
+
+          <div className="input-group row">
+
+            <div className="row">
+              <input type="checkbox" id="remember" hidden />
+              <label for="remember" className="custom-checkbox"></label>
+              <label for="remember">Remember me?</label>
+            </div>
+
+            <div className="row">
+              <a href="/" target="_blank">Forgot password?</a>
+            </div>
+          </div>
+
+
+          <div className="input-group">
+            <button> Login <i className="fa-solid fa-arrow-right"></i></button>
+          </div>
+
         </div>
-      </Layout>
+      </div>
     </>
   )
 }
