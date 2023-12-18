@@ -12,11 +12,11 @@ const webflowAuth = async (req, res) => {
     }
 
     const authUrl = `https://webflow.com/oauth/authorize?response_type=code&client_id=${clientID}&scope=assets%3Aread+assets%3Awrite+authorized_user%3Aread+cms%3Aread+cms%3Awrite+custom_code%3Aread+custom_code%3Awrite+forms%3Aread+forms%3Awrite+pages%3Aread+pages%3Awrite+sites%3Aread+sites%3Awrite+users%3Aread+users%3Awrite+ecommerce%3Aread+ecommerce%3Awrite+site_activity%3Aread`;
-    
-    if(!authUrl) {
-        return res.status(401).json({message: 'No auth url provided'});
+
+    if (!authUrl) {
+        return res.status(401).json({ message: 'No auth url provided' });
     }
-    
+
     res.redirect(authUrl);
 };
 
@@ -81,4 +81,13 @@ const webflowAuthorizedBy = async (req, res) => {
     }
 };
 
-export { webflowAuth, webflowAuthorized, webflowAuthorizedBy }
+const webflowLogin = async (req, res) => {
+    try {
+
+    } catch (error) {
+        console.error('Error login', error.message);
+        res.status(error.response ? error.response.status : 500).json({ message: 'Error login' });
+    }
+}
+
+export { webflowAuth, webflowAuthorized, webflowAuthorizedBy, webflowLogin }
