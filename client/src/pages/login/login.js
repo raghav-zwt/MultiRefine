@@ -53,7 +53,6 @@ const Login = () => {
   return (
     <>
       <div className="main-wrapper">
-        {authorized}
         <div className="wrapper">
 
           <div className="heading">
