@@ -27,7 +27,7 @@ const Login = () => {
         const response = await axios.post(apiUrl, { tokenApi });
         if (response.data) {
           setAuthorized(response.data);
-          toast.success(response.data);
+          toast.success("webflow User Authorized");
         }
       } catch (error) {
         console.error('Error making API request:', error.message);
