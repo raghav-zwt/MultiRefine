@@ -28,23 +28,26 @@ const Login = () => {
       });
       const accessToken = response.data.access_token;
       setToken(accessToken);
+
+      if(accessToken) {
+        fetchData(accessToken);
+      }
+
     } catch (error) {
       console.error('Error exchanging code for access token:', error.message);
     }
   };
 
-  const fetchData = async () => {
+  const fetchData = async (accessToken) => {
     try {
       const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
-      const tokenApi = token;
+      const tokenApi = accessToken;
       const response = await axios.post(apiUrl, { tokenApi });
       setAuthorized(response.data);
     } catch (error) {
       console.error('Error making API request:', error.message);
     }
   };
-
-  fetchData();
 
   return (
     <>
