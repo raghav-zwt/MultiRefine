@@ -56,7 +56,7 @@ const Login = () => {
         <div className="wrapper">
 
           <div className="heading">
-            <h2>Welcome! - {authorized}</h2>
+            <h2>Welcome!</h2>
             <p>Sign In to your account</p>
           </div>
 
