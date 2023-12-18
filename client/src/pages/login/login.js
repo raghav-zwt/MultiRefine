@@ -5,7 +5,6 @@ import axios from "axios"
 import Loader from "../../assets/images/loader.gif"
 import "./login.css"
 
-
 const Login = () => {
 
   const [token, setToken] = useState(null);
@@ -68,7 +67,6 @@ const Login = () => {
 
   return (
     <>
-
       <div className="main-wrapper">
         <div>
           {loading ? (
