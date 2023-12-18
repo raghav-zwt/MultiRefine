@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
 import "./login.css"
 
 const Login = () => {
 
   const [token, setToken] = useState(null);
   const [authorized, setAuthorized] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -24,9 +22,6 @@ const Login = () => {
         const tokenApi = token;
         const response = await axios.post(apiUrl, { tokenApi });
         setAuthorized(response.data);
-        if(response.data) {
-          navigate("/login");
-        }
       } catch (error) {
         console.error('Error making API request:', error.message);
       }
@@ -35,7 +30,7 @@ const Login = () => {
     if (token) {
       fetchData();
     }
-  }, [token, navigate]);
+  }, [token]);
 
   const exchangeCodeForToken = async (authorizationCode) => {
     try {
@@ -61,7 +56,7 @@ const Login = () => {
         <div className="wrapper">
 
           <div className="heading">
-            <h2>Welcome!</h2>
+            <h2>Welcome! - {authorized}</h2>
             <p>Sign In to your account</p>
           </div>
 
