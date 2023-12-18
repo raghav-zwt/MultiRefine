@@ -5,7 +5,9 @@ import "./login.css"
 const Login = () => {
 
   const [token, setToken] = useState(null);
-  const [authorized, setAuthorized] = useState([]);
+  const [authorized, setAuthorized] = useState("false");
+
+  setAuthorized("false");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -22,7 +24,7 @@ const Login = () => {
         const tokenApi = token;
         const response = await axios.post(apiUrl, { tokenApi });
         if(response.data) {
-          setAuthorized(response.data);
+          authorized("true")
         }
       } catch (error) {
         console.error('Error making API request:', error.message);
@@ -32,7 +34,7 @@ const Login = () => {
     if (token) {
       fetchData();
     }
-  }, [token]);
+  }, [token, authorized]);
 
   const exchangeCodeForToken = async (authorizationCode) => {
     try {
@@ -56,22 +58,17 @@ const Login = () => {
     <>
       <div className="main-wrapper">
         <div className="wrapper">
-
           <div className="heading">
             <h2>Welcome!</h2>
             <p>Sign In to your account</p>
           </div>
-
           <div className="input-group">
             <input type="text" id="username" className="input-field" placeholder="Username" />
           </div>
-
           <div className="input-group">
             <input type="password" id="password" className="input-field" placeholder="Password" />
           </div>
-
           <div className="input-group row">
-
             <div className="row">
               <input type="checkbox" id="remember" hidden />
               <label htmlFor="remember" className="custom-checkbox"></label>
@@ -82,12 +79,9 @@ const Login = () => {
               <a href="/" target="_blank">Forgot password?</a>
             </div>
           </div>
-
-
           <div className="input-group">
             <button> Login <i className="fa-solid fa-arrow-right"></i></button>
           </div>
-
         </div>
       </div>
     </>
