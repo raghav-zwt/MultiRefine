@@ -57,6 +57,8 @@ const Login = () => {
       <div className="main-wrapper">
         {authorized ?
           (<>
+            <h3>Verifying the user details</h3>
+          </>) : (
             <div className="wrapper">
 
               <div className="heading">
@@ -91,8 +93,6 @@ const Login = () => {
               </div>
 
             </div>
-          </>) : (
-            <p>Verifying the user details</p>
           )}
       </div>
     </>
