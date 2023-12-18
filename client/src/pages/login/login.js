@@ -33,22 +33,18 @@ const Login = () => {
     }
   };
 
-  
+  const fetchData = async () => {
+    try {
+      const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
+      const tokenApi = token;
+      const response = await axios.post(apiUrl, { tokenApi });
+      setAuthorized(response.data);
+    } catch (error) {
+      console.error('Error making API request:', error.message);
+    }
+  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
-        const tokenApi = token;
-        const response = await axios.post(apiUrl, { tokenApi });
-        setAuthorized(response.data);
-      } catch (error) {
-        console.error('Error making API request:', error.message);
-      }
-    };
-
-    fetchData();
-  }, []);
+  fetchData();
 
   return (
     <>
@@ -73,8 +69,8 @@ const Login = () => {
 
             <div className="row">
               <input type="checkbox" id="remember" hidden />
-              <label for="remember" className="custom-checkbox"></label>
-              <label for="remember">Remember me?</label>
+              <label htmlFor="remember" className="custom-checkbox"></label>
+              <label htmlFor="remember">Remember me?</label>
             </div>
 
             <div className="row">
