@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
+import { useNavigate } from "react-router-dom";
 import "./login.css"
 
 const Login = () => {
 
+  const navigate = useNavigate();
   const [token, setToken] = useState(null);
   const [authorized, setAuthorized] = useState(false);
 
@@ -32,8 +34,9 @@ const Login = () => {
     if (token) {
       fetchData();
       authorized(true)
+      navigate("/login");
     }
-  }, [token, authorized]);
+  }, [token, authorized, navigate]);
 
   const exchangeCodeForToken = async (authorizationCode) => {
     try {
