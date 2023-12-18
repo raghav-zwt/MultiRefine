@@ -16,6 +16,8 @@ const Login = () => {
     const authorizationCode = params.get('code');
     if (authorizationCode) {
       exchangeCodeForToken(authorizationCode);
+    } else {
+      toast.error("Webflow authorized code not found, try again.");
     }
   }, []);
 
