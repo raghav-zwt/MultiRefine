@@ -33,20 +33,27 @@ const Login = () => {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
-      const tokenApi = token;
-      const response = await axios.post(apiUrl, { tokenApi });
-      setAuthorized(response.data);
-    } catch (error) {
-      console.error('Error making API request:', error.message);
-    }
-  };
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
+        const tokenApi = token;
+        const response = await axios.post(apiUrl, { tokenApi });
+        setAuthorized(response.data);
+      } catch (error) {
+        console.error('Error making API request:', error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
       <div className="main-wrapper">
+        {authorized}
         <div className="wrapper">
 
           <div className="heading">
