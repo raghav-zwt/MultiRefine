@@ -66,7 +66,7 @@ const Login = () => {
       <div className="main-wrapper">
         <div className="wrapper">
           {loading ? (
-            { Loader }
+            <img src={Loader} alt="loading..." />
           ) : (
             <div>
               <div className="heading">
