@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from "react-router-dom";
 import "./sidebar.css"
 
 const sideBar = () => {
@@ -8,44 +9,34 @@ const sideBar = () => {
                 <nav className="sidebar-nav">
                     <ul id="sidebarnav">
                         <li className="sidebar-item pt-2">
-                            <a
+                            <Link
                                 className="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="index.html"
+                                to={"/"}
                                 aria-expanded="false"
                             >
                                 <i className="far fa-clock" aria-hidden="true"></i>
                                 <span className="hide-menu">Dashboard</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="sidebar-item">
-                            <a
+                            <Link
                                 className="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="profile.html"
+                                to={"/profile"}
                                 aria-expanded="false"
                             >
                                 <i className="fa fa-user" aria-hidden="true"></i>
                                 <span className="hide-menu">Profile</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="sidebar-item">
-                            <a
+                            <Link
                                 className="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="filterlist.html"
+                                to={"/list"}
                                 aria-expanded="false"
                             >
                                 <i className="fa fa-table" aria-hidden="true"></i>
                                 <span className="hide-menu">Filter List</span>
-                            </a>
-                        </li>
-                        <li className="sidebar-item">
-                            <a
-                                className="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="order.html"
-                                aria-expanded="false"
-                            >
-                                <i className="fa fa-cart-arrow-down" aria-hidden="true"></i>
-                                <span className="hide-menu">Order</span>
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </nav>
