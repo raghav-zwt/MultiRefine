@@ -5,9 +5,9 @@ import "./login.css"
 
 const Login = () => {
 
-  const navigate = useNavigate();
   const [token, setToken] = useState(null);
   const [authorized, setAuthorized] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -25,6 +25,7 @@ const Login = () => {
         const response = await axios.post(apiUrl, { tokenApi });
         if (response.data) {
           setAuthorized(response.data);
+          navigate("/login"); 
         }
       } catch (error) {
         console.error('Error making API request:', error.message);
