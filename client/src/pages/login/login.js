@@ -9,6 +9,8 @@ const Login = () => {
   const [authorized, setAuthorized] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  setLoading(false);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const authorizationCode = params.get('code');
@@ -66,7 +68,7 @@ const Login = () => {
       <div className="main-wrapper">
         <div>
           {loading ? (
-            <img src={Loader} alt="loading..." />
+            <img src={Loader} width={80} height={80} alt="loading..." />
           ) : (
             <div className="wrapper">
               <div className="heading">
