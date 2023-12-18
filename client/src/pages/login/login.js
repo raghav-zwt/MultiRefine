@@ -9,8 +9,6 @@ const Login = () => {
   const [authorized, setAuthorized] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  setLoading(false);
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const authorizationCode = params.get('code');
