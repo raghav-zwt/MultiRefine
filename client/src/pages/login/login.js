@@ -15,6 +15,23 @@ const Login = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
+        const tokenApi = token;
+        const response = await axios.post(apiUrl, { tokenApi });
+        setAuthorized(response.data);
+      } catch (error) {
+        console.error('Error making API request:', error.message);
+      }
+    };
+
+    if (token) {
+      fetchData();
+    }
+  }, [token]);
+
   const exchangeCodeForToken = async (authorizationCode) => {
     try {
       const apiUrl = `${process.env.REACT_APP_API_URL}/callback`;
@@ -28,24 +45,8 @@ const Login = () => {
       });
       const accessToken = response.data.access_token;
       setToken(accessToken);
-
-      if(accessToken) {
-        fetchData(accessToken);
-      }
-
     } catch (error) {
       console.error('Error exchanging code for access token:', error.message);
-    }
-  };
-
-  const fetchData = async (accessToken) => {
-    try {
-      const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
-      const tokenApi = accessToken;
-      const response = await axios.post(apiUrl, { tokenApi });
-      setAuthorized(response.data);
-    } catch (error) {
-      console.error('Error making API request:', error.message);
     }
   };
 
