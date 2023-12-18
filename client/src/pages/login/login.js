@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
 import "./login.css"
 
 const Login = () => {
 
   const [token, setToken] = useState(null);
-  const [authorized, setAuthorized] = useState(false);
-  const navigate = useNavigate();
+  const [authorized, setAuthorized] = useState([]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -25,7 +23,6 @@ const Login = () => {
         const response = await axios.post(apiUrl, { tokenApi });
         if (response.data) {
           setAuthorized(response.data);
-          navigate("/login"); 
         }
       } catch (error) {
         console.error('Error making API request:', error.message);
@@ -34,10 +31,8 @@ const Login = () => {
 
     if (token) {
       fetchData();
-      authorized(true)
-      navigate("/login");
     }
-  }, [token, authorized, navigate]);
+  }, [token]);
 
   const exchangeCodeForToken = async (authorizationCode) => {
     try {
@@ -60,42 +55,33 @@ const Login = () => {
   return (
     <>
       <div className="main-wrapper">
-        {authorized ? (
-          <>
-            <div className="wrapper">
-              <div className="heading">
-                <h2>Welcome!</h2>
-                <p>Sign In to your account</p>
-              </div>
-              <div className="input-group">
-                <input type="text" id="username" className="input-field" placeholder="Username" />
-              </div>
-              <div className="input-group">
-                <input type="password" id="password" className="input-field" placeholder="Password" />
-              </div>
-              <div className="input-group row">
+        <div className="wrapper">
+          <div className="heading">
+            <h2>Welcome!</h2>
+            <p>Sign In to your account</p>
+          </div>
+          <div className="input-group">
+            <input type="text" id="username" className="input-field" placeholder="Username" />
+          </div>
+          <div className="input-group">
+            <input type="password" id="password" className="input-field" placeholder="Password" />
+          </div>
+          <div className="input-group row">
 
-                <div className="row">
-                  <input type="checkbox" id="remember" hidden />
-                  <label htmlFor="remember" className="custom-checkbox"></label>
-                  <label htmlFor="remember">Remember me?</label>
-                </div>
-
-                <div className="row">
-                  <a href="/" target="_blank">Forgot password?</a>
-                </div>
-              </div>
-              <div className="input-group">
-                <button> Login <i className="fa-solid fa-arrow-right"></i></button>
-              </div>
+            <div className="row">
+              <input type="checkbox" id="remember" hidden />
+              <label htmlFor="remember" className="custom-checkbox"></label>
+              <label htmlFor="remember">Remember me?</label>
             </div>
-          </>
-        ) : (
-          <>
-            <h3>Please wait</h3>
-          </>
-        )}
 
+            <div className="row">
+              <a href="/" target="_blank">Forgot password?</a>
+            </div>
+          </div>
+          <div className="input-group">
+            <button> Login <i className="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
       </div>
     </>
   )
