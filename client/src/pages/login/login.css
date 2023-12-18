@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #F0F0F0;
+  background-color: #edf1f5;
   padding-top: 20px;
  }
  
@@ -24,7 +24,7 @@
   height: 45px;
   border: none;
   padding: 10px;
-  background-color: #eeeeee;
+  background-color: #edf1f5;
   color: gray;
   outline: none;
   font-size: 15px;
@@ -32,9 +32,7 @@
   transition: .5s;
   border-radius: 5px;
  }
- 
 
- 
  .main-wrapper .heading{
   color: #3B3663;
   margin-bottom: 20px;
@@ -78,30 +76,6 @@
   justify-content: space-between;
   margin-bottom: 10px;
   font-size: 15px;
- }
- 
- .main-wrapper .custom-checkbox{
-  width: 17px;
-  height: 17px;
-  border-radius: 5px;
-  background-color: #eeeeee;
-  display: flex;
-  align-items: center;
-  justify-content: center; 
-  font-size: 10px;
-  margin-right: 5px;
- }
- 
- .main-wrapper input[type=checkbox]:checked ~ .custom-checkbox{
-  background-color: #31285C;
- }
- 
- .main-wrapper input[type=checkbox]:checked ~ .custom-checkbox::before {
- font-family: "Font Awesome 5 Free";
-   content: "\f00c";
-   display: inline-block;
-   font-weight: 900;
-   color: #ffffff;
  }
  
  .main-wrapper footer{

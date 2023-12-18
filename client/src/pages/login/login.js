@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from "axios"
 import Loader from "../../assets/images/loader.gif"
 import "./login.css"
+import { toast } from "react-toastify";
 
 const Login = () => {
 
@@ -26,6 +27,7 @@ const Login = () => {
         const response = await axios.post(apiUrl, { tokenApi });
         if (response.data) {
           setAuthorized(response.data);
+          toast.success(response.data);
         }
       } catch (error) {
         console.error('Error making API request:', error.message);
