@@ -64,11 +64,11 @@ const Login = () => {
     <>
 
       <div className="main-wrapper">
-        <div className="wrapper">
+        <div>
           {loading ? (
             <img src={Loader} alt="loading..." />
           ) : (
-            <div>
+            <div className="wrapper">
               <div className="heading">
                 <h2>Welcome!</h2>
                 <p>Sign In to your account</p>
