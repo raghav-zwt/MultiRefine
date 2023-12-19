@@ -11,4 +11,12 @@ const accessTokenVerifier = (req, res, next) => {
     }
 }
 
+const isAuthenticated = (req, res, next) => {
+    if (req) {
+      return next(); 
+    } else {
+      return res.status(401).json({ message: 'Unauthorized' }); 
+    }
+  };
+
 export { accessTokenVerifier }

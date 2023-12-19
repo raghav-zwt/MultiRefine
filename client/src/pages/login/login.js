@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios"
 import Loader from "../../assets/images/loader.gif"
@@ -9,6 +10,9 @@ const Login = () => {
 
   const [token, setToken] = useState(null);
   const [authorized, setAuthorized] = useState([]);
+  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -16,9 +20,9 @@ const Login = () => {
     const authorizationCode = params.get('code');
     if (authorizationCode) {
       exchangeCodeForToken(authorizationCode);
-    } 
-    
-    if(authorizationCode?.length < 64) {
+    }
+
+    if (authorizationCode?.length < 64) {
       toast.error("Webflow authorized code not found, try again.");
     }
   }, []);
@@ -69,6 +73,26 @@ const Login = () => {
     }
   };
 
+  const LoginSubmit = async (e) => {
+    e.preventDefault();
+
+    const loginDetails = {
+      email, 
+      password
+    }
+
+    try {
+      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/login`, loginDetails, { withCredentials: true });
+
+      if (data.success) {
+        toast.success(data.message);
+        navigate("/");
+      } 
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+
   return (
     <>
       <div className="main-wrapper">
@@ -77,28 +101,35 @@ const Login = () => {
             <img src={Loader} width={80} height={80} alt="loading..." />
           ) : (
             <div className="wrapper">
-              <div className="heading">
-                <h2>Welcome!</h2>
-                <p>Sign In to your account</p>
-              </div>
-              <div className="input-group">
-                <input type="text" id="username" className="input-field" placeholder="Username" />
-              </div>
-              <div className="input-group">
-                <input type="password" id="password" className="input-field" placeholder="Password" />
-              </div>
-              <div className="input-group row">
-                <div className="row">
-                  <a href="/" target="_blank">
-                    Forgot password?
-                  </a>
+              <form method="post"
+                encType="multipart/form-data" onSubmit={LoginSubmit}>
+                <div className="heading">
+                  <h2>Welcome!</h2>
+                  <p>Sign In to your account</p>
                 </div>
-              </div>
-              <div className="input-group">
-                <button>
-                  Login 
-                </button>
-              </div>
+                <div className="input-group">
+                  <input type="email" value={email} name="email" className="input-field" onChange={(e) => {
+                    setEmail(e.target.value)
+                  }} placeholder="email" required />
+                </div>
+                <div className="input-group">
+                  <input type="text" value={password} name="password" className="input-field" onChange={(e) => {
+                    setPassword(e.target.value)
+                  }} placeholder="password" required />
+                </div>
+                <div className="input-group row">
+                  <div className="row">
+                    <a href="/" target="_blank">
+                      Forgot password?
+                    </a>
+                  </div>
+                </div>
+                <div className="input-group">
+                  <button type="submit" >
+                    Login
+                  </button>
+                </div>
+              </form>
             </div>
           )}
         </div>
