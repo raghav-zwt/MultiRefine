@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { UseAuth } from "../../context/AuthContext.js";
 
 const errorPage = () => {
-  const [auth, setAuth] = UseAuth([]);
   
   return (
     <>
