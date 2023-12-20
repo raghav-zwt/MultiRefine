@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from "../layouts/layout.js"
 import "../assets/js/homepage.js";
+import {} from "../api/webflowApi.js"
 
 const HomePage = () => {
 
