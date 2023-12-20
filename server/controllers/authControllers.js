@@ -43,8 +43,37 @@ const webflowAuthorized = async (req, res) => {
 
         console.log('Token Response:', tokenResponse.data);
 
+        console.log("====================>", tokenResponse);
+
         const accessToken = tokenResponse.data.access_token;
-        res.json({ access_token: accessToken });
+
+        const sqlInsert = "INSERT INTO details (user_id, email, first_name, last_name, password) VALUES (?)"
+        const sqlValues = [authLogin.user_id, authLogin.email, authLogin.first_name, authLogin.last_name, authLogin.password]
+
+        dbConnect.query(sqlInsert, [sqlValues], (error, data) => {
+            try {
+                if (error) {
+                    console.log(error);
+                    return res.status(404).json({
+                        message: "Error in query.",
+                        success: false,
+                    });
+                };
+
+                return res.status(201).send({
+                    message: "Webflow user register successfully.",
+                    success: true,
+                    access_token: accessToken,
+                });
+            } catch (error) {
+                return res.status(404).json({
+                    message: "Webflow user not register.",
+                    success: false,
+                });
+            }
+        })
+
+        
     } catch (error) {
         console.error('Error exchanging code for access token:', error.message);
         console.log('Error Response:', error.response.data);

@@ -1,24 +1,11 @@
 import './assets/css/App.css';
-import { Route, Routes } from "react-router-dom";
-import Login from "./pages/login/login.js"
-import Home from "./pages/index.js"
-import ErrorPage from "./pages/errorPage/errorPage.js"
-import ProfilePage from './pages/profile/profile.js';
-import FilterList from './pages/filterList/filterlist.js';
-import DetailPage from './pages/detailPage/detail.js';
-import SitePage from './pages/sitePage/site.js';
+import PublicRoute from "./route/PublicRoute.js";
 
 function App() {
   return (
-    <Routes>
-      <Route path={""} element={<Home />}></Route>
-      <Route path={"/login"} element={<Login />}></Route>
-      <Route path={"/profile"} element={<ProfilePage />}></Route>
-      <Route path={"/list"} element={<FilterList />}></Route>
-      <Route path={"/detail"} element={<DetailPage />}></Route>
-      <Route path={"/site"} element={<SitePage />}></Route>
-      <Route path={"*"} element={<ErrorPage />}></Route>
-    </Routes>
+    <>
+      <PublicRoute />
+    </>
   );
 }
 

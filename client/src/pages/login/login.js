@@ -64,6 +64,7 @@ const Login = () => {
         grant_type: 'authorization_code',
       });
       const accessToken = response.data.access_token;
+      localStorage.setItem('accessToken', accessToken);
       setToken(accessToken);
     } catch (error) {
       console.error('Error exchanging code for access token:', error.message);
@@ -86,6 +87,7 @@ const Login = () => {
 
       if (data.success) {
         toast.success(data.message);
+        localStorage.setItem('userId', data?.data[0].user_id);
         navigate("/");
       } 
     } catch (error) {

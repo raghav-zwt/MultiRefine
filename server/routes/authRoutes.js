@@ -1,5 +1,5 @@
 import express from "express";
-import { webflowAuth, webflowAuthorized,webflowAuthorizedBy, webflowRegister, webflowLogin  } from "../controllers/webflowAuthControllers.js";
+import { webflowAuth, webflowAuthorized,webflowAuthorizedBy, webflowRegister, webflowLogin  } from "../controllers/authControllers.js";
 const router = express.Router();
 
 router.get("/auth", webflowAuth);
