@@ -3,7 +3,7 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const useAuth = () => {
-  const result = localStorage.getItem('userId');
+  const result = localStorage.getItem('auth');
   return { userId: result }; 
 }
 

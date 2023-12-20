@@ -95,7 +95,6 @@ const Login = () => {
           email: data.data[0].email,
         });
 
-        console.log()
         localStorage.setItem("auth", JSON.stringify(data?.data));
         navigate("/");
       } 
