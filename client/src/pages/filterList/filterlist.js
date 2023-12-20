@@ -1,7 +1,10 @@
 import React from 'react'
 import Layout from "../../layouts/layout.js"
+import { UseAuth } from "../../context/AuthContext.js";
 
 const FilterList = () => {
+    const [auth, setAuth] = UseAuth([]);
+    
     return (
         <>
             <Layout>

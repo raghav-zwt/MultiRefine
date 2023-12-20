@@ -5,11 +5,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios"
 import Loader from "../../assets/images/loader.gif"
 import "./login.css"
+import { UseAuth } from "../../context/AuthContext.js";
 
 const Login = () => {
 
   const [token, setToken] = useState(null);
   const [authorized, setAuthorized] = useState([]);
+  const [auth, setAuth] = UseAuth([]);
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
@@ -87,7 +89,14 @@ const Login = () => {
 
       if (data.success) {
         toast.success(data.message);
-        localStorage.setItem('userId', data?.data[0].user_id);
+        setAuth({
+          ...auth,
+          auth_id: data.data[0].auth_id,
+          email: data.data[0].email,
+        });
+
+        console.log()
+        localStorage.setItem("auth", JSON.stringify(data?.data));
         navigate("/");
       } 
     } catch (error) {
