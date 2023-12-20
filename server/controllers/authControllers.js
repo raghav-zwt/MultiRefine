@@ -43,37 +43,9 @@ const webflowAuthorized = async (req, res) => {
 
         console.log('Token Response:', tokenResponse.data);
 
-        console.log("====================>", tokenResponse);
-
         const accessToken = tokenResponse.data.access_token;
 
-        const sqlInsert = "INSERT INTO details (user_id, email, first_name, last_name, password) VALUES (?)"
-        const sqlValues = [authLogin.user_id, authLogin.email, authLogin.first_name, authLogin.last_name, authLogin.password]
-
-        dbConnect.query(sqlInsert, [sqlValues], (error, data) => {
-            try {
-                if (error) {
-                    console.log(error);
-                    return res.status(404).json({
-                        message: "Error in query.",
-                        success: false,
-                    });
-                };
-
-                return res.status(201).send({
-                    message: "Webflow user register successfully.",
-                    success: true,
-                    access_token: accessToken,
-                });
-            } catch (error) {
-                return res.status(404).json({
-                    message: "Webflow user not register.",
-                    success: false,
-                });
-            }
-        })
-
-        
+        res.json({ access_token: accessToken });
     } catch (error) {
         console.error('Error exchanging code for access token:', error.message);
         console.log('Error Response:', error.response.data);
@@ -105,7 +77,33 @@ const webflowAuthorizedBy = async (req, res) => {
             res.status(error.response ? error.response.status : 500).json({ message: 'Error in authorized' });
         }
 
-        res.json(webflowAuthorizedUser);
+        const date = new Date();
+
+        const sqlInsert = "INSERT INTO auth (user_id, date_time, access_token) VALUES (?)"
+        const sqlValues = [webflowAuthorizedUser.id, date, token]
+
+        dbConnect.query(sqlInsert, [sqlValues], (error, data) => {
+            try {
+                if (error) {
+                    console.log(error);
+                    return res.status(404).json({
+                        message: "Error in query.",
+                        success: false,
+                    });
+                };
+
+                return res.status(201).send({
+                    message: "Access token verified",
+                    success: true,
+                    data,
+                });
+            } catch (error) {
+                return res.status(404).json({
+                    message: "Access token not verified.",
+                    success: false,
+                });
+            }
+        })
     } catch (error) {
         console.error('Error fetching Webflow user data:', error.message);
         res.status(error.response ? error.response.status : 500).json({ message: 'Error fetching user data' });
