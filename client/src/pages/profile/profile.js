@@ -57,7 +57,7 @@ const ProfilePage = () => {
                       </div>
                     </div>
                     <div className="form-group mb-4">
-                      <label for="example-email" className="col-md-12 p-0"
+                      <label htmlFor="example-email" className="col-md-12 p-0"
                       >Email</label
                       >
                       <div className="col-md-12 border-bottom p-0">
