@@ -80,7 +80,7 @@ const Login = () => {
     e.preventDefault();
 
     const loginDetails = {
-      email, 
+      email,
       password
     }
 
@@ -96,8 +96,9 @@ const Login = () => {
         });
 
         localStorage.setItem("auth", JSON.stringify(data?.data));
+        localStorage.setItem("token", JSON.stringify(data?.token));
         navigate("/");
-      } 
+      }
     } catch (error) {
       toast.error(error.response.data.message);
     }

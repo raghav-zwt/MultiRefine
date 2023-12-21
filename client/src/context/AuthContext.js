@@ -9,16 +9,17 @@ const AuthProvider = ({ children }) => {
         token: "",
     });
 
-    axios.defaults.headers.common["Authorization"] = auth?.token;
+    axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 
     useEffect(() => {
         const data = localStorage.getItem("auth");
+        const token = localStorage.getItem("token");
         if (data) {
             const parseData = JSON.parse(data);
             setAuth({
                 ...auth,
-                auth_id: parseData.auth_id,
-                token: parseData.token,
+                auth_id: parseData[0].auth_id,
+                token: token,
             });
         }
         //  eslint-disable-next-line
