@@ -1,16 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from "../layouts/layout.js"
 import "../assets/js/homepage.js";
-import {} from "../api/webflowApi.js"
+import { Link } from 'react-router-dom';
+import axios from "axios";
 
 const HomePage = () => {
 
-  const sty = {
-    "display": "inline-block",
-    "width": "67px",
-    "height": "30px",
-    "verticalAlign": "top",
-  }
+  useEffect(() => {
+    const options = {
+      method: 'GET',
+      url: 'https://api.webflow.com/v2/sites',
+      headers: {
+        accept: 'application/json',
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`
+      }
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  })
 
   return (
     <>
@@ -23,57 +37,17 @@ const HomePage = () => {
             <div className="col-lg-9 col-sm-8 col-md-8 col-xs-12">
               <div className="d-md-flex">
                 <ol className="breadcrumb ms-auto">
-                  <li><a href="/" className="fw-normal">Dashboard</a></li>
+                  <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
                 </ol>
-                <a
-                  href="cw_step1.html"
+                <Link
+                  to={"/site"}
                   className="btn btn-danger d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white"
-                >Create Workflow</a>
+                >Create Workflow</Link>
               </div>
             </div>
           </div>
         </div>
         <div className="container-fluid">
-          <div className="row justify-content-start">
-            <div className="col-lg-4 col-md-12">
-              <div className="white-box analytics-info">
-                <h3 className="box-title">Active Filter</h3>
-                <ul className="list-inline two-part d-flex align-items-center mb-0">
-                  <li>
-                    <div id="sparklinedash">
-                      <canvas
-                        width="67"
-                        height="30"
-                        style={sty}
-                      ></canvas>
-                    </div>
-                  </li>
-                  <li className="ms-auto">
-                    <span className="Activecounter counter text-success">5</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-12">
-              <div className="white-box analytics-info">
-                <h3 className="box-title">Total Filter</h3>
-                <ul className="list-inline two-part d-flex align-items-center mb-0">
-                  <li>
-                    <div id="sparklinedash3">
-                      <canvas
-                        width="67"
-                        height="30"
-                        style={sty}
-                      ></canvas>
-                    </div>
-                  </li>
-                  <li className="ms-auto">
-                    <span className="TotalSite counter text-info">3</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
           <h3 className="page-title pb-3">Recent Filter</h3>
           <div className="row" id="recent-workflows">
             <div className="col-lg-4 col-xlg-3 col-md-12 recent-workflows-item">
@@ -101,9 +75,9 @@ const HomePage = () => {
                   </div>
                 </div>
                 <div className="user-btm-box gap-3  mt-4 align-items-center d-flex flex-wrap">
-                  <a href="/" className="btn btn-danger pull-right me-auto waves-effect waves-light text-white">
+                  <Link to={"/detail"} className="btn btn-danger pull-right me-auto waves-effect waves-light text-white">
                     Details
-                  </a>
+                  </Link>
                   <h6 className="mb-0">Created 54/76/678</h6>
                 </div>
               </div>
@@ -121,12 +95,12 @@ const HomePage = () => {
                 <div
                   className="user-btm-box mt-5 justify-content-center align-items-center d-md-flex"
                 >
-                  <a
-                    href="cw_step1.html"
+                  <Link
+                    to={"/site"}
                     className="btn btn-danger pull-right me-auto waves-effect waves-light text-white"
                   >
                     Create filter
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

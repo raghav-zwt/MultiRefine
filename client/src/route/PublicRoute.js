@@ -7,6 +7,7 @@ import FilterList from '../pages/filterList/filterlist.js';
 import DetailPage from '../pages/detailPage/detail.js';
 import SitePage from '../pages/sitePage/site.js';
 import PrivateRoute from "./PrivateRoute.js";
+import SiteDetail from "../pages/siteDetail/siteDetail.js";
 
 const AppRoute = () => {
     return (
@@ -22,6 +23,7 @@ const AppRoute = () => {
                             <Route path="list" element={<FilterList />} />
                             <Route path="detail" element={<DetailPage />} />
                             <Route path="site" element={<SitePage />} />
+                            <Route path="sitedetails" element={<SiteDetail />} />
                         </Routes>
                     </PrivateRoute>
                 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import Layout from "../../layouts/layout.js"
+import { Link } from 'react-router-dom'
 
 const FilterList = () => {
     
@@ -14,14 +15,12 @@ const FilterList = () => {
                         <div className="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                             <div className="d-md-flex">
                                 <ol className="breadcrumb ms-auto">
-                                    <li><a href="/" className="fw-normal">Dashboard</a></li>
+                                    <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
                                 </ol>
-                                <a
-                                    href="/"
-                                    target="_blank"
+                                <Link
+                                    to={"/site"}
                                     className="btn btn-danger d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white"
-                                >Create Workflow</a
-                                >
+                                >Create Workflow</Link>
                             </div>
                         </div>
                     </div>
