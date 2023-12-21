@@ -23,7 +23,7 @@ const AppRoute = () => {
                             <Route path="list" element={<FilterList />} />
                             <Route path="detail" element={<DetailPage />} />
                             <Route path="site" element={<SitePage />} />
-                            <Route path="sitedetails" element={<SiteDetail />} />
+                            <Route path="sitedetails/:id" element={<SiteDetail />} />
                         </Routes>
                     </PrivateRoute>
                 }

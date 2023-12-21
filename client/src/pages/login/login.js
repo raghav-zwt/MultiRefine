@@ -17,6 +17,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  console.log(authorized);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const authorizationCode = params.get('code');

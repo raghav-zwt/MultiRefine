@@ -1,8 +1,18 @@
 import React from 'react'
 import LogoText from "../../assets/images/ample.png";
 import Logo from "../../assets/images/ample-icon.png";
+import cookie from "js-cookie"
+import { useNavigate } from 'react-router-dom';
 
-const header = () => {
+const Header = () => {
+  const Navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.clear();
+    cookie.remove('auth');
+    Navigate("/login")
+  }
+
   return (
     <>
       <header className="topbar" data-navbarbg="skin5">
@@ -18,10 +28,11 @@ const header = () => {
             </a>
             <a className="nav-toggler waves-effect waves-light text-dark d-block d-md-none" href="/"><i className="ti-menu ti-close"></i></a>
           </div>
+          <button className='ms-auto text-white btn btn-danger mx-4' onClick={logout}>Logout</button>
         </nav>
       </header>
     </>
   )
 }
 
-export default header
+export default Header
