@@ -6,10 +6,10 @@ const authContext = createContext();
 const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({
         auth_id: null,
-        email: "",
+        token: "",
     });
 
-    axios.defaults.headers.common["Authorization"] = auth?.auth_id;
+    axios.defaults.headers.common["Authorization"] = auth?.token;
 
     useEffect(() => {
         const data = localStorage.getItem("auth");
@@ -18,7 +18,7 @@ const AuthProvider = ({ children }) => {
             setAuth({
                 ...auth,
                 auth_id: parseData.auth_id,
-                email: parseData.email,
+                token: parseData.token,
             });
         }
         //  eslint-disable-next-line

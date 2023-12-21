@@ -92,7 +92,7 @@ const Login = () => {
         setAuth({
           ...auth,
           auth_id: data.data[0].auth_id,
-          email: data.data[0].email,
+          token: data.token,
         });
 
         localStorage.setItem("auth", JSON.stringify(data?.data));

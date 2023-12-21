@@ -1,6 +1,7 @@
 import { dbConnect } from "../db/dbConnect.js";
 import { dotenvFile } from "../helper/dotenv.js"
 import { comparePassword, hashPassword } from "../middlewares/hashPassword.js";
+import jwt from "jsonwebtoken";
 import axios from "axios";
 
 dotenvFile;
@@ -129,6 +130,8 @@ const webflowRegister = async (req, res) => {
             password += charset.charAt(Math.floor(Math.random() * n));
         }
 
+        console.log(password)
+
         const generatePassword = await hashPassword(password);
 
         if (!generatePassword) {
@@ -139,15 +142,15 @@ const webflowRegister = async (req, res) => {
         }
 
         const authLogin = {
-            "user_id": id,
+            "auth_id": id,
             "email": email,
             "first_name": firstName,
             "last_name": lastName,
             "password": generatePassword,
         }
 
-        const sqlInsert = "INSERT INTO details (user_id, email, first_name, last_name, password) VALUES (?)"
-        const sqlValues = [authLogin.user_id, authLogin.email, authLogin.first_name, authLogin.last_name, authLogin.password]
+        const sqlInsert = "INSERT INTO details (auth_id, email, first_name, last_name, password) VALUES (?)"
+        const sqlValues = [authLogin.auth_id, authLogin.email, authLogin.first_name, authLogin.last_name, authLogin.password]
 
         dbConnect.query(sqlInsert, [sqlValues], (error, data) => {
             try {
@@ -221,16 +224,28 @@ const webflowLogin = async (req, res) => {
                         success: false,
                     });
                 } else {
+                    const token = await jwt.sign(
+                        {
+                            auth_id : data.auth_id ,
+                        },
+                        process.env.JWT_SECRET,
+                        {
+                            expiresIn: "7d",
+                        }
+                    );
+
                     res.cookie("user", data, {
                         httpOnly: true,
                         maxAge: 72 * 60 * 60 * 1000,
                         secure: true,
                         sameSite: 'None',
                     });
+
                     return res.status(200).send({
                         message: "Login successfully !",
                         success: true,
                         data,
+                        token,
                     });
                 }
             }
