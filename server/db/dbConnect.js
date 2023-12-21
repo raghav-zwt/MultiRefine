@@ -16,7 +16,6 @@ const dbConnect = mysql.createConnection({
     waitForConnections: true,
     connectionLimit: 10,    
     queueLimit: 0,
-    connectTimeout: 5000, // 30 seconds timeout
 });
 
 dbConnect.on("connect", () => {
