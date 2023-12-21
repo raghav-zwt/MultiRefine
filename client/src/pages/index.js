@@ -1,30 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Layout from "../layouts/layout.js"
 import "../assets/js/homepage.js";
 import { Link } from 'react-router-dom';
-import axios from "axios";
 
 const HomePage = () => {
-
-  useEffect(() => {
-    const options = {
-      method: 'GET',
-      url: 'https://api.webflow.com/v2/sites',
-      headers: {
-        accept: 'application/json',
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`
-      }
-    };
-
-    axios
-      .request(options)
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  })
 
   return (
     <>
