@@ -2,7 +2,7 @@ import React from 'react'
 import LogoText from "../../assets/images/ample.png";
 import Logo from "../../assets/images/ample-icon.png";
 import cookie from "js-cookie"
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const Navigate = useNavigate();
@@ -28,7 +28,15 @@ const Header = () => {
             </a>
             <a className="nav-toggler waves-effect waves-light text-dark d-block d-md-none" href="/"><i className="ti-menu ti-close"></i></a>
           </div>
-          <button className='ms-auto text-white btn btn-danger mx-4' onClick={logout}>Logout</button>
+          <div className="mx-4 ms-auto dropdown">
+            <button className="text-white btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              😎
+            </button>
+            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <Link className="dropdown-item" to={"/profile"}>Profile</Link>
+              <div className="dropdown-item" onClick={logout} >Logout</div>
+            </div>
+          </div>
         </nav>
       </header>
     </>

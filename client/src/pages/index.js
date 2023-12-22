@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Layout from "../layouts/layout.js"
-import "../assets/js/homepage.js";
 import { Link } from 'react-router-dom';
 import Loader from "../assets/images/loader.gif"
 import axios from "axios";

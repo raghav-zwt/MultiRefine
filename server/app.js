@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
 import webflowRoutes from "./routes/webflowRoutes.js";
+import filterRoutes from "./routes/filterRoutes.js";
 import { dbConnect } from "./db/dbConnect.js";
 import { dotenvFile } from "./helper/dotenv.js"
 const PORT = process.env.PORT || 8080;
@@ -13,7 +14,7 @@ const app = express();
 
 dotenvFile;
 
-app.use(cors({ credentials: true, origin: 'https://multi-refine.vercel.app' }));
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,
@@ -27,6 +28,7 @@ dbConnect;
 
 app.use("", authRoutes);
 app.use("/api", webflowRoutes);
+app.use("/api/filter", filterRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${process.env.PORT || 8080}`); 

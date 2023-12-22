@@ -83,6 +83,8 @@ const webflowAuthorizedBy = async (req, res) => {
         const sqlInsert = "INSERT INTO auth (webflow_id, date_time, access_token) VALUES (?)"
         const sqlValues = [webflowAuthorizedUser.id, date, token]
 
+        console.log(sqlInsert, sqlValues);
+
         dbConnect.query(sqlInsert, [sqlValues], (error, data) => {
             try {
                 if (error) {
@@ -113,7 +115,11 @@ const webflowAuthorizedBy = async (req, res) => {
 
 const webflowRegister = async (req, res) => {
     try {
-        const { id, email, firstName, lastName } = req.body;
+        const id = "63f5df688a63cc9e951ca116";
+        const email = "jenil@zealousweb.com";
+        const firstName = "Jenil";
+        const lastName = "Gohel"
+        // const { id, email, firstName, lastName } = req.body;
 
         if (!id || !email || !firstName || !lastName) {
             return res.status(400).json({
@@ -133,6 +139,8 @@ const webflowRegister = async (req, res) => {
         console.log(password)
 
         const generatePassword = await hashPassword(password);
+
+        console.log(generatePassword);
 
         if (!generatePassword) {
             return res.status(400).json({
