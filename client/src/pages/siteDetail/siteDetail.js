@@ -69,14 +69,15 @@ const SiteDetail = () => {
                 collection: JSON.stringify(selectedOption),
                 date: formattedDate
             });
-
             if (data.data.success) {
-                toast.success(data.data.message);
                 setLoading(false);
-                console.log(data);
-                navigate("/detail");
+                if (data?.data?.message === "Filter already exists") {
+                    toast.error(data?.data?.message);
+                } else {
+                    toast.success(data?.data?.message);
+                    navigate("/detail")
+                }
             }
-
         } catch (error) {
             toast.error(error.response.data.message);
             setLoading(false);
@@ -130,6 +131,7 @@ const SiteDetail = () => {
                                                             setFilterName(e.target.value)
                                                         }}
                                                         id="FilterName"
+                                                        required
                                                     />
                                                 </div>
                                             </div>
@@ -253,6 +255,7 @@ const SiteDetail = () => {
                                                 defaultValue={selectedOption}
                                                 onChange={setSelectedOption}
                                                 isMulti
+                                                required
                                                 options={ListCollectionsOptions}
                                             />
                                         </div>
@@ -262,7 +265,7 @@ const SiteDetail = () => {
                             <button
                                 type='submit'
                                 className="btn btn-danger mt-4  waves-light text-white"
-                            >Create Workflow</button>
+                            >Create Now</button>
                         </form>
                     </div>
                 </Layout>

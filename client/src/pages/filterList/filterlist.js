@@ -1,8 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Layout from "../../layouts/layout.js"
 import { Link } from 'react-router-dom'
+import axios from "axios";
 
 const FilterList = () => {
+
+    useEffect(() => {
+        const getFilterList = async () => {
+            const data = await axios.get(`${process.env.REACT_APP_API_URL}/api/userfilter`);
+            return data;
+        }
+
+        getFilterList();
+    }, [])
     
     return (
         <>
@@ -151,7 +161,6 @@ const FilterList = () => {
                         </div>
                     </div>
                 </div>
-
             </Layout>
         </>
     )

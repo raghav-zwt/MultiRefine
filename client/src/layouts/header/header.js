@@ -1,6 +1,7 @@
 import React from 'react'
 import LogoText from "../../assets/images/ample.png";
 import Logo from "../../assets/images/ample-icon.png";
+import User from "../../assets/images/user.png"
 import cookie from "js-cookie"
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -11,6 +12,12 @@ const Header = () => {
     localStorage.clear();
     cookie.remove('auth');
     Navigate("/login")
+  }
+
+  const LoginStyle = {
+    "width": "40px",
+    "height": "40px",
+    "borderRadius" : "100px"
   }
 
   return (
@@ -29,10 +36,10 @@ const Header = () => {
             <a className="nav-toggler waves-effect waves-light text-dark d-block d-md-none" href="/"><i className="ti-menu ti-close"></i></a>
           </div>
           <div className="mx-4 ms-auto dropdown">
-            <button className="text-white btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              😎
+            <button style={LoginStyle} className="border-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img className='w-100 h-100 object-fit-cover' src={User} alt='user' />
             </button>
-            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div className="dropdown-menu pb-0 dropdown-menu-end" aria-labelledby="dropdownMenuButton">
               <Link className="dropdown-item" to={"/profile"}>Profile</Link>
               <div className="dropdown-item" onClick={logout} >Logout</div>
             </div>

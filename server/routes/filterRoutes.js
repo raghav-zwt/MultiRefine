@@ -1,7 +1,9 @@
 import express from "express";
 const router = express.Router();
-import { filterAddList } from "../controllers/filterControllers.js"
+import { filterAddList, userFilterList } from "../controllers/filterControllers.js"
 
 router.post("/add", filterAddList);
+
+router.get("/userfilter", userFilterList);
 
 export default router;
