@@ -80,7 +80,7 @@ const webflowAuthorizedBy = async (req, res) => {
 
         const date = new Date();
 
-        const sqlInsert = "INSERT INTO auth (user_id, date_time, access_token) VALUES (?)"
+        const sqlInsert = "INSERT INTO auth (webflow_id, date_time, access_token) VALUES (?)"
         const sqlValues = [webflowAuthorizedUser.id, date, token]
 
         dbConnect.query(sqlInsert, [sqlValues], (error, data) => {
@@ -149,8 +149,8 @@ const webflowRegister = async (req, res) => {
             "password": generatePassword,
         }
 
-        const sqlInsert = "INSERT INTO details (auth_id, email, first_name, last_name, password) VALUES (?)"
-        const sqlValues = [authLogin.auth_id, authLogin.email, authLogin.first_name, authLogin.last_name, authLogin.password]
+        const sqlInsert = "INSERT INTO user (email, first_name, last_name, password) VALUES (?)"
+        const sqlValues = [authLogin.email, authLogin.first_name, authLogin.last_name, authLogin.password]
 
         dbConnect.query(sqlInsert, [sqlValues], (error, data) => {
             try {
@@ -194,7 +194,7 @@ const webflowLogin = async (req, res) => {
             })
         }
 
-        const emailQuery = `SELECT * FROM details WHERE email = ?`;
+        const emailQuery = `SELECT * FROM user WHERE email = ?`;
 
         dbConnect.query(emailQuery, [email], async function (err, data) {
             if (err) {
