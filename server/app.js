@@ -15,7 +15,7 @@ const app = express();
 
 dotenvFile;
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+app.use(cors({ credentials: true, origin: ['http://localhost:3000', "https://multi-refine.vercel.app"] }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,
@@ -33,7 +33,7 @@ app.use("/api/filter", filterRoutes);
 app.use("/api/profile", profileRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT || 8080}`); 
+  console.log(`Server is running on port ${process.env.PORT || 8080}`);
 });
 
 export { app }

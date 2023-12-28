@@ -36,11 +36,6 @@ const DetailPage = () => {
                                 <div
                                     className="user-btm-box mt-5 justify-content-center align-items-center flex-wrap gap-2 d-md-flex"
                                 >
-                                    <a href="/" 
-                                        className="btn btn-danger pull-right waves-effect waves-light text-white"
-                                    >
-                                        Sync
-                                    </a>
                                     <button
                                         type="button"
                                         className="btn btn-danger pull-right waves-effect waves-light text-white"
@@ -54,22 +49,12 @@ const DetailPage = () => {
                         </div>
                     </div>
 
-                    <h3 className="page-title pb-3">Recent changes</h3>
-
                     <div className="card">
-                        <div className="card-header">Sync</div>
+                        <div className="card-header">CSS</div>
                         <div className="card-body">
-                            <blockquote className="blockquote mb-0">
-                                <p>Completed in less than a minute</p>
-                            </blockquote>
-                        </div>
-                    </div>
-                    <div className="card">
-                        <div className="card-header">Edit</div>
-                        <div className="card-body">
-                            <blockquote className="blockquote mb-0">
-                                <p>Completed in less than a 30 minute</p>
-                            </blockquote>
+                            <textarea className='w-100 p-4' placeholder='Enter css' rows={10}>
+                            </textarea>
+                            <button className='btn btn-danger pull-right waves-effect waves-light text-white'>Add</button>
                         </div>
                     </div>
                 </div>

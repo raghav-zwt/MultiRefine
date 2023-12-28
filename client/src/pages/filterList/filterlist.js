@@ -105,7 +105,7 @@ const FilterList = () => {
                                                             to={`/detail/${e.id}?site_id=${e.site_id}`}
                                                                 className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
                                                             >
-                                                                Embedded link
+                                                                Embedded & Css
                                                             </Link>
                                                         </td>
                                                     </tr>
