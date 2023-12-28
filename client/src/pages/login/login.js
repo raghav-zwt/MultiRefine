@@ -39,8 +39,6 @@ const Login = () => {
         if (response.data) {
           setAuthorized(response.data);
           toast.success("Webflow user authorized, login here.");
-          const registerData = await axios.post(`${process.env.REACT_APP_API_URL}/register`, authorized);
-          console.log(registerData)
         }
       } catch (error) {
         console.error('Error making API request:', error.message);
@@ -53,8 +51,8 @@ const Login = () => {
     if (token) {
       fetchData();
     }
-  }, [token, authorized]);
-
+  }, [token]);
+  console.log(authorized);
   const exchangeCodeForToken = async (authorizationCode) => {
     try {
       setLoading(true);
