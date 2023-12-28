@@ -115,11 +115,7 @@ const webflowAuthorizedBy = async (req, res) => {
 
 const webflowRegister = async (req, res) => {
     try {
-        const id = "63f5df688a63cc9e951ca116";
-        const email = "jenil@zealousweb.com";
-        const firstName = "Jenil";
-        const lastName = "Gohel"
-        // const { id, email, firstName, lastName } = req.body;
+        const { id, email, firstName, lastName } = req.body;
 
         if (!id || !email || !firstName || !lastName) {
             return res.status(400).json({
@@ -136,11 +132,7 @@ const webflowRegister = async (req, res) => {
             password += charset.charAt(Math.floor(Math.random() * n));
         }
 
-        console.log(password)
-
         const generatePassword = await hashPassword(password);
-
-        console.log(generatePassword);
 
         if (!generatePassword) {
             return res.status(400).json({
@@ -154,13 +146,16 @@ const webflowRegister = async (req, res) => {
             "email": email,
             "first_name": firstName,
             "last_name": lastName,
-            "password": generatePassword,
+            "password": password,
+            "hash_password" : generatePassword
         }
 
-        const sqlInsert = "INSERT INTO user (email, first_name, last_name, password) VALUES (?)"
-        const sqlValues = [authLogin.email, authLogin.first_name, authLogin.last_name, authLogin.password]
+        console.log(authLogin);
 
-        dbConnect.query(sqlInsert, [sqlValues], (error, data) => {
+        const sqlInsert = "INSERT INTO user (auth_id, email, first_name, last_name, password, hash_password) VALUES (?)"
+        const sqlValues = [authLogin.auth_id, authLogin.email, authLogin.first_name, authLogin.last_name, authLogin.password, authLogin.hash_password]
+
+        dbConnect.query(sqlInsert, [sqlValues], async function  (error, data) {
             try {
                 if (error) {
                     console.log(error);
@@ -170,10 +165,21 @@ const webflowRegister = async (req, res) => {
                     });
                 };
 
+                const token = await jwt.sign(
+                    {
+                        auth_id: data.auth_id,
+                    },
+                    process.env.JWT_SECRET,
+                    {
+                        expiresIn: "7d",
+                    }
+                );
+
                 return res.status(201).send({
                     message: "Webflow user register successfully.",
                     success: true,
                     data,
+                    token
                 });
             } catch (error) {
                 return res.status(404).json({
@@ -202,11 +208,11 @@ const webflowLogin = async (req, res) => {
             })
         }
 
-        const emailQuery = `SELECT * FROM user WHERE email = ?`;
+        const emailQuery = `SELECT id, auth_id, first_name, last_name, email, hash_password FROM user WHERE email = ?`;
 
-        dbConnect.query(emailQuery, [email], async function (err, data) {
-            if (err) {
-                console.log(err);
+        dbConnect.query(emailQuery, [email], async function (error, data) {
+            if (error) {
+                console.log(error);
             }
 
             if (data.length === 0) {
@@ -215,7 +221,7 @@ const webflowLogin = async (req, res) => {
                     success: false,
                 });
             } else {
-                const validPassword = data[0].password;
+                const validPassword = data[0].hash_password;
 
                 if (!validPassword) {
                     return res.status(404).json({
@@ -234,7 +240,7 @@ const webflowLogin = async (req, res) => {
                 } else {
                     const token = await jwt.sign(
                         {
-                            auth_id : data.auth_id ,
+                            auth_id: data.auth_id,
                         },
                         process.env.JWT_SECRET,
                         {
@@ -265,4 +271,27 @@ const webflowLogin = async (req, res) => {
     }
 }
 
-export { webflowAuth, webflowAuthorized, webflowAuthorizedBy, webflowRegister, webflowLogin }
+const getToken = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const sqlToken = `SELECT auth.access_token FROM user JOIN auth ON user.auth_id = auth.id WHERE user.id = ${id}`;
+
+        dbConnect.query(sqlToken, async function (error, data) {
+            if(error) {
+                return res.status(400).json({
+                    message: "Error in access token",
+                    success: false
+                })
+            }
+            return res.status(200).send({
+                message: "access token",
+                success: true,
+                data,
+            })
+        })
+    } catch (error) {
+        res.status(error.response ? error.response.status : 500).json({ message: 'Error token' });
+    }
+}
+
+export { webflowAuth, webflowAuthorized, webflowAuthorizedBy, webflowRegister, webflowLogin, getToken }

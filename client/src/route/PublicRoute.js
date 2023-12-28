@@ -8,6 +8,7 @@ import DetailPage from '../pages/detailPage/detail.js';
 import SitePage from '../pages/sitePage/site.js';
 import PrivateRoute from "./PrivateRoute.js";
 import SiteDetail from "../pages/siteDetail/siteDetail.js";
+import ListDetails from "../pages/listDetails/listDetails.js";
 
 const AppRoute = () => {
     return (
@@ -21,9 +22,10 @@ const AppRoute = () => {
                             <Route path="/" element={<Home />} />
                             <Route path="profile" element={<ProfilePage />} />
                             <Route path="list" element={<FilterList />} />
-                            <Route path="detail" element={<DetailPage />} />
+                            <Route path="detail/:id" element={<DetailPage />} />
                             <Route path="site" element={<SitePage />} />
                             <Route path="sitedetails/:id" element={<SiteDetail />} />
+                            <Route path="list/listdetails/:id" element={<ListDetails />} />
                         </Routes>
                     </PrivateRoute>
                 }

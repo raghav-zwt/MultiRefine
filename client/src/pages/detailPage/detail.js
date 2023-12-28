@@ -17,10 +17,6 @@ const DetailPage = () => {
                                 <ol className="breadcrumb ms-auto">
                                     <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
                                 </ol>
-                                <Link
-                                    to={"/site"}
-                                    className="btn btn-danger d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white"
-                                >Create Workflow</Link>
                             </div>
                         </div>
                     </div>
@@ -41,28 +37,18 @@ const DetailPage = () => {
                                     className="user-btm-box mt-5 justify-content-center align-items-center flex-wrap gap-2 d-md-flex"
                                 >
                                     <a href="/" 
-                                        className="btn btn-success pull-right waves-effect waves-light text-white"
+                                        className="btn btn-danger pull-right waves-effect waves-light text-white"
                                     >
                                         Sync
                                     </a>
                                     <button
                                         type="button"
-                                        className="btn btn-dark pull-right waves-effect waves-light text-white"
+                                        className="btn btn-danger pull-right waves-effect waves-light text-white"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModalLong"
                                     >
                                         Embadded Link
                                     </button>
-                                    <a href="/" 
-                                        className="btn btn-danger pull-right waves-effect waves-light text-white"
-                                    >
-                                        Edit
-                                    </a>
-                                    <a href="/" 
-                                        className="btn btn-danger pull-right waves-effect waves-light text-white"
-                                    >
-                                        Delete
-                                    </a>
                                 </div>
                             </div>
                         </div>

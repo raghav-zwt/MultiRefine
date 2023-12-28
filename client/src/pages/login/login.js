@@ -17,8 +17,6 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  console.log(authorized);
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const authorizationCode = params.get('code');
@@ -41,6 +39,8 @@ const Login = () => {
         if (response.data) {
           setAuthorized(response.data);
           toast.success("Webflow user authorized, login here.");
+          const registerData = await axios.post(`${process.env.REACT_APP_API_URL}/register`, authorized);
+          console.log(registerData)
         }
       } catch (error) {
         console.error('Error making API request:', error.message);
@@ -53,7 +53,7 @@ const Login = () => {
     if (token) {
       fetchData();
     }
-  }, [token]);
+  }, [token, authorized]);
 
   const exchangeCodeForToken = async (authorizationCode) => {
     try {
@@ -88,6 +88,16 @@ const Login = () => {
 
     try {
       const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/login`, loginDetails, { withCredentials: true });
+
+      try {
+        const accessToken = await axios.post(`${process.env.REACT_APP_API_URL}/getToken/${data?.data[0].id}`);
+
+        if (accessToken?.data?.success) {
+          localStorage.setItem("accessToken", accessToken?.data?.data[0].access_token);
+        }
+      } catch (error) {
+        console.error("Error fetching access token:", error);
+      }
 
       if (data.success) {
         toast.success(data.message);

@@ -1,8 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from "../../layouts/layout.js";
 import { Link } from 'react-router-dom';
+import axios from "axios";
+import { toast } from 'react-toastify';
 
 const ProfilePage = () => {
+
+  const auth = JSON.parse(localStorage.getItem("auth"));
+  const UserId = auth[0].id;
+  const [newPassword, setNewPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const passwordChange = async (e) => {
+    e.preventDefault();
+
+    try {
+      const data = await axios.put(`${process.env.REACT_APP_API_URL}/api/profile/update/${UserId}`, {
+        NewPassword: newPassword,
+        OldPassword: oldPassword,
+        ConfirmPassword: confirmPassword
+      });
+
+      if (data?.data?.success) {
+        toast.success(data?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message)
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <Layout>
@@ -16,101 +44,72 @@ const ProfilePage = () => {
                 <ol className="breadcrumb ms-auto">
                   <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
                 </ol>
-                <Link
-                  to={"/site"}
-                  className="btn btn-danger d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white"
-                >Create Workflow</Link>
               </div>
             </div>
           </div>
         </div>
         <div className="container-fluid">
           <div className="row">
-            <div className="col-lg-4 col-xlg-3 col-md-12">
-              <div className="white-box card">
-                <img
-                  src="plugins/images/users/genu.jpg"
-                  className="thumb-lg img-circle"
-                  alt="..."
-                />
-                <ul className="list-group list-group-flush pt-3">
-                  <li className="list-group-item px-0">Name - Jenil Gohel</li>
-                  <li className="list-group-item px-0">Email - JenilGohel@gmail.com</li>
-                  <li className="list-group-item px-0">Phone No - 9909000995</li>
-                  <li className="list-group-item px-0">Country - London</li>
+            <div className="col-lg-12 col-xlg-6 col-md-12">
+              <div className="white-box justify-content-center h-100 card">
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item px-0"><b>first name</b> - {auth[0].first_name}</li>
+                  <li className="list-group-item px-0"><b>last name</b> - {auth[0].last_name}</li>
+                  <li className="list-group-item px-0"><b>email</b> - {auth[0].email}</li>
                 </ul>
               </div>
             </div>
-            <div className="col-lg-8 col-xlg-9 col-md-12">
-              <div className="card">
-                <div className="card-body">
-                  <form className="form-horizontal form-material">
-                    <div className="form-group mb-4">
-                      <label className="col-md-12 p-0">Full Name</label>
-                      <div className="col-md-12 border-bottom p-0">
-                        <input
-                          type="text"
-                          placeholder="Johnathan Doe"
-                          className="form-control p-0 border-0"
-                        />
-                      </div>
+            <div className="col-lg-12 col-xlg-6 col-md-12">
+              <div className="white-box justify-content-center h-100 card">
+                <form className="form-horizontal form-material" method='post' onSubmit={passwordChange}>
+                  <div className="form-group mb-4">
+                    <label htmlFor="OldPassword" className="col-md-12 p-0">Old Password</label>
+                    <div className="col-md-12 border-bottom p-0">
+                      <input
+                        type="text"
+                        name="OldPassword"
+                        onChange={(e) => {
+                          setOldPassword(e.target.value)
+                        }}
+                        placeholder="Old Password"
+                        className="form-control p-0 border-0"
+                      />
                     </div>
-                    <div className="form-group mb-4">
-                      <label htmlFor="example-email" className="col-md-12 p-0"
-                      >Email</label
-                      >
-                      <div className="col-md-12 border-bottom p-0">
-                        <input
-                          type="email"
-                          placeholder="johnathan@admin.com"
-                          className="form-control p-0 border-0"
-                          name="example-email"
-                          id="example-email"
-                        />
-                      </div>
+                  </div>
+                  <div className="form-group mb-4">
+                    <label htmlFor="NewPassword" className="col-md-12 p-0">New Password</label>
+                    <div className="col-md-12 border-bottom p-0">
+                      <input
+                        type="text"
+                        placeholder="New Password"
+                        name="NewPassword"
+                        onChange={(e) => {
+                          setNewPassword(e.target.value)
+                        }}
+                        className="form-control p-0 border-0"
+                      />
                     </div>
-                    <div className="form-group mb-4">
-                      <label className="col-md-12 p-0">Password</label>
-                      <div className="col-md-12 border-bottom p-0">
-                        <input
-                          type="password"
-                          value="password"
-                          className="form-control p-0 border-0"
-                        />
-                      </div>
+                  </div>
+                  <div className="form-group mb-4">
+                    <label htmlFor="ConfirmPassword" className="col-md-12 p-0">Confirm Password</label>
+                    <div className="col-md-12 border-bottom p-0">
+                      <input
+                        type="text"
+                        placeholder="Confirm Password"
+                        name="ConfirmPassword"
+                        onChange={(e) => {
+                          setConfirmPassword(e.target.value)
+                        }}
+                        className="form-control p-0 border-0"
+                      />
                     </div>
-                    <div className="form-group mb-4">
-                      <label className="col-md-12 p-0">Phone No</label>
-                      <div className="col-md-12 border-bottom p-0">
-                        <input
-                          type="text"
-                          placeholder="123 456 7890"
-                          className="form-control p-0 border-0"
-                        />
-                      </div>
+                  </div>
+                  <div className="form-group mb-0">
+                    <div className="col-sm-12">
+                      <button type='submit' className="btn btn-success">Update Password</button>
                     </div>
-                    <div className="form-group mb-4">
-                      <label className="col-sm-12">Select Country</label>
-
-                      <div className="col-sm-12 border-bottom">
-                        <select
-                          className="form-select shadow-none p-0 border-0 form-control-line"
-                        >
-                          <option>London</option>
-                          <option>India</option>
-                          <option>Usa</option>
-                          <option>Canada</option>
-                          <option>Thailand</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="form-group mb-4">
-                      <div className="col-sm-12">
-                        <button className="btn btn-success">Update Profile</button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

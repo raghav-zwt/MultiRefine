@@ -16,10 +16,6 @@ const SitePage = () => {
                                 <ol className="breadcrumb ms-auto">
                                     <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
                                 </ol>
-                                <Link
-                                    to={"/site"}
-                                    className="btn btn-danger d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white"
-                                >Create Workflow</Link>
                             </div>
                         </div>
                     </div>

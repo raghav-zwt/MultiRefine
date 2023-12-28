@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
 import webflowRoutes from "./routes/webflowRoutes.js";
 import filterRoutes from "./routes/filterRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
 import { dbConnect } from "./db/dbConnect.js";
 import { dotenvFile } from "./helper/dotenv.js"
 const PORT = process.env.PORT || 8080;
@@ -29,6 +30,7 @@ dbConnect;
 app.use("", authRoutes);
 app.use("/api", webflowRoutes);
 app.use("/api/filter", filterRoutes);
+app.use("/api/profile", profileRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${process.env.PORT || 8080}`); 

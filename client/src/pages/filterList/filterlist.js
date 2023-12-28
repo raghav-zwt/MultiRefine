@@ -1,19 +1,47 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from "../../layouts/layout.js"
 import { Link } from 'react-router-dom'
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 const FilterList = () => {
+    const localStorageAuth = localStorage.getItem("auth");
+    const userID = JSON.parse(localStorageAuth)[0].id
+    const [filterData, setFilterData] = useState([]);
+
+    const getFilterList = async () => {
+        try {
+            const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/filter/list`, {
+                userID
+            });
+
+            if (data?.data?.success) {
+                setFilterData(data?.data?.data);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+        }
+    }
+
+    const filterRemoveId = async (id) => {
+        try {
+            const data = await axios.delete(
+                `${process.env.REACT_APP_API_URL}/api/filter/remove/${id}`
+            );
+            if (data?.data?.success) {
+                toast.success(data?.data?.message);
+                getFilterList();
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+        }
+    };
 
     useEffect(() => {
-        const getFilterList = async () => {
-            const data = await axios.get(`${process.env.REACT_APP_API_URL}/api/userfilter`);
-            return data;
-        }
-
         getFilterList();
-    }, [])
-    
+        // eslint-disable-next-line
+    }, []);
+
     return (
         <>
             <Layout>
@@ -27,10 +55,6 @@ const FilterList = () => {
                                 <ol className="breadcrumb ms-auto">
                                     <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
                                 </ol>
-                                <Link
-                                    to={"/site"}
-                                    className="btn btn-danger d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white"
-                                >Create Workflow</Link>
                             </div>
                         </div>
                     </div>
@@ -41,119 +65,52 @@ const FilterList = () => {
                             <div className="white-box">
                                 <div className="d-md-flex mb-3">
                                     <h3 className="box-title mb-0">Filter List</h3>
-                                    <div className="col-md-3 col-sm-4 col-xs-6 ms-auto">
-                                        <select className="form-select shadow-none row border-top">
-                                            <option>March 2021</option>
-                                            <option>April 2021</option>
-                                            <option>May 2021</option>
-                                            <option>June 2021</option>
-                                            <option>July 2021</option>
-                                        </select>
-                                    </div>
                                 </div>
                                 <div className="table-responsive">
                                     <table className="table no-wrap">
                                         <thead>
                                             <tr>
-                                                <th className="border-top-0">Id</th>
+                                                <th className="border-top-0">Site Id</th>
                                                 <th className="border-top-0">Project</th>
                                                 <th className="border-top-0">Type</th>
                                                 <th className="border-top-0">Layout</th>
                                                 <th className="border-top-0">Date</th>
-                                                <th className="border-top-0">Status</th>
                                                 <th className="border-top-0">Collections</th>
                                                 <th className="border-top-0">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td className="txt-oflo">Nodejs AWS</td>
-                                                <td><span className="">Single</span></td>
-                                                <td><span className="">Grid View</span></td>
-                                                <td className="txt-oflo">April 18, 2021</td>
-                                                <td>
-                                                    <span className="btn btn-success text-white">Active</span>
-                                                </td>
-                                                <td><span className="btn btn-info text-white">1</span></td>
-                                                <td className="d-flex align-items-center gap-2">
-                                                    <a href='/' className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
-                                                    >Edit</a
-                                                    >
-                                                    <a href='/'
-                                                        className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
-                                                    >Delete</a
-                                                    >
-                                                    <button
-                                                        data-bs-toggle="modal"
-                                                        type="button"
-                                                        data-bs-target="#exampleModalLong"
-                                                        className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
-                                                    >
-                                                        Embedded link
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td className="txt-oflo">Nodejs Firebase</td>
-                                                <td><span className="">Multiple</span></td>
-                                                <td><span className="">List View</span></td>
-                                                <td className="txt-oflo">April 18, 2021</td>
-                                                <td>
-                                                    <span className="btn btn-success text-white">Active</span>
-                                                </td>
-                                                <td><span className="btn btn-info text-white">4</span></td>
-                                                <td className="d-flex align-items-center gap-2">
-                                                    <a href='/'
-                                                        className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
-                                                    >Edit</a
-                                                    >
-                                                    <a href='/'
-                                                        className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
-                                                    >Delete</a
-                                                    >
-                                                    <button
-                                                        data-bs-toggle="modal"
-                                                        type="button"
-                                                        data-bs-target="#exampleModalLong"
-                                                        className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
-                                                    >
-                                                        Embedded link
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td className="txt-oflo">Nodejs Github</td>
-                                                <td><span className="">Single</span></td>
-                                                <td><span className="">List & Grid View</span></td>
-                                                <td className="txt-oflo">April 18, 2021</td>
-                                                <td>
-                                                    <span className="btn btn-danger text-white"
-                                                    >Deactive</span
-                                                    >
-                                                </td>
-                                                <td><span className="btn btn-info text-white">1</span></td>
-                                                <td className="d-flex align-items-center gap-2">
-                                                    <a href='/'
-                                                        className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
-                                                    >Edit</a
-                                                    >
-                                                    <a href='/'
-                                                        className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
-                                                    >Delete</a
-                                                    >
-                                                    <button
-                                                        data-bs-toggle="modal"
-                                                        type="button"
-                                                        data-bs-target="#exampleModalLong"
-                                                        className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
-                                                    >
-                                                        Embedded link
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                            {Array.isArray(filterData) && filterData?.map((e) => (
+                                                <>
+                                                    <tr key={e.id}>
+                                                        <td>{e.site_id}</td>
+                                                        <td className="txt-oflo">{e.name}</td>
+                                                        <td><span className="">{e.type}</span></td>
+                                                        <td><span className="">{e.layout}</span></td>
+                                                        <td className="txt-oflo">{e.date.split('T')[0]}</td>
+                                                        <td><span className="btn btn-info text-white">{e.collection.length}</span></td>
+                                                        <td className="d-flex align-items-center gap-2">
+                                                            <Link to={`listdetails/${e.id}`} className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
+                                                            >Edit</Link>
+                                                            <button
+                                                                className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
+                                                                onClick={(el) => {
+                                                                    el.preventDefault();
+                                                                    filterRemoveId(e.id);
+                                                                }}
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                            <Link
+                                                            to={`/detail/${e.id}?site_id=${e.site_id}`}
+                                                                className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
+                                                            >
+                                                                Embedded link
+                                                            </Link>
+                                                        </td>
+                                                    </tr>
+                                                </>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </div>

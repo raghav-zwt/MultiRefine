@@ -1,27 +1,62 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import Loader from "../../assets/images/loader.gif";
+import { Link, useParams } from "react-router-dom";
 import Layout from "../../layouts/layout.js";
-import axios from "axios";
-import { toast } from 'react-toastify';
-import Loader from "../../assets/images/loader.gif"
-import { Link, useParams } from 'react-router-dom';
 import Select from 'react-select';
+import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
-const SiteDetail = () => {
-
-    const Bearer = localStorage.getItem("accessToken");
+const ListDetails = () => {
+    const [loading, setLoading] = useState(false);
+    const [siteId, setSiteId] = useState("")
     const [listCollections, setListCollections] = useState([]);
     const [selectedOption, setSelectedOption] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const Bearer = localStorage.getItem("accessToken");
+    const params = useParams();
+    const [filtername, setFilterName] = useState("");
     const [type, setType] = useState("");
     const [layout, setLayout] = useState("");
     const navigate = useNavigate();
-    const [filtername, setFilterName] = useState("");
 
-    const authData = localStorage.getItem("auth");
+    useEffect(() => {
+        const filterFetch = async () => {
+            try {
+                const data = await axios.get(`${process.env.REACT_APP_API_URL}/api/filter/listDetails/${params.id}`);
 
-    const params = useParams();
-    const site_id = params.id;
+                if (data?.data?.success) {
+                    setFilterName(data?.data?.data[0].name)
+                    setSiteId(data?.data?.data[0].site_id);
+                    setType(data?.data?.data[0].type);
+                    setLayout(data?.data?.data[0].layout);
+
+                    if (siteId) {
+                        const ListCollections = async () => {
+                            setLoading(true);
+                            const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListCollections`, {
+                                site_id: `${siteId}`,
+                                Bearer: `${Bearer}`
+                            });
+
+                            if (data.status === 200) {
+                                setLoading(false);
+                                setListCollections(data?.data?.collections);
+                            }
+                        }
+                        ListCollections();
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        filterFetch();
+    }, [params, siteId, Bearer]);
+
+    const ListCollectionsOptions = listCollections.map(collection => ({
+        value: collection.id,
+        label: collection.displayName,
+    }));
 
     const handleChangeType = event => {
         setType(event.target.value);
@@ -31,44 +66,25 @@ const SiteDetail = () => {
         setLayout(event.target.value);
     };
 
-    useEffect(() => {
-        const ListCollections = async () => {
-            setLoading(true);
-            const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListCollections`, {
-                site_id: `${site_id}`,
-                Bearer: `${Bearer}`
-            });
+    const authData = localStorage.getItem("auth");
 
-            if (data.status === 200) {
-                setLoading(false);
-                setListCollections(data?.data?.collections);
-            }
-
-        }
-        ListCollections();
-    }, [site_id, Bearer])
-
-    const ListCollectionsOptions = listCollections.map(collection => ({
-        value: collection.id,
-        label: collection.displayName,
-    }));
-
-    const filterSend = async (e) => {
-        e.preventDefault();
+    const filterUpdate = async (e) => {
+        e.preventDefault()
         try {
             const currentDate = new Date();
             const formattedDate = currentDate.toISOString().split('T')[0]
-
+            
             setLoading(true);
-            const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/filter/add`, {
+            const data = await axios.put(`${process.env.REACT_APP_API_URL}/api/filter/filterUpdate/${params.id}`, {
                 user_id: JSON.parse(authData)[0].id,
-                site_id: site_id,
+                id: params.id,
                 name: filtername,
                 type: type,
                 layout: layout,
                 collection: JSON.stringify(selectedOption),
                 date: formattedDate
             });
+
             if (data.data.success) {
                 setLoading(false);
                 if (data?.data?.message === "Filter already exists") {
@@ -79,7 +95,7 @@ const SiteDetail = () => {
                 }
             }
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message);
             setLoading(false);
         }
     }
@@ -95,7 +111,7 @@ const SiteDetail = () => {
                     <div className="page-breadcrumb bg-white">
                         <div className="row align-items-center">
                             <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                                <h4 className="page-title">Create Filter</h4>
+                                <h4 className="page-title">Update Filter</h4>
                             </div>
                             <div className="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                                 <div className="d-md-flex">
@@ -107,7 +123,7 @@ const SiteDetail = () => {
                         </div>
                     </div>
                     <div className="container-fluid">
-                        <form onSubmit={filterSend} method='post'>
+                        <form onSubmit={filterUpdate} method='post'>
                             <div className="row">
                                 <div className="col-lg-4 col-xlg-4 col-md-12">
                                     <div className="w-100 h-100">
@@ -123,10 +139,11 @@ const SiteDetail = () => {
                                                         placeholder="Filter Name"
                                                         className="form-control p-0 border-0"
                                                         name="FilterName"
+                                                        id="FilterName"
                                                         onChange={(e) => {
                                                             setFilterName(e.target.value)
                                                         }}
-                                                        id="FilterName"
+                                                        value={filtername}
                                                         required
                                                     />
                                                 </div>
@@ -164,8 +181,8 @@ const SiteDetail = () => {
                                                         type="radio"
                                                         name="flexRadioDefault"
                                                         id="flexRadioDefault1"
-                                                        checked={type === 'Multiple'}
                                                         value="Multiple"
+                                                        checked={type === 'Multiple'}
                                                         onChange={handleChangeType}
                                                     />
                                                     <label
@@ -227,8 +244,8 @@ const SiteDetail = () => {
                                                         type="radio"
                                                         name="flexRadioDefault-2"
                                                         id="flexRadioDefault5"
-                                                        value="List & Grid View"
                                                         checked={layout === 'List & Grid View'}
+                                                        value="List & Grid View"
                                                         onChange={handleChangeLayout}
                                                     />
                                                     <label
@@ -248,11 +265,11 @@ const SiteDetail = () => {
                                             <h3 className="box-title">Webflow Collection</h3>
                                             <Select
                                                 className="w-25 w_collection_options"
+                                                isMulti
+                                                options={ListCollectionsOptions}
+                                                required
                                                 defaultValue={selectedOption}
                                                 onChange={setSelectedOption}
-                                                isMulti
-                                                required
-                                                options={ListCollectionsOptions}
                                             />
                                         </div>
                                     </div>
@@ -261,14 +278,13 @@ const SiteDetail = () => {
                             <button
                                 type='submit'
                                 className="btn btn-danger mt-4  waves-light text-white"
-                            >Create Now</button>
+                            >Update</button>
                         </form>
                     </div>
                 </Layout>
             )}
-
         </>
     )
 }
 
-export default SiteDetail
+export default ListDetails;
