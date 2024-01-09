@@ -105,8 +105,7 @@ const ListCollections = async (req, res) => {
 
 const GetCollectionDetails = async (req, res) => {
     try {
-        const Bearer = "";
-        const collection_id = "";
+        const { collection_id, Bearer } = req.body;
 
         const options = {
             method: 'GET',
@@ -132,8 +131,7 @@ const GetCollectionDetails = async (req, res) => {
 
 const ListCollectionItems = async (req, res) => {
     try {
-        const Bearer = "";
-        const collection_id = "";
+        const { collection_id, Bearer } = req.body;
 
         const options = {
             method: 'GET',

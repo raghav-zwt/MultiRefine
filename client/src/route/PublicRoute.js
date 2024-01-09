@@ -9,6 +9,7 @@ import SitePage from '../pages/sitePage/site.js';
 import PrivateRoute from "./PrivateRoute.js";
 import SiteDetail from "../pages/siteDetail/siteDetail.js";
 import ListDetails from "../pages/listDetails/listDetails.js";
+import Embedded from "../pages/embedded/embedded.js";
 
 const AppRoute = () => {
     return (
@@ -30,6 +31,7 @@ const AppRoute = () => {
                     </PrivateRoute>
                 }
             />
+            <Route path="embedded_code/:query" element={<Embedded />} />
             <Route path="*" element={<ErrorPage />} />
         </Routes>
     )

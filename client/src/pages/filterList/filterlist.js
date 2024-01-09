@@ -39,8 +39,7 @@ const FilterList = () => {
 
     useEffect(() => {
         getFilterList();
-        // eslint-disable-next-line
-    }, []);
+    });
 
     return (
         <>
@@ -48,7 +47,7 @@ const FilterList = () => {
                 <div className="page-breadcrumb bg-white">
                     <div className="row align-items-center">
                         <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                            <h4 className="page-title">Filter Table</h4>
+                            <h4 className="page-title">Filter List</h4>
                         </div>
                         <div className="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                             <div className="d-md-flex">
@@ -63,15 +62,11 @@ const FilterList = () => {
                     <div className="row">
                         <div className="col-md-12 col-lg-12 col-sm-12">
                             <div className="white-box">
-                                <div className="d-md-flex mb-3">
-                                    <h3 className="box-title mb-0">Filter List</h3>
-                                </div>
                                 <div className="table-responsive">
                                     <table className="table no-wrap">
                                         <thead>
                                             <tr>
-                                                <th className="border-top-0">Site Id</th>
-                                                <th className="border-top-0">Project</th>
+                                                <th className="border-top-0">Filter Name</th>
                                                 <th className="border-top-0">Type</th>
                                                 <th className="border-top-0">Layout</th>
                                                 <th className="border-top-0">Date</th>
@@ -83,12 +78,11 @@ const FilterList = () => {
                                             {Array.isArray(filterData) && filterData?.map((e) => (
                                                 <>
                                                     <tr key={e.id}>
-                                                        <td>{e.site_id}</td>
                                                         <td className="txt-oflo">{e.name}</td>
                                                         <td><span className="">{e.type}</span></td>
                                                         <td><span className="">{e.layout}</span></td>
                                                         <td className="txt-oflo">{e.date.split('T')[0]}</td>
-                                                        <td><span className="btn btn-info text-white">{e.collection.length}</span></td>
+                                                        <td><span className="btn btn-info text-white">{e.collection.length >= 1 ? e.collection.length : 1}</span></td>
                                                         <td className="d-flex align-items-center gap-2">
                                                             <Link to={`listdetails/${e.id}`} className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
                                                             >Edit</Link>
@@ -102,7 +96,7 @@ const FilterList = () => {
                                                                 Delete
                                                             </button>
                                                             <Link
-                                                            to={`/detail/${e.id}?site_id=${e.site_id}`}
+                                                                to={`/detail/${e.id}?site_id=${e.site_id}`}
                                                                 className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
                                                             >
                                                                 Embedded & Css

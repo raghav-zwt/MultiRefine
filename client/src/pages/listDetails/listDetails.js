@@ -12,12 +12,16 @@ const ListDetails = () => {
     const [siteId, setSiteId] = useState("")
     const [listCollections, setListCollections] = useState([]);
     const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedUniqueOption, setSelectedUniqueOption] = useState(null);
+    const [uniqueFieldsData, setuniqueFieldsData] = useState([]);
     const Bearer = localStorage.getItem("accessToken");
     const params = useParams();
     const [filtername, setFilterName] = useState("");
     const [type, setType] = useState("");
     const [layout, setLayout] = useState("");
     const navigate = useNavigate();
+
+    console.log(selectedUniqueOption)
 
     useEffect(() => {
         const filterFetch = async () => {
@@ -29,6 +33,8 @@ const ListDetails = () => {
                     setSiteId(data?.data?.data[0].site_id);
                     setType(data?.data?.data[0].type);
                     setLayout(data?.data?.data[0].layout);
+                    setSelectedOption(data?.data?.data[0].collection)
+                    setSelectedUniqueOption(data?.data?.data[0].collection_category)
 
                     if (siteId) {
                         const ListCollections = async () => {
@@ -73,7 +79,7 @@ const ListDetails = () => {
         try {
             const currentDate = new Date();
             const formattedDate = currentDate.toISOString().split('T')[0]
-            
+
             setLoading(true);
             const data = await axios.put(`${process.env.REACT_APP_API_URL}/api/filter/filterUpdate/${params.id}`, {
                 user_id: JSON.parse(authData)[0].id,
@@ -82,6 +88,7 @@ const ListDetails = () => {
                 type: type,
                 layout: layout,
                 collection: JSON.stringify(selectedOption),
+                collection_category: JSON.stringify(selectedUniqueOption),
                 date: formattedDate
             });
 
@@ -99,6 +106,51 @@ const ListDetails = () => {
             setLoading(false);
         }
     }
+
+    const FilterFields = async (e) => {
+        e.preventDefault();
+        const selectedOptionValue = selectedOption;
+        try {
+            let collectionData;
+            if (Array.isArray(selectedOptionValue)) {
+                collectionData = await Promise.all(selectedOptionValue.map(async (collection) => {
+                    const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListCollectionItems`, {
+                        collection_id: collection.value,
+                        Bearer: `${Bearer}`
+                    });
+                    return response?.data?.items;
+                }));
+            } else {
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListCollectionItems`, {
+                    collection_id: selectedOptionValue.value,
+                    Bearer: `${Bearer}`
+                });
+                collectionData = [response?.data?.items];
+            }
+            const siteCollectionData = collectionData.reduce((acc, val) => acc.concat(val), []);
+
+            const uniqueFields = new Set();
+
+            siteCollectionData.map(async function (item) {
+                const fieldData = item?.fieldData;
+
+                if (fieldData) {
+                    Object.keys(fieldData).forEach(field => {
+                        uniqueFields.add(field);
+                    });
+                }
+            });
+
+            setuniqueFieldsData(Array.from(uniqueFields));
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const uniqueFieldsDataOptions = uniqueFieldsData.map(collection => ({
+        value: collection,
+        label: collection,
+    }));
 
     return (
         <>
@@ -265,11 +317,20 @@ const ListDetails = () => {
                                             <h3 className="box-title">Webflow Collection</h3>
                                             <Select
                                                 className="w-25 w_collection_options"
-                                                isMulti
+                                                isMulti={type === 'Multiple'}
                                                 options={ListCollectionsOptions}
                                                 required
                                                 defaultValue={selectedOption}
                                                 onChange={setSelectedOption}
+                                            />
+                                            <button className='my-3 btn btn-primary' onClick={FilterFields}>Filter Collection Fields</button>
+                                            <Select
+                                                className="w-25 w_collection_options"
+                                                required
+                                                defaultValue={selectedUniqueOption}
+                                                onChange={setSelectedUniqueOption}
+                                                options={uniqueFieldsDataOptions}
+                                                isMulti={type === 'Multiple'}
                                             />
                                         </div>
                                     </div>

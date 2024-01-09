@@ -80,35 +80,81 @@ const webflowAuthorizedBy = async (req, res) => {
 
         const date = new Date();
 
-        const sqlInsert = "INSERT INTO auth (webflow_id, date_time, access_token) VALUES (?)"
-        const sqlValues = [webflowAuthorizedUser.id, date, token]
+        const checkQuery = `SELECT COUNT(*) AS count FROM auth WHERE webflow_id = ?`;
+        const checkValues = [webflowAuthorizedUser.id];
 
-        console.log(sqlInsert, sqlValues);
-
-        dbConnect.query(sqlInsert, [sqlValues], (error, data) => {
+        dbConnect.query(checkQuery, checkValues, (error, data) => {
             try {
                 if (error) {
                     console.log(error);
-                    return res.status(404).json({
-                        message: "Error in query.",
+                    return res.status(404).send({
+                        message: "Error in query",
                         success: false,
                     });
-                };
+                }
 
-                return res.status(201).send({
-                    message: "Access token verified",
-                    success: true,
-                    data,
-                });
+                if (data[0].count > 0) {
+                    const updateQuery = "UPDATE auth SET access_token = ?, date_time = ? WHERE webflow_id = ?";
+                    const updateValues = [token, date, webflowAuthorizedUser.id];
+
+                    dbConnect.query(updateQuery, updateValues, (error, data) => {
+                        try {
+                            if (error) {
+                                console.log(error);
+                                return res.status(404).json({
+                                    message: "Error updating access token.",
+                                    success: false,
+                                });
+                            }
+
+                            return res.status(200).send({
+                                message: 'Access token updated',
+                                success: true,
+                            });
+                        } catch (error) {
+                            return res.status(404).json({
+                                message: "Error updating access token.",
+                                success: false,
+                            });
+                        }
+                    });
+                } else {
+                    const insertQuery = "INSERT INTO auth (webflow_id, date_time, access_token) VALUES (?, ?, ?)";
+                    const insertValues = [webflowAuthorizedUser.id, date, token];
+
+                    dbConnect.query(insertQuery, insertValues, (error, data) => {
+                        try {
+                            if (error) {
+                                console.log(error);
+                                return res.status(404).json({
+                                    message: "Error in query.",
+                                    success: false,
+                                });
+                            }
+
+                            return res.status(201).send({
+                                message: "Access token verified",
+                                success: true,
+                                data,
+                            });
+                        } catch (error) {
+                            return res.status(404).json({
+                                message: "Access token not verified.",
+                                success: false,
+                            });
+                        }
+                    });
+                }
             } catch (error) {
-                return res.status(404).json({
-                    message: "Access token not verified.",
-                    success: false,
+                return res.status(400).send({
+                    message: 'Access token already created, check again',
+                    success: false
                 });
             }
-        })
+        });
+
     } catch (error) {
-        console.error('Error fetching Webflow user data:', error.message);
+        console.error('Error fetching Webflow user data:', error);
         res.status(error.response ? error.response.status : 500).json({ message: 'Error fetching user data' });
     }
 };
@@ -147,7 +193,7 @@ const webflowRegister = async (req, res) => {
             "first_name": firstName,
             "last_name": lastName,
             "password": password,
-            "hash_password" : generatePassword
+            "hash_password": generatePassword
         }
 
         console.log(authLogin);
@@ -155,7 +201,7 @@ const webflowRegister = async (req, res) => {
         const sqlInsert = "INSERT INTO user (auth_id, email, first_name, last_name, password, hash_password) VALUES (?)"
         const sqlValues = [authLogin.auth_id, authLogin.email, authLogin.first_name, authLogin.last_name, authLogin.password, authLogin.hash_password]
 
-        dbConnect.query(sqlInsert, [sqlValues], async function  (error, data) {
+        dbConnect.query(sqlInsert, [sqlValues], async function (error, data) {
             try {
                 if (error) {
                     console.log(error);
@@ -277,7 +323,7 @@ const getToken = async (req, res) => {
         const sqlToken = `SELECT auth.access_token FROM user JOIN auth ON user.auth_id = auth.id WHERE user.id = ${id}`;
 
         dbConnect.query(sqlToken, async function (error, data) {
-            if(error) {
+            if (error) {
                 return res.status(400).json({
                     message: "Error in access token",
                     success: false

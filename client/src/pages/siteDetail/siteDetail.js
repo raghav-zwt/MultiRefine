@@ -17,6 +17,8 @@ const SiteDetail = () => {
     const [layout, setLayout] = useState("");
     const navigate = useNavigate();
     const [filtername, setFilterName] = useState("");
+    const [uniqueFieldsData, setuniqueFieldsData] = useState([]);
+    const [selectedUniqueOption, setSelectedUniqueOption] = useState(null);
 
     const authData = localStorage.getItem("auth");
 
@@ -67,6 +69,7 @@ const SiteDetail = () => {
                 type: type,
                 layout: layout,
                 collection: JSON.stringify(selectedOption),
+                collection_category: JSON.stringify(selectedUniqueOption),
                 date: formattedDate
             });
             if (data.data.success) {
@@ -84,6 +87,51 @@ const SiteDetail = () => {
         }
     }
 
+    const FilterFields = async (e) => {
+        e.preventDefault();
+        const selectedOptionValue = selectedOption;
+        try {
+            let collectionData;
+            if (Array.isArray(selectedOptionValue)) {
+                collectionData = await Promise.all(selectedOptionValue.map(async (collection) => {
+                    const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListCollectionItems`, {
+                        collection_id: collection.value,
+                        Bearer: `${Bearer}`
+                    });
+                    return response?.data?.items;
+                }));
+            } else {
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListCollectionItems`, {
+                    collection_id: selectedOptionValue.value,
+                    Bearer: `${Bearer}`
+                });
+                collectionData = [response?.data?.items];
+            }
+            const siteCollectionData = collectionData.reduce((acc, val) => acc.concat(val), []);
+
+            const uniqueFields = new Set();
+
+            siteCollectionData.map(async function (item) {
+                const fieldData = item?.fieldData;
+
+                if (fieldData) {
+                    Object.keys(fieldData).forEach(field => {
+                        uniqueFields.add(field);
+                    });
+                }
+            });
+
+            setuniqueFieldsData(Array.from(uniqueFields));
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const uniqueFieldsDataOptions = uniqueFieldsData.map(collection => ({
+        value: collection,
+        label: collection,
+    }));
+
     return (
         <>
             {loading ? (
@@ -95,7 +143,7 @@ const SiteDetail = () => {
                     <div className="page-breadcrumb bg-white">
                         <div className="row align-items-center">
                             <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                                <h4 className="page-title">Create Filter</h4>
+                                <h4 className="page-title">Filter Details</h4>
                             </div>
                             <div className="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                                 <div className="d-md-flex">
@@ -244,16 +292,25 @@ const SiteDetail = () => {
                                 </div>
                                 <div className="col-lg-12 col-xlg-12 mt-4 col-md-12">
                                     <div className="w-100 h-100">
-                                        <div className="white-box analytics-info h-100">
+                                        <div className="white-box mb-0 analytics-info h-100">
                                             <h3 className="box-title">Webflow Collection</h3>
                                             <Select
                                                 className="w-25 w_collection_options"
                                                 defaultValue={selectedOption}
                                                 onChange={setSelectedOption}
-                                                isMulti
+                                                isMulti={type === 'Multiple'}
                                                 required
                                                 options={ListCollectionsOptions}
                                             />
+                                            <button className='my-3 btn btn-primary' onClick={FilterFields}>Filter Collection Fields</button>
+                                            <Select
+                                                    className="w-25 w_collection_options"
+                                                    required
+                                                    defaultValue={selectedUniqueOption}
+                                                    onChange={setSelectedUniqueOption}
+                                                    options={uniqueFieldsDataOptions}
+                                                    isMulti={type === 'Multiple'}
+                                                />
                                         </div>
                                     </div>
                                 </div>
