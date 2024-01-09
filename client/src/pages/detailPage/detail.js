@@ -27,7 +27,8 @@ const DetailPage = () => {
 
     useEffect(() => {
         fetchCss();
-    })
+        // eslint-disable-next-line
+    }, [])
 
     const submitCss = async (e) => {
         e.preventDefault();

@@ -8,7 +8,6 @@ import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
 
 const SiteDetail = () => {
-
     const Bearer = localStorage.getItem("accessToken");
     const [listCollections, setListCollections] = useState([]);
     const [selectedOption, setSelectedOption] = useState(null);
@@ -293,7 +292,7 @@ const SiteDetail = () => {
                                 <div className="col-lg-12 col-xlg-12 mt-4 col-md-12">
                                     <div className="w-100 h-100">
                                         <div className="white-box mb-0 analytics-info h-100">
-                                            <h3 className="box-title">Webflow Collection</h3>
+                                            <h3 className="box-title">Select Collection</h3>
                                             <Select
                                                 className="w-25 w_collection_options"
                                                 defaultValue={selectedOption}
@@ -303,14 +302,15 @@ const SiteDetail = () => {
                                                 options={ListCollectionsOptions}
                                             />
                                             <button className='my-3 btn btn-primary' onClick={FilterFields}>Filter Collection Fields</button>
+                                            <h3 className="box-title">Select Collection Fields</h3>
                                             <Select
-                                                    className="w-25 w_collection_options"
-                                                    required
-                                                    defaultValue={selectedUniqueOption}
-                                                    onChange={setSelectedUniqueOption}
-                                                    options={uniqueFieldsDataOptions}
-                                                    isMulti={type === 'Multiple'}
-                                                />
+                                                className="w-25 w_collection_options"
+                                                required
+                                                defaultValue={selectedUniqueOption}
+                                                onChange={setSelectedUniqueOption}
+                                                options={uniqueFieldsDataOptions}
+                                                isMulti={type === 'Multiple'}
+                                            />
                                         </div>
                                     </div>
                                 </div>

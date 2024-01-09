@@ -314,7 +314,7 @@ const ListDetails = () => {
                                 <div className="col-lg-12 col-xlg-12 mt-4 col-md-12">
                                     <div className="w-100 h-100">
                                         <div className="white-box analytics-info h-100">
-                                            <h3 className="box-title">Webflow Collection</h3>
+                                            <h3 className="box-title">Select Collection</h3>
                                             <Select
                                                 className="w-25 w_collection_options"
                                                 isMulti={type === 'Multiple'}
@@ -324,6 +324,7 @@ const ListDetails = () => {
                                                 onChange={setSelectedOption}
                                             />
                                             <button className='my-3 btn btn-primary' onClick={FilterFields}>Filter Collection Fields</button>
+                                            <h3 className="box-title">Select Collection Fields</h3>
                                             <Select
                                                 className="w-25 w_collection_options"
                                                 required

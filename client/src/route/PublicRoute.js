@@ -27,11 +27,12 @@ const AppRoute = () => {
                             <Route path="site" element={<SitePage />} />
                             <Route path="sitedetails/:id" element={<SiteDetail />} />
                             <Route path="list/listdetails/:id" element={<ListDetails />} />
+                            <Route path="*" element={<ErrorPage />} />
                         </Routes>
                     </PrivateRoute>
                 }
             />
-            <Route path="embedded_code/:query" element={<Embedded />} />
+            <Route path="/embedded_code/:query" element={<Embedded />} />
             <Route path="*" element={<ErrorPage />} />
         </Routes>
     )

@@ -127,7 +127,8 @@ const EmbeddedPage = () => {
     const resetFilterBtn = async (e) => {
         e.preventDefault();
         setSearchQuery("");
-        setSelectedCategories("")
+        setSelectedCategories("");
+        setVisibleItemCount(8);
     }
 
     return (
