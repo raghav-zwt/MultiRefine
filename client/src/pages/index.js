@@ -3,6 +3,7 @@ import Layout from "../layouts/layout.js"
 import { Link } from 'react-router-dom';
 import Loader from "../assets/images/loader.gif"
 import axios from "axios";
+import slugify from "slugify";
 
 const HomePage = () => {
 
@@ -40,10 +41,9 @@ const HomePage = () => {
                 <h4 className="page-title">Dashboard</h4>
               </div>
               <div className="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <div className="d-md-flex">
-                  <ol className="breadcrumb ms-auto">
-                    <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
-                  </ol>
+                <div className="d-flex gap-3 justify-content-end ms-auto">
+                  <Link to={"/site"} className="btn btn-primary fw-normal">Create Filter</Link>
+                  <Link to={"/"} className="btn btn-primary fw-normal">Dashboard</Link>
                 </div>
               </div>
             </div>
@@ -65,7 +65,7 @@ const HomePage = () => {
                       className="user-btm-box mt-5 justify-content-center align-items-center d-md-flex"
                     >
                       <Link
-                        to={`/sitedetails/${e.id}`}
+                        to={`/sitedetails/${e.id}/${slugify(e.displayName)}`}
                         className="btn btn-primary pull-right me-auto waves-effect waves-light text-white"
                       >
                         Select Now

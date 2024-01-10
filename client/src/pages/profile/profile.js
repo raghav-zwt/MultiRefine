@@ -16,14 +16,18 @@ const ProfilePage = () => {
     e.preventDefault();
 
     try {
-      const data = await axios.put(`${process.env.REACT_APP_API_URL}/api/profile/update/${UserId}`, {
-        NewPassword: newPassword,
-        OldPassword: oldPassword,
-        ConfirmPassword: confirmPassword
-      });
+      if (newPassword === confirmPassword) {
+        const data = await axios.put(`${process.env.REACT_APP_API_URL}/api/profile/update/${UserId}`, {
+          NewPassword: newPassword,
+          OldPassword: oldPassword,
+          ConfirmPassword: confirmPassword
+        });
 
-      if (data?.data?.success) {
-        toast.success(data?.data?.message)
+        if (data?.data?.success) {
+          toast.success(data?.data?.message)
+        }
+      } else {
+        toast.error("new password & confirm password do not match");
       }
     } catch (error) {
       toast.error(error?.response?.data?.message)
@@ -40,10 +44,9 @@ const ProfilePage = () => {
               <h4 className="page-title">Profile page</h4>
             </div>
             <div className="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-              <div className="d-md-flex">
-                <ol className="breadcrumb ms-auto">
-                  <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
-                </ol>
+              <div className="d-flex gap-3 justify-content-end ms-auto">
+                <Link to={"/site"} className="btn btn-primary fw-normal">Create Filter</Link>
+                <Link to={"/"} className="btn btn-primary fw-normal">Dashboard</Link>
               </div>
             </div>
           </div>

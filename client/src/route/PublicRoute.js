@@ -25,7 +25,7 @@ const AppRoute = () => {
                             <Route path="list" element={<FilterList />} />
                             <Route path="detail/:id" element={<DetailPage />} />
                             <Route path="site" element={<SitePage />} />
-                            <Route path="sitedetails/:id" element={<SiteDetail />} />
+                            <Route path="sitedetails/:id/:name" element={<SiteDetail />} />
                             <Route path="list/listdetails/:id" element={<ListDetails />} />
                             <Route path="*" element={<ErrorPage />} />
                         </Routes>

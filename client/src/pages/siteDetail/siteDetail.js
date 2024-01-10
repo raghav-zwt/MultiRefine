@@ -18,11 +18,13 @@ const SiteDetail = () => {
     const [filtername, setFilterName] = useState("");
     const [uniqueFieldsData, setuniqueFieldsData] = useState([]);
     const [selectedUniqueOption, setSelectedUniqueOption] = useState(null);
+    const [siteList, setSiteList] = useState([]);
 
     const authData = localStorage.getItem("auth");
 
     const params = useParams();
     const site_id = params.id;
+    const site_name = params.name;
 
     const handleChangeType = event => {
         setType(event.target.value);
@@ -33,6 +35,19 @@ const SiteDetail = () => {
     };
 
     useEffect(() => {
+        const SiteListCollections = async () => {
+            setLoading(true);
+            const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/filter/getSiteList`, {
+                site_id: `${site_id}`,
+            });
+
+            if (data.status === 200) {
+                setLoading(false);
+                setSiteList(data?.data?.data)
+            }
+
+        }
+
         const ListCollections = async () => {
             setLoading(true);
             const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListCollections`, {
@@ -46,6 +61,8 @@ const SiteDetail = () => {
             }
 
         }
+
+        SiteListCollections();
         ListCollections();
     }, [site_id, Bearer])
 
@@ -64,6 +81,7 @@ const SiteDetail = () => {
             const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/filter/add`, {
                 user_id: JSON.parse(authData)[0].id,
                 site_id: site_id,
+                site_name: site_name,
                 name: filtername,
                 type: type,
                 layout: layout,
@@ -71,17 +89,18 @@ const SiteDetail = () => {
                 collection_category: JSON.stringify(selectedUniqueOption),
                 date: formattedDate
             });
-            if (data.data.success) {
+
+            if (data?.data?.success) {
                 setLoading(false);
                 if (data?.data?.message === "Filter already exists") {
                     toast.error(data?.data?.message);
                 } else {
                     toast.success(data?.data?.message);
-                    navigate("/list")
+                    navigate("/list");
                 }
             }
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message);
             setLoading(false);
         }
     }
@@ -122,7 +141,8 @@ const SiteDetail = () => {
 
             setuniqueFieldsData(Array.from(uniqueFields));
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            toast.error(error?.response?.data?.message);
         }
     }
 
@@ -145,15 +165,76 @@ const SiteDetail = () => {
                                 <h4 className="page-title">Filter Details</h4>
                             </div>
                             <div className="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                                <div className="d-md-flex">
-                                    <ol className="breadcrumb ms-auto">
-                                        <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
-                                    </ol>
+                                <div className="d-flex gap-3 justify-content-end ms-auto">
+                                    <Link to={"/site"} className="btn btn-primary fw-normal">Create Filter</Link>
+                                    <Link to={"/"} className="btn btn-primary fw-normal">Dashboard</Link>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="container-fluid">
+                        <div className="row">
+                            <div className="col-12">
+                                <div className="white-box p-0 analytics-info">
+                                    <div className="accordion" id="accordionExample">
+                                        <div className="accordion-item border-0">
+                                            <h2 className="accordion-header d-flex align-items-center" id="headingOne">
+                                                <button className="accordion-button bg-white text-black border-0 shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    <label className='box-title mb-0'>Site Filter List</label>
+                                                </button>
+                                                <Link className='me-3 btn btn-primary' to={"/list"}>Details</Link>
+                                            </h2>
+                                            <div id="collapseOne" className="accordion-collapse border-0 collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                <div className="accordion-body">
+                                                    <div className="table-responsive">
+                                                        <table className="table no-wrap mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th className="border-top-0">Webflow Site Name</th>
+                                                                    <th className="border-top-0">Filter Name</th>
+                                                                    <th className="border-top-0">Type</th>
+                                                                    <th className="border-top-0">Layout</th>
+                                                                    <th className="border-top-0">Date</th>
+                                                                    <th className="border-top-0">Collections</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {
+                                                                    Array.isArray(siteList) && siteList.length === 0 ?
+                                                                        (
+                                                                            <tr>
+                                                                                <td className="txt-oflo border-0">Not Found</td>
+                                                                            </tr>
+
+                                                                        ) :
+                                                                        (
+                                                                            <>
+                                                                                {Array.isArray(siteList) && siteList?.map((e) => (
+                                                                                    <>
+                                                                                        <tr key={e.id}>
+                                                                                            <td className="txt-oflo">{e.site_name}</td>
+                                                                                            <td className="txt-oflo">{e.name}</td>
+                                                                                            <td><span className="">{e.type}</span></td>
+                                                                                            <td><span className="">{e.layout}</span></td>
+                                                                                            <td className="txt-oflo">{e.date.split('T')[0]}</td>
+                                                                                            <td><span className="btn btn-info text-white">{e.collection.length >= 1 ? e.collection.length : 1}</span></td>
+                                                                                        </tr>
+                                                                                    </>
+                                                                                ))}
+                                                                            </>
+                                                                        )
+                                                                }
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <form onSubmit={filterSend} method='post'>
                             <div className="row">
                                 <div className="col-lg-4 col-xlg-4 col-md-12">
@@ -302,7 +383,7 @@ const SiteDetail = () => {
                                                 options={ListCollectionsOptions}
                                             />
                                             <button className='my-3 btn btn-primary' onClick={FilterFields}>Filter Collection Fields</button>
-                                            <h3 className="box-title">Select Collection Fields</h3>
+                                            <h3 className="box-title">Select Collection Categories</h3>
                                             <Select
                                                 className="w-25 w_collection_options"
                                                 required
@@ -315,10 +396,15 @@ const SiteDetail = () => {
                                     </div>
                                 </div>
                             </div>
-                            <button
-                                type='submit'
-                                className="btn btn-danger mt-4  waves-light text-white"
-                            >Create Now</button>
+                            <div className='d-flex flex-warp gap-3 mt-4'>
+                                <button
+                                    type='submit'
+                                    className="btn btn-primary waves-light text-white"
+                                >Create Now</button>
+                                <Link to={"/"}
+                                    className="btn btn-primary waves-light text-white"
+                                >Cancel</Link>
+                            </div>
                         </form>
                     </div>
                 </Layout>

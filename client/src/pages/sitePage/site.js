@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import Loader from "../../assets/images/loader.gif";
 import Select from 'react-select';
+import slugify from "slugify";
 
 const SitePage = () => {
 
@@ -16,8 +17,6 @@ const SitePage = () => {
         value: collection.id,
         label: collection.displayName,
     }));
-
-    const webID = selectedOption?.value;
 
     useEffect(() => {
         const ListSite = async () => {
@@ -35,6 +34,10 @@ const SitePage = () => {
         ListSite();
     }, [Bearer])
 
+    const slugifiedLabel = slugify(selectedOption?.label || '');
+    
+    const webID = `${selectedOption?.value}/${slugifiedLabel}`;
+
     return (
         <>
             {loading ? (
@@ -49,10 +52,9 @@ const SitePage = () => {
                                 <h4 className="page-title">Select Site</h4>
                             </div>
                             <div className="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                                <div className="d-md-flex">
-                                    <ol className="breadcrumb ms-auto">
-                                        <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
-                                    </ol>
+                                <div className="d-flex gap-3 justify-content-end ms-auto">
+                                    <Link to={"/site"} className="btn btn-primary fw-normal">Create Filter</Link>
+                                    <Link to={"/"} className="btn btn-primary fw-normal">Dashboard</Link>
                                 </div>
                             </div>
                         </div>

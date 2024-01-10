@@ -145,7 +145,7 @@ const EmbeddedPage = () => {
                                     onChange={handleSearchChange} placeholder='Search...' className='multirefine-filter-search form-control' />
                             </div>
                             <div className='d-flex gap-4'>
-                                {Array.isArray(data?.collection_category) && data?.collection_category.length > 1 ? (
+                                {Array.isArray(data?.collection_category) && data?.collection_category.length >= 1 ? (
                                     data?.collection_category.map((category) => (
                                         <div key={category.value}>
                                             <select
@@ -164,9 +164,11 @@ const EmbeddedPage = () => {
                                                             ))
                                                         )
                                                         .map((e) => (
-                                                            <option key={e.id} value={`${e.fieldData?.[`${category.value}`]}`}>
-                                                                {`${e.fieldData?.[`${category.value}`]}`}
-                                                            </option>
+                                                            e.fieldData?.[`${category.value}`] !== undefined && (
+                                                                <option key={e.id} value={`${e.fieldData?.[`${category.value}`]}`}>
+                                                                    {`${e.fieldData?.[`${category.value}`]}`}
+                                                                </option>
+                                                            )
                                                         ))
                                                 }
                                             </select>
@@ -190,9 +192,11 @@ const EmbeddedPage = () => {
                                                         ))
                                                     )
                                                     .map((e) => (
-                                                        <option key={e.id} value={`${e.fieldData?.[`${data?.collection_category?.value}`]}`}>
-                                                            {`${e.fieldData?.[`${data?.collection_category?.value}`]}`}
-                                                        </option>
+                                                        e.fieldData?.[`${data?.collection_category?.value}`] !== undefined && (
+                                                            <option key={e.id} value={`${e.fieldData?.[`${data?.collection_category?.value}`]}`}>
+                                                                {`${e.fieldData?.[`${data?.collection_category?.value}`]}`}
+                                                            </option>
+                                                        )
                                                     ))
                                             }
                                         </select>

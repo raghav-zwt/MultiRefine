@@ -3,8 +3,8 @@ import axios from "axios";
 
 const filterAddList = async (req, res) => {
     try {
-        const { user_id, site_id, name, type, layout, collection, collection_category, date } = req.body;
-        if (!user_id || !site_id || !name || !type || !layout || !collection || !collection_category || !date) {
+        const { user_id, site_id, site_name, name, type, layout, collection, collection_category, date } = req.body;
+        if (!user_id || !site_id || !site_name || !name || !type || !layout || !collection || !collection_category || !date) {
             return res.status(401).json({
                 message: 'All fields are required',
                 success: false,
@@ -28,8 +28,8 @@ const filterAddList = async (req, res) => {
                         data,
                     });
                 }
-                const insertQuery = "INSERT INTO filter (user_id, site_id, name, type, layout, collection, collection_category, date) VALUES (?)";
-                const insertValue = [user_id, site_id, name, type, layout, collection, collection_category, date]
+                const insertQuery = "INSERT INTO filter (user_id, site_id, site_name, name, type, layout, collection, collection_category, date) VALUES (?)";
+                const insertValue = [user_id, site_id, site_name, name, type, layout, collection, collection_category, date]
                 dbConnect.query(insertQuery, [insertValue], (error, data) => {
                     try {
                         if (error) {
@@ -310,7 +310,7 @@ const embeddedCode = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const embeddedGet = `SELECT filter.id AS site_id, collection, collection_category, type, layout, date, css, user.id AS user_id, user.hash_password, auth.access_token
+        const embeddedGet = `SELECT filter.id AS site_id, site_name, collection, collection_category, type, layout, date, css, user.id AS user_id, user.hash_password, auth.access_token
         FROM filter
         JOIN user ON filter.user_id = user.id
         JOIN auth ON user.auth_id = auth.id
@@ -350,4 +350,42 @@ const embeddedCode = async (req, res) => {
     }
 }
 
-export { filterAddList, userFilterList, filterRemove, userDetails, filterUpdate, filterCss, getFilterCss, embeddedCode };
+const getSiteList = async (req, res) => {
+    try {
+        const { site_id } = req.body;
+
+        const siteData = `SELECT * FROM filter WHERE site_id = ?`;
+
+        dbConnect.query(siteData, [site_id], async function (error, data) {
+            try {
+                if (error) {
+                    console.log(error);
+                    return res.status(400).json({
+                        message: "Error in query",
+                        success: false,
+                        error
+                    });
+                }
+                return res.status(200).send({
+                    message: "site fetch",
+                    success: true,
+                    data
+                });
+            } catch (error) {
+                return res.status(400).send({
+                    message: "Error in site filter",
+                    success: false,
+                    error
+                });
+            }
+        });
+
+    } catch (error) {
+        return res.status(400).send({
+            message: "Error in get filter data",
+            success: false,
+        });
+    }
+}
+
+export { filterAddList, userFilterList, filterRemove, userDetails, filterUpdate, filterCss, getFilterCss, embeddedCode, getSiteList };

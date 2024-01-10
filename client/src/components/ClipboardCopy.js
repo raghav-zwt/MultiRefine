@@ -26,7 +26,7 @@ function ClipboardCopy({ copyText }) {
 
     return (
         <div>
-            <input class="page-url-info w-100" disabled type="text" value={copyText} readOnly />
+            <input className="page-url-info w-100" disabled type="text" value={copyText} readOnly />
             <button className="btn w-100 btn-primary" onClick={handleCopyClick}>
                 <span>{isCopied ? 'Copied!' : 'Copy'}</span>
             </button>

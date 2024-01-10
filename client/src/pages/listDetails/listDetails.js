@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 
 const ListDetails = () => {
     const [loading, setLoading] = useState(false);
-    const [siteId, setSiteId] = useState("")
+    const [siteId, setSiteId] = useState("");
     const [listCollections, setListCollections] = useState([]);
     const [selectedOption, setSelectedOption] = useState(null);
     const [selectedUniqueOption, setSelectedUniqueOption] = useState(null);
@@ -20,8 +20,6 @@ const ListDetails = () => {
     const [type, setType] = useState("");
     const [layout, setLayout] = useState("");
     const navigate = useNavigate();
-
-    console.log(selectedUniqueOption)
 
     useEffect(() => {
         const filterFetch = async () => {
@@ -44,7 +42,7 @@ const ListDetails = () => {
                                 Bearer: `${Bearer}`
                             });
 
-                            if (data.status === 200) {
+                            if (data?.status === 200) {
                                 setLoading(false);
                                 setListCollections(data?.data?.collections);
                             }
@@ -92,7 +90,7 @@ const ListDetails = () => {
                 date: formattedDate
             });
 
-            if (data.data.success) {
+            if (data?.data?.success) {
                 setLoading(false);
                 if (data?.data?.message === "Filter already exists") {
                     toast.error(data?.data?.message);
@@ -166,10 +164,9 @@ const ListDetails = () => {
                                 <h4 className="page-title">Update Filter</h4>
                             </div>
                             <div className="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                                <div className="d-md-flex">
-                                    <ol className="breadcrumb ms-auto">
-                                        <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
-                                    </ol>
+                                <div className="d-flex gap-3 justify-content-end ms-auto">
+                                    <Link to={"/site"} className="btn btn-primary fw-normal">Create Filter</Link>
+                                    <Link to={"/"} className="btn btn-primary fw-normal">Dashboard</Link>
                                 </div>
                             </div>
                         </div>
@@ -313,7 +310,7 @@ const ListDetails = () => {
                                 </div>
                                 <div className="col-lg-12 col-xlg-12 mt-4 col-md-12">
                                     <div className="w-100 h-100">
-                                        <div className="white-box analytics-info h-100">
+                                        <div className="white-box analytics-info h-100 mb-0">
                                             <h3 className="box-title">Select Collection</h3>
                                             <Select
                                                 className="w-25 w_collection_options"
@@ -324,7 +321,7 @@ const ListDetails = () => {
                                                 onChange={setSelectedOption}
                                             />
                                             <button className='my-3 btn btn-primary' onClick={FilterFields}>Filter Collection Fields</button>
-                                            <h3 className="box-title">Select Collection Fields</h3>
+                                            <h3 className="box-title">Select Collection Categories</h3>
                                             <Select
                                                 className="w-25 w_collection_options"
                                                 required
@@ -337,10 +334,15 @@ const ListDetails = () => {
                                     </div>
                                 </div>
                             </div>
-                            <button
-                                type='submit'
-                                className="btn btn-danger mt-4  waves-light text-white"
-                            >Update</button>
+                            <div className='d-flex flex-warp gap-3'>
+                                <button
+                                    type='submit'
+                                    className="btn btn-danger mt-4 waves-light text-white"
+                                >Update</button>
+                                <Link to={"/list"}
+                                    className="btn btn-primary mt-4 waves-light text-white"
+                                >Cancel</Link>
+                            </div>
                         </form>
                     </div>
                 </Layout>

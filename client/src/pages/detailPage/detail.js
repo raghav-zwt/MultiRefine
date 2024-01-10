@@ -42,6 +42,7 @@ const DetailPage = () => {
             }
         } catch (error) {
             console.log(error)
+            toast.error(error?.response?.data?.message);
         }
     }
 
@@ -51,13 +52,12 @@ const DetailPage = () => {
                 <div className="page-breadcrumb bg-white">
                     <div className="row align-items-center">
                         <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                            <h4 className="page-title">Filter Details</h4>
+                            <h4 className="page-title">Filter Embadded Details</h4>
                         </div>
                         <div className="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                            <div className="d-md-flex">
-                                <ol className="breadcrumb ms-auto">
-                                    <li><Link to={"/"} className="fw-normal">Dashboard</Link></li>
-                                </ol>
+                            <div className="d-flex gap-3 justify-content-end ms-auto">
+                                <Link to={"/site"} className="btn btn-primary fw-normal">Create Filter</Link>
+                                <Link to={"/"} className="btn btn-primary fw-normal">Dashboard</Link>
                             </div>
                         </div>
                     </div>
@@ -76,9 +76,12 @@ const DetailPage = () => {
                                     </div>
                                 </div>
                                 <div className="user-btm-box mt-5 justify-content-center align-items-center flex-wrap gap-2 d-md-flex">
-                                    <Button variant="danger text-white" onClick={handleShow}>
+                                    <Button variant="primary text-white" onClick={handleShow}>
                                         Embadded Link
                                     </Button>
+                                    <Link to={"/list"} className="btn btn-primary text-white" >
+                                        Filter List
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +104,7 @@ const DetailPage = () => {
                     <div className="card">
                         <div className="card-header">CSS</div>
                         <div className="card-body">
-                            {getFilterCss.css}
+                            {getFilterCss.css ? getFilterCss.css : "Css Not found"}
                         </div>
                     </div>
                 </div>
@@ -118,7 +121,7 @@ const DetailPage = () => {
                         <h4 className="py-4 page-title mb-0 text-center">- OR -</h4>
                         <div>
                             <h4 className="page-title">Iframe code</h4>
-                            <ClipboardCopy copyText={`<iframe src="${process.env.REACT_APP_URL}/embedded_code/user_id=${getFilterCss.user_id}&id=${getFilterCss.id}" title="Multifilter-${getFilterCss.user_id}${getFilterCss.id}"></iframe>`} />
+                            <ClipboardCopy copyText={`<iframe src="${process.env.REACT_APP_URL}/embedded_code/user_id=${getFilterCss.user_id}&id=${getFilterCss.id}" width="100%" height="100%" class="Multifilter-${getFilterCss.user_id}${getFilterCss.id}" title="Multifilter-${getFilterCss.user_id}${getFilterCss.id}"></iframe>`} />
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
