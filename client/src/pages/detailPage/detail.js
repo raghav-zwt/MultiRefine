@@ -5,7 +5,9 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { ClipboardCopy } from "../../components/ClipboardCopy.js"
+import { ClipboardCopy } from "../../components/ClipboardCopy.js";
+import MonacoEditor from '@monaco-editor/react';
+import "./detail.css"
 
 const DetailPage = () => {
     const [textareaData, setTextareaData] = useState("");
@@ -20,6 +22,7 @@ const DetailPage = () => {
         try {
             const data = await axios.get(`${process.env.REACT_APP_API_URL}/api/filter/getFilterCss/${param.id}`);
             setgetFilterCss(data?.data?.data[0]);
+            setTextareaData(data?.data?.data[0]?.css);
         } catch (error) {
             console.log(error);
         }
@@ -33,18 +36,36 @@ const DetailPage = () => {
     const submitCss = async (e) => {
         e.preventDefault();
         try {
-            const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/filter/filterCss/${param.id}`, {
-                cssData: textareaData
-            });
-            if (data?.data?.success) {
-                toast.success(data?.data?.message)
-                fetchCss();
+            if (textareaData === getFilterCss.css) {
+                toast.error("Your current css already added, change it.")
+            } else {
+                const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/filter/filterCss/${param.id}`, {
+                    cssData: textareaData
+                });
+                if (data?.data?.success) {
+                    toast.success(data?.data?.message);
+                    fetchCss();
+                }
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
             toast.error(error?.response?.data?.message);
         }
     }
+
+    const CssRemoveId = async (id) => {
+        try {
+            const data = await axios.put(
+                `${process.env.REACT_APP_API_URL}/api/filter/filterCssRemove/${id}`
+            );
+            if (data?.data?.success) {
+                toast.success(data?.data?.message);
+                fetchCss();
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+        }
+    };
 
     return (
         <>
@@ -90,21 +111,47 @@ const DetailPage = () => {
                     <div className="card">
                         <div className="card-body">
                             <form method='post' onSubmit={submitCss}>
-                                <textarea required
+                                {/* <textarea required
                                     className='w-100 p-4'
-                                    // value={getFilterCss.css}
+                                    value={textareaData || ""}
                                     onChange={(e) => { setTextareaData(e.target.value) }}
                                     placeholder='Enter css'
-                                    rows={10}></textarea>
-                                <Button type='submit' className='btn btn-danger pull-right waves-effect waves-light text-white'>Add</Button>
+                                    rows={10}></textarea> */}
+                                <div className='Css-Editor'>
+                                    <MonacoEditor
+                                        width="100%"
+                                        height="100%"
+                                        className='w-100'
+                                        onChange={(e) => { setTextareaData(e); }}
+                                        defaultLanguage="css"
+                                        options={{
+                                            selectOnLineNumbers: true,
+                                            roundedSelection: false,
+                                            readOnly: false,
+                                            cursorStyle: 'line',
+                                            automaticLayout: true,
+                                        }}
+                                        theme="vs-dark"
+                                        value={textareaData || ""}
+                                    />
+                                </div>
+                                <Button type='submit' className='btn mt-4 btn-danger pull-right waves-effect waves-light text-white'>Add</Button>
                             </form>
                         </div>
                     </div>
 
                     <div className="card">
-                        <div className="card-header">CSS</div>
+                        <div className='card-header gap-4 bg-white pt-4 pb-0 d-flex flex-wrap justify-content-between align-items-center'>
+                            <div className="fw-bold fs-4">CSS</div>
+                            {getFilterCss.css ? (
+                                <button onClick={(el) => {
+                                    el.preventDefault();
+                                    CssRemoveId(getFilterCss?.id);
+                                }} className='btn btn-primary'>Remove CSS</button>
+                            ) : ""}
+                        </div>
                         <div className="card-body">
-                            {getFilterCss.css ? getFilterCss.css : "Css Not found"}
+                            <ClipboardCopy copyText={getFilterCss.css ? getFilterCss.css : "Css Not found"} />
                         </div>
                     </div>
                 </div>

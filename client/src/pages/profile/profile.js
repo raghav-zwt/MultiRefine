@@ -27,7 +27,7 @@ const ProfilePage = () => {
           toast.success(data?.data?.message)
         }
       } else {
-        toast.error("new password & confirm password do not match");
+        toast.error("new password & confirm password not match");
       }
     } catch (error) {
       toast.error(error?.response?.data?.message)
@@ -74,6 +74,7 @@ const ProfilePage = () => {
                         onChange={(e) => {
                           setOldPassword(e.target.value)
                         }}
+                        required
                         placeholder="Old Password"
                         className="form-control p-0 border-0"
                       />
@@ -86,6 +87,7 @@ const ProfilePage = () => {
                         type="text"
                         placeholder="New Password"
                         name="NewPassword"
+                        required
                         onChange={(e) => {
                           setNewPassword(e.target.value)
                         }}
@@ -100,6 +102,7 @@ const ProfilePage = () => {
                         type="text"
                         placeholder="Confirm Password"
                         name="ConfirmPassword"
+                        required
                         onChange={(e) => {
                           setConfirmPassword(e.target.value)
                         }}

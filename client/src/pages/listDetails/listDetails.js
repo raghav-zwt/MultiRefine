@@ -14,6 +14,7 @@ const ListDetails = () => {
     const [selectedOption, setSelectedOption] = useState(null);
     const [selectedUniqueOption, setSelectedUniqueOption] = useState(null);
     const [uniqueFieldsData, setuniqueFieldsData] = useState([]);
+    const [mappingOption, setMappingOption] = useState({});
     const Bearer = localStorage.getItem("accessToken");
     const params = useParams();
     const [filtername, setFilterName] = useState("");
@@ -33,6 +34,7 @@ const ListDetails = () => {
                     setLayout(data?.data?.data[0].layout);
                     setSelectedOption(data?.data?.data[0].collection)
                     setSelectedUniqueOption(data?.data?.data[0].collection_category)
+                    setMappingOption(data?.data?.data[0].collection_mapping)
 
                     if (siteId) {
                         const ListCollections = async () => {
@@ -87,6 +89,7 @@ const ListDetails = () => {
                 layout: layout,
                 collection: JSON.stringify(selectedOption),
                 collection_category: JSON.stringify(selectedUniqueOption),
+                collection_mapping: JSON.stringify(mappingOption),
                 date: formattedDate
             });
 
@@ -149,6 +152,16 @@ const ListDetails = () => {
         value: collection,
         label: collection,
     }));
+
+    const handleInputChange = (category, fieldName, selectedValue) => {
+        setMappingOption((prevFormData) => ({
+            ...prevFormData,
+            [category]: {
+                ...prevFormData[category],
+                [fieldName]: selectedValue,
+            },
+        }));
+    };
 
     return (
         <>
@@ -308,30 +321,134 @@ const ListDetails = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-lg-12 col-xlg-12 mt-4 col-md-12">
-                                    <div className="w-100 h-100">
-                                        <div className="white-box analytics-info h-100 mb-0">
-                                            <h3 className="box-title">Select Collection</h3>
-                                            <Select
-                                                className="w-25 w_collection_options"
-                                                isMulti={type === 'Multiple'}
-                                                options={ListCollectionsOptions}
-                                                required
-                                                defaultValue={selectedOption}
-                                                onChange={setSelectedOption}
-                                            />
-                                            <button className='my-3 btn btn-primary' onClick={FilterFields}>Filter Collection Fields</button>
-                                            <h3 className="box-title">Select Collection Categories</h3>
-                                            <Select
-                                                className="w-25 w_collection_options"
-                                                required
-                                                defaultValue={selectedUniqueOption}
-                                                onChange={setSelectedUniqueOption}
-                                                options={uniqueFieldsDataOptions}
-                                                isMulti={type === 'Multiple'}
-                                            />
+                                <div className="row">
+                                    <div className="col-lg-6 col-xlg-6 mt-4 col-md-6">
+                                        <div className="w-100 h-100">
+                                            <div className="white-box analytics-info h-100 mb-0">
+                                                <h3 className="my-3 box-title">Select Collection</h3>
+                                                <Select
+                                                    className="w-100 w_collection_options"
+                                                    isMulti={type === 'Multiple'}
+                                                    options={ListCollectionsOptions}
+                                                    required
+                                                    defaultValue={selectedOption}
+                                                    onChange={setSelectedOption}
+                                                />
+                                                <button className='mt-3 btn btn-primary' onClick={FilterFields}>Filter Collection Fields</button>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div className="col-lg-6 col-xlg-6 mt-4 col-md-6">
+                                        <div className="w-100 h-100">
+                                            <div className="white-box analytics-info h-100 mb-0">
+                                                <h3 className="my-3 box-title">Select Collection Categories</h3>
+                                                <Select
+                                                    className="w-100 w_collection_options"
+                                                    required
+                                                    defaultValue={selectedUniqueOption}
+                                                    onChange={setSelectedUniqueOption}
+                                                    options={uniqueFieldsDataOptions}
+                                                    isMulti={type === 'Multiple'}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {selectedOption ? (
+                                        <div className="col-12 pt-4">
+                                            <div className="white-box mb-0 p-0 analytics-info">
+                                                <div className="accordion" id="accordionExample">
+                                                    <div className="accordion-item border-0">
+                                                        <h2 className="accordion-header" id="headingThree">
+                                                            <button className="p-3 accordion-button bg-white text-black border-0 shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                                <label className='box-title mb-0'>Map filter data</label>
+                                                            </button>
+                                                        </h2>
+                                                        <div id="collapseThree" className="accordion-collapse border-0 collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                                            <div className="accordion-body">
+                                                                <div className='row'>
+                                                                    {Array.isArray(selectedOption) && selectedOption?.length > 0 ? (
+                                                                        selectedOption.map((lab) => (
+                                                                            <div className="col-lg-3 col-xlg-3 col-md-3">
+                                                                                <div>
+                                                                                    <h3 className="mb-4">{lab.label}</h3>
+                                                                                    <label className="mb-2">Select Image</label>
+                                                                                    <Select
+                                                                                        className="w-100 w_collection_options"
+                                                                                        required
+                                                                                        name='select_image'
+                                                                                        defaultValue={mappingOption?.[lab.label].select_image}
+                                                                                        onChange={(e) => handleInputChange(lab.label, 'select_image', e)}
+                                                                                        options={uniqueFieldsDataOptions}
+                                                                                    />
+                                                                                    <label className="my-2">Select Title</label>
+                                                                                    <Select
+                                                                                        className="w-100 w_collection_options"
+                                                                                        required
+                                                                                        name='select_title'
+                                                                                        defaultValue={mappingOption?.[lab.label].select_title}
+                                                                                        onChange={(e) => handleInputChange(lab.label, 'select_title', e)}
+                                                                                        options={uniqueFieldsDataOptions}
+                                                                                    />
+                                                                                    <label className="my-2">Select Category</label>
+                                                                                    <Select
+                                                                                        className="w-100 w_collection_options"
+                                                                                        required
+                                                                                        name='select_category'
+                                                                                        defaultValue={mappingOption?.[lab.label].select_category}
+                                                                                        onChange={(e) => handleInputChange(lab.label, 'select_category', e)}
+                                                                                        options={uniqueFieldsDataOptions}
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+                                                                        ))
+                                                                    ) : (
+                                                                        <div className="col-lg-3 col-xlg-3 col-md-3">
+                                                                            <div>
+                                                                                <h3 className="mb-4">{selectedOption?.label}</h3>
+                                                                                <label className="mb-2">Select Image</label>
+                                                                                <Select
+                                                                                    className="w-100 w_collection_options"
+                                                                                    required
+                                                                                    name='select_image'
+                                                                                    defaultValue={mappingOption?.[selectedOption?.label].select_image}
+                                                                                    onChange={(e) => handleInputChange(selectedOption?.label, 'select_image', e)}
+                                                                                    options={uniqueFieldsDataOptions}
+                                                                                />
+                                                                                <label className="my-2">Select Title</label>
+                                                                                <Select
+                                                                                    className="w-100 w_collection_options"
+                                                                                    required
+                                                                                    name='select_title'
+                                                                                    defaultValue={mappingOption?.[selectedOption?.label].select_title}
+                                                                                    onChange={(e) => handleInputChange(selectedOption?.label, 'select_title', e)}
+                                                                                    options={uniqueFieldsDataOptions}
+                                                                                />
+                                                                                <label className="my-2">Select Category</label>
+                                                                                <Select
+                                                                                    className="w-100 w_collection_options"
+                                                                                    required
+                                                                                    name='select_category'
+                                                                                    defaultValue={mappingOption?.[selectedOption?.label].select_category}
+                                                                                    onChange={(e) => handleInputChange(selectedOption?.label, 'select_category', e)}
+                                                                                    options={uniqueFieldsDataOptions}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="col-12 pt-4">
+                                            <div className="white-box p-3 mb-0 analytics-info h-100">
+                                                <h3 className="box-title mb-0">Mapping data not found</h3>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className='d-flex flex-warp gap-3'>

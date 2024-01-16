@@ -20,7 +20,6 @@ const EmbeddedPage = () => {
     const [visibleItemCount, setVisibleItemCount] = useState(8);
     const loadMoreIncrement = 8;
 
-
     useEffect(() => {
         setSportList(allCollectionData);
     }, [allCollectionData]);
@@ -30,7 +29,8 @@ const EmbeddedPage = () => {
         if (searchQuery) {
             const lowerCaseSearchTerm = searchQuery.toLowerCase();
             filteredList = filteredList.filter(
-                (item) => item.fieldData?.name.toLowerCase().includes(lowerCaseSearchTerm)
+                (item) => item.fieldData?.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+                    item.fieldData?.slug.toLowerCase().includes(lowerCaseSearchTerm)
             );
         }
         Object.entries(selectedCategories).forEach(([categoryName, categoryValue]) => {
@@ -218,24 +218,24 @@ const EmbeddedPage = () => {
                             </div>
                         </>) : (<>
                         </>)}
-                        <div className='multirefine-filter-row row'>
+                        <div className='multirefine-filter-row row gy-4'>
                             {displayedItems.length === 0 ? (
                                 <h4 className='text-center No-data-found mb-0'>No data found</h4>
                             ) : (
                                 displayedItems.map((element, index) => (
-                                    <EmbeddedItem {...element} {...data} isOn={isOn} key={index} />
+                                    <EmbeddedItem {...element} {...data} isOn={isOn} collectionMapping={data?.collection_mapping} key={index} />
                                 ))
                             )}
                         </div>
                         {isLoading ? (
-                            <div className="text-center load-more mt-2">
+                            <div className="text-center load-more mt-4">
                                 <div className="btn btn-primary">
                                     Loading...
                                 </div>
                             </div>
                         ) : (
                             filteredList.length > visibleItemCount && (
-                                <div className="text-center load-more mt-2">
+                                <div className="text-center load-more mt-4">
                                     <button className="btn btn-primary" onClick={handleLoadMore}>
                                         Load More
                                     </button>

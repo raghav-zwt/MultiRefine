@@ -3,8 +3,8 @@ import axios from "axios";
 
 const filterAddList = async (req, res) => {
     try {
-        const { user_id, site_id, site_name, name, type, layout, collection, collection_category, date } = req.body;
-        if (!user_id || !site_id || !site_name || !name || !type || !layout || !collection || !collection_category || !date) {
+        const { user_id, site_id, site_name, name, type, layout, collection, collection_category, collection_mapping, date } = req.body;
+        if (!user_id || !site_id || !site_name || !name || !type || !layout || !collection || !collection_category || !collection_mapping || !date) {
             return res.status(401).json({
                 message: 'All fields are required',
                 success: false,
@@ -28,8 +28,8 @@ const filterAddList = async (req, res) => {
                         data,
                     });
                 }
-                const insertQuery = "INSERT INTO filter (user_id, site_id, site_name, name, type, layout, collection, collection_category, date) VALUES (?)";
-                const insertValue = [user_id, site_id, site_name, name, type, layout, collection, collection_category, date]
+                const insertQuery = "INSERT INTO filter (user_id, site_id, site_name, name, type, layout, collection, collection_category, collection_mapping, date) VALUES (?)";
+                const insertValue = [user_id, site_id, site_name, name, type, layout, collection, collection_category, collection_mapping, date]
                 dbConnect.query(insertQuery, [insertValue], (error, data) => {
                     try {
                         if (error) {
@@ -162,7 +162,7 @@ const filterUpdate = async (req, res) => {
     try {
         const id = req.params.id;
 
-        const { name, type, layout, collection, collection_category, date } = req.body;
+        const { name, type, layout, collection, collection_category,  collection_mapping, date } = req.body;
 
         if (!name || !type || !layout || !collection || !collection_category || !date) {
             return res.status(401).json({
@@ -171,8 +171,8 @@ const filterUpdate = async (req, res) => {
             });
         }
 
-        const checkQuery = `SELECT COUNT(*) AS count FROM filter WHERE name = ? AND type = ? AND layout = ? AND collection = ? AND collection_category = ?`;
-        const checkValues = [name, type, layout, collection, collection_category];
+        const checkQuery = `SELECT COUNT(*) AS count FROM filter WHERE name = ? AND type = ? AND layout = ? AND collection = ? AND collection_category = ? AND collection_mapping = ?`;
+        const checkValues = [name, type, layout, collection, collection_category, collection_mapping];
 
         dbConnect.query(checkQuery, checkValues, (error, data) => {
             try {
@@ -190,8 +190,8 @@ const filterUpdate = async (req, res) => {
                         data,
                     });
                 }
-                const updateQuery = `UPDATE filter SET name = ?, type = ?, layout = ?, collection = ?, collection_category = ?, date = ? WHERE id = ${id}`;
-                dbConnect.query(updateQuery, [name, type, layout, collection, collection_category, date], (error, data) => {
+                const updateQuery = `UPDATE filter SET name = ?, type = ?, layout = ?, collection = ?, collection_category = ?, collection_mapping = ? , date = ? WHERE id = ${id}`;
+                dbConnect.query(updateQuery, [name, type, layout, collection, collection_category, collection_mapping, date], (error, data) => {
                     try {
                         if (error) {
                             console.log(error);
@@ -310,7 +310,7 @@ const embeddedCode = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const embeddedGet = `SELECT filter.id AS site_id, site_name, collection, collection_category, type, layout, date, css, user.id AS user_id, user.hash_password, auth.access_token
+        const embeddedGet = `SELECT filter.id AS site_id, site_name, collection, collection_category, collection_mapping, type, layout, date, css, user.id AS user_id, user.hash_password, auth.access_token
         FROM filter
         JOIN user ON filter.user_id = user.id
         JOIN auth ON user.auth_id = auth.id
@@ -388,4 +388,34 @@ const getSiteList = async (req, res) => {
     }
 }
 
-export { filterAddList, userFilterList, filterRemove, userDetails, filterUpdate, filterCss, getFilterCss, embeddedCode, getSiteList };
+const cssRemove = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const sqlDelete = "UPDATE filter SET css = NULL WHERE id = ?;";
+        const valueDelete = [[id]];
+
+        dbConnect.query(sqlDelete, valueDelete, function (error, data) {
+            if (error) {
+                console.log(error);
+                return res.status(404).json({
+                    message: "Error in query",
+                    success: false,
+                });
+            };
+            return res.status(200).send({
+                message: "Css remove",
+                success: true,
+                data,
+            });
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({
+            message: "Error in filter",
+            success: false,
+        });
+    }
+}
+
+
+export { filterAddList, userFilterList, filterRemove, userDetails, filterUpdate, filterCss, getFilterCss, embeddedCode, getSiteList, cssRemove };

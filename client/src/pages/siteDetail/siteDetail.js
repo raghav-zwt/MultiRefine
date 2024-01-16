@@ -18,6 +18,9 @@ const SiteDetail = () => {
     const [filtername, setFilterName] = useState("");
     const [uniqueFieldsData, setuniqueFieldsData] = useState([]);
     const [selectedUniqueOption, setSelectedUniqueOption] = useState(null);
+
+    const [mappingOption, setMappingOption] = useState({});
+
     const [siteList, setSiteList] = useState([]);
 
     const authData = localStorage.getItem("auth");
@@ -45,7 +48,6 @@ const SiteDetail = () => {
                 setLoading(false);
                 setSiteList(data?.data?.data)
             }
-
         }
 
         const ListCollections = async () => {
@@ -59,7 +61,6 @@ const SiteDetail = () => {
                 setLoading(false);
                 setListCollections(data?.data?.collections);
             }
-
         }
 
         SiteListCollections();
@@ -87,6 +88,7 @@ const SiteDetail = () => {
                 layout: layout,
                 collection: JSON.stringify(selectedOption),
                 collection_category: JSON.stringify(selectedUniqueOption),
+                collection_mapping: JSON.stringify(mappingOption),
                 date: formattedDate
             });
 
@@ -127,11 +129,12 @@ const SiteDetail = () => {
             }
             const siteCollectionData = collectionData.reduce((acc, val) => acc.concat(val), []);
 
+            console.log(siteCollectionData);
+
             const uniqueFields = new Set();
 
             siteCollectionData.map(async function (item) {
                 const fieldData = item?.fieldData;
-
                 if (fieldData) {
                     Object.keys(fieldData).forEach(field => {
                         uniqueFields.add(field);
@@ -150,6 +153,18 @@ const SiteDetail = () => {
         value: collection,
         label: collection,
     }));
+
+    const handleInputChange = (category, fieldName, selectedValue) => {
+        setMappingOption((prevFormData) => ({
+            ...prevFormData,
+            [category]: {
+                ...prevFormData[category],
+                [fieldName]: selectedValue,
+            },
+        }));
+    };
+
+    console.log(mappingOption)
 
     return (
         <>
@@ -173,9 +188,9 @@ const SiteDetail = () => {
                         </div>
                     </div>
                     <div className="container-fluid">
-                        <div className="row">
+                        <div className="row pb-4">
                             <div className="col-12">
-                                <div className="white-box p-0 analytics-info">
+                                <div className="white-box mb-0 p-0 analytics-info">
                                     <div className="accordion" id="accordionExample">
                                         <div className="accordion-item border-0">
                                             <h2 className="accordion-header d-flex align-items-center" id="headingOne">
@@ -224,7 +239,6 @@ const SiteDetail = () => {
                                                                             </>
                                                                         )
                                                                 }
-
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -236,167 +250,261 @@ const SiteDetail = () => {
                             </div>
                         </div>
                         <form onSubmit={filterSend} method='post'>
-                            <div className="row">
+                            <div className="row pb-4">
                                 <div className="col-lg-4 col-xlg-4 col-md-12">
-                                    <div className="w-100 h-100">
-                                        <div className="white-box analytics-info h-100">
-                                            <h3 className="box-title">Filter Information</h3>
-                                            <div className="form-group mb-0 mt-4">
-                                                <label htmlFor="FilterName" className="col-md-12 p-0"
-                                                >Filter Name</label
-                                                >
-                                                <div className="col-md-12 border-bottom p-0">
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Filter Name"
-                                                        className="form-control p-0 border-0"
-                                                        name="FilterName"
-                                                        onChange={(e) => {
-                                                            setFilterName(e.target.value)
-                                                        }}
-                                                        id="FilterName"
-                                                        required
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4 col-xlg-4 col-md-12">
-                                    <div className="w-100 h-100">
-                                        <div className="white-box analytics-info h-100">
-                                            <h3 className="box-title">Filter Type</h3>
-                                            <div
-                                                id="filterType"
-                                                className="d-flex flex-wrap align-items-center mt-4 gap-4">
-                                                <div className="form-check d-flex align-items-center gap-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name="flexRadioDefault"
-                                                        id="flexRadioDefault2"
-                                                        value="Single"
-                                                        checked={type === 'Single'}
-                                                        onChange={handleChangeType}
-                                                    />
-                                                    <label
-                                                        className="form-check-label mb-0"
-                                                        htmlFor="flexRadioDefault2"
-                                                    >
-                                                        Single
-                                                    </label>
-                                                </div>
-                                                <div className="form-check d-flex align-items-center gap-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name="flexRadioDefault"
-                                                        id="flexRadioDefault1"
-                                                        checked={type === 'Multiple'}
-                                                        value="Multiple"
-                                                        onChange={handleChangeType}
-                                                    />
-                                                    <label
-                                                        className="form-check-label mb-0"
-                                                        htmlFor="flexRadioDefault1"
-                                                    >
-                                                        Multiple
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4 col-xlg-4 col-md-12">
-                                    <div className="w-100 h-100">
-                                        <div className="white-box analytics-info h-100">
-                                            <h3 className="box-title">Filter Layout</h3>
-                                            <div
-                                                id="filterLayout"
-                                                className="d-flex flex-wrap align-items-center mt-4 gap-4"
+                                    <div className="white-box analytics-info h-100">
+                                        <h3 className="box-title">Filter Information</h3>
+                                        <div className="form-group mb-0 mt-4">
+                                            <label htmlFor="FilterName" className="col-md-12 p-0"
+                                            >Filter Name</label
                                             >
-                                                <div className="form-check d-flex align-items-center gap-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name="flexRadioDefault-2"
-                                                        id="flexRadioDefault3"
-                                                        value="Grid View"
-                                                        checked={layout === 'Grid View'}
-                                                        onChange={handleChangeLayout}
-                                                    />
-                                                    <label
-                                                        className="form-check-label mb-0"
-                                                        htmlFor="flexRadioDefault3"
-                                                    >
-                                                        Grid View
-                                                    </label>
-                                                </div>
-                                                <div className="form-check d-flex align-items-center gap-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name="flexRadioDefault-2"
-                                                        id="flexRadioDefault4"
-                                                        value="List View"
-                                                        checked={layout === 'List View'}
-                                                        onChange={handleChangeLayout}
-                                                    />
-                                                    <label
-                                                        className="form-check-label mb-0"
-                                                        htmlFor="flexRadioDefault4"
-                                                    >
-                                                        List View
-                                                    </label>
-                                                </div>
-                                                <div className="form-check d-flex align-items-center gap-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name="flexRadioDefault-2"
-                                                        id="flexRadioDefault5"
-                                                        value="List & Grid View"
-                                                        checked={layout === 'List & Grid View'}
-                                                        onChange={handleChangeLayout}
-                                                    />
-                                                    <label
-                                                        className="form-check-label mb-0"
-                                                        htmlFor="flexRadioDefault5"
-                                                    >
-                                                        List & Grid View
-                                                    </label>
-                                                </div>
+                                            <div className="col-md-12 border-bottom p-0">
+                                                <input
+                                                    type="text"
+                                                    placeholder="Filter Name"
+                                                    className="form-control p-0 border-0"
+                                                    name="FilterName"
+                                                    onChange={(e) => {
+                                                        setFilterName(e.target.value)
+                                                    }}
+                                                    id="FilterName"
+                                                    required
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-lg-12 col-xlg-12 mt-4 col-md-12">
-                                    <div className="w-100 h-100">
-                                        <div className="white-box mb-0 analytics-info h-100">
-                                            <h3 className="box-title">Select Collection</h3>
-                                            <Select
-                                                className="w-25 w_collection_options"
-                                                defaultValue={selectedOption}
-                                                onChange={setSelectedOption}
-                                                isMulti={type === 'Multiple'}
-                                                required
-                                                options={ListCollectionsOptions}
-                                            />
-                                            <button className='my-3 btn btn-primary' onClick={FilterFields}>Filter Collection Fields</button>
-                                            <h3 className="box-title">Select Collection Categories</h3>
-                                            <Select
-                                                className="w-25 w_collection_options"
-                                                required
-                                                defaultValue={selectedUniqueOption}
-                                                onChange={setSelectedUniqueOption}
-                                                options={uniqueFieldsDataOptions}
-                                                isMulti={type === 'Multiple'}
-                                            />
+                                <div className="col-lg-4 col-xlg-4 col-md-12">
+                                    <div className="white-box analytics-info h-100">
+                                        <h3 className="box-title">Filter Type</h3>
+                                        <div
+                                            id="filterType"
+                                            className="d-flex flex-wrap align-items-center mt-4 gap-4">
+                                            <div className="form-check d-flex align-items-center gap-2">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    name="flexRadioDefault"
+                                                    id="flexRadioDefault2"
+                                                    value="Single"
+                                                    checked={type === 'Single'}
+                                                    onChange={handleChangeType}
+                                                />
+                                                <label
+                                                    className="form-check-label mb-0"
+                                                    htmlFor="flexRadioDefault2"
+                                                >
+                                                    Single
+                                                </label>
+                                            </div>
+                                            <div className="form-check d-flex align-items-center gap-2">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    name="flexRadioDefault"
+                                                    id="flexRadioDefault1"
+                                                    checked={type === 'Multiple'}
+                                                    value="Multiple"
+                                                    onChange={handleChangeType}
+                                                />
+                                                <label
+                                                    className="form-check-label mb-0"
+                                                    htmlFor="flexRadioDefault1"
+                                                >
+                                                    Multiple
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-lg-4 col-xlg-4 col-md-12">
+                                    <div className="white-box analytics-info h-100">
+                                        <h3 className="box-title">Filter Layout</h3>
+                                        <div
+                                            id="filterLayout"
+                                            className="d-flex flex-wrap align-items-center mt-4 gap-4"
+                                        >
+                                            <div className="form-check d-flex align-items-center gap-2">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    name="flexRadioDefault-2"
+                                                    id="flexRadioDefault3"
+                                                    value="Grid View"
+                                                    checked={layout === 'Grid View'}
+                                                    onChange={handleChangeLayout}
+                                                />
+                                                <label
+                                                    className="form-check-label mb-0"
+                                                    htmlFor="flexRadioDefault3"
+                                                >
+                                                    Grid View
+                                                </label>
+                                            </div>
+                                            <div className="form-check d-flex align-items-center gap-2">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    name="flexRadioDefault-2"
+                                                    id="flexRadioDefault4"
+                                                    value="List View"
+                                                    checked={layout === 'List View'}
+                                                    onChange={handleChangeLayout}
+                                                />
+                                                <label
+                                                    className="form-check-label mb-0"
+                                                    htmlFor="flexRadioDefault4"
+                                                >
+                                                    List View
+                                                </label>
+                                            </div>
+                                            <div className="form-check d-flex align-items-center gap-2">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    name="flexRadioDefault-2"
+                                                    id="flexRadioDefault5"
+                                                    value="List & Grid View"
+                                                    checked={layout === 'List & Grid View'}
+                                                    onChange={handleChangeLayout}
+                                                />
+                                                <label
+                                                    className="form-check-label mb-0"
+                                                    htmlFor="flexRadioDefault5"
+                                                >
+                                                    List & Grid View
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className='d-flex flex-warp gap-3 mt-4'>
+                            <div className="row pb-4">
+                                <div className="col-lg-6 col-xlg-6 col-md-6">
+                                    <div className="white-box analytics-info h-100">
+                                        <h3 className="my-3 box-title">Select Collection</h3>
+                                        <Select
+                                            className="w-100 w_collection_options"
+                                            defaultValue={selectedOption}
+                                            onChange={setSelectedOption}
+                                            isMulti={type === 'Multiple'}
+                                            required
+                                            options={ListCollectionsOptions}
+                                        />
+                                        <button className='mt-3 btn btn-primary' onClick={FilterFields}>Fetch Collection Fields</button>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-xlg-6 col-md-6">
+                                    <div className="white-box analytics-info h-100">
+                                        <h3 className="my-3 box-title">Select Collection Categories</h3>
+                                        <Select
+                                            className="w-100 w_collection_options"
+                                            required
+                                            defaultValue={selectedUniqueOption}
+                                            onChange={setSelectedUniqueOption}
+                                            options={uniqueFieldsDataOptions}
+                                            isMulti={type === 'Multiple'}
+                                        />
+                                    </div>
+                                </div>
+                                {selectedOption ? (
+                                    <div className="col-12 pt-4">
+                                        <div className="white-box mb-0 p-0 analytics-info">
+                                            <div className="accordion" id="accordionExample">
+                                                <div className="accordion-item border-0">
+                                                    <h2 className="accordion-header" id="headingThree">
+                                                        <button className="p-3 accordion-button bg-white text-black border-0 shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                            <label className='box-title mb-0'>Map filter data</label>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseThree" className="accordion-collapse border-0 collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                                        <div className="accordion-body">
+                                                            <div className='row'>
+                                                                {Array.isArray(selectedOption) && selectedOption?.length > 0 ? (
+                                                                    selectedOption.map((lab) => (
+                                                                        <div className="col-lg-3 col-xlg-3 col-md-3">
+                                                                            <div>
+                                                                                <h3 className="mb-4">{lab.label}</h3>
+                                                                                <label className="mb-2">Select Image</label>
+                                                                                <Select
+                                                                                    className="w-100 w_collection_options"
+                                                                                    required
+                                                                                    name='select_image'
+                                                                                    defaultValue={mappingOption.select_image}
+                                                                                    onChange={(e) => handleInputChange(lab.label, 'select_image', e)}
+                                                                                    options={uniqueFieldsDataOptions}
+                                                                                />
+                                                                                <label className="my-2">Select Title</label>
+                                                                                <Select
+                                                                                    className="w-100 w_collection_options"
+                                                                                    required
+                                                                                    name='select_title'
+                                                                                    defaultValue={mappingOption.select_title}
+                                                                                    onChange={(e) => handleInputChange(lab.label, 'select_title', e)}
+                                                                                    options={uniqueFieldsDataOptions}
+                                                                                />
+                                                                                <label className="my-2">Select Category</label>
+                                                                                <Select
+                                                                                    className="w-100 w_collection_options"
+                                                                                    required
+                                                                                    name='select_category'
+                                                                                    defaultValue={mappingOption.select_category}
+                                                                                    onChange={(e) => handleInputChange(lab.label, 'select_category', e)}
+                                                                                    options={uniqueFieldsDataOptions}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    ))
+                                                                ) : (
+                                                                    <div className="col-lg-3 col-xlg-3 col-md-3">
+                                                                        <div>
+                                                                            <h3 className="mb-4">{selectedOption?.label}</h3>
+                                                                            <label className="mb-2">Select Image</label>
+                                                                            <Select
+                                                                                className="w-100 w_collection_options"
+                                                                                required
+                                                                                name='select_image'
+                                                                                defaultValue={mappingOption.select_image}
+                                                                                onChange={(e) => handleInputChange(selectedOption?.label, 'select_image', e)}
+                                                                                options={uniqueFieldsDataOptions}
+                                                                            />
+                                                                            <label className="my-2">Select Title</label>
+                                                                            <Select
+                                                                                className="w-100 w_collection_options"
+                                                                                required
+                                                                                name='select_title'
+                                                                                defaultValue={mappingOption.select_title}
+                                                                                onChange={(e) => handleInputChange(selectedOption?.label, 'select_title', e)}
+                                                                                options={uniqueFieldsDataOptions}
+                                                                            />
+                                                                            <label className="my-2">Select Category</label>
+                                                                            <Select
+                                                                                className="w-100 w_collection_options"
+                                                                                required
+                                                                                name='select_category'
+                                                                                defaultValue={mappingOption.select_category}
+                                                                                onChange={(e) => handleInputChange(selectedOption?.label, 'select_category', e)}
+                                                                                options={uniqueFieldsDataOptions}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="col-12 pt-4">
+                                        <div className="white-box p-3 mb-0 analytics-info h-100">
+                                            <h3 className="box-title mb-0">Mapping data not found</h3>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <div className='d-flex flex-warp gap-3'>
                                 <button
                                     type='submit'
                                     className="btn btn-primary waves-light text-white"
