@@ -90,6 +90,7 @@ const webflowAuthorizedBy = async (req, res) => {
                     return res.status(404).send({
                         message: "Error in query",
                         success: false,
+                        error
                     });
                 }
 
@@ -104,6 +105,7 @@ const webflowAuthorizedBy = async (req, res) => {
                                 return res.status(404).json({
                                     message: "Error updating access token.",
                                     success: false,
+                                    error
                                 });
                             }
 
@@ -129,6 +131,7 @@ const webflowAuthorizedBy = async (req, res) => {
                                 return res.status(404).json({
                                     message: "Error in query.",
                                     success: false,
+                                    error
                                 });
                             }
 
