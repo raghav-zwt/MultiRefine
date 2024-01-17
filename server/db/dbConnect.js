@@ -9,7 +9,7 @@ if (dotenvResult.error) {
 }
 
 // Create a connection pool
-const dbPool = mysql.createPool({
+const dbConnect = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -25,24 +25,24 @@ const dbPool = mysql.createPool({
 });
 
 // Handle connection pool events
-dbPool.on("acquire", (connection) => {
+dbConnect.on("acquire", (connection) => {
     console.log("Connection %d acquired", connection.threadId);
 });
 
-dbPool.on("connection", (connection) => {
+dbConnect.on("connection", (connection) => {
     console.log("New database connection created");
 });
 
-dbPool.on("enqueue", () => {
+dbConnect.on("enqueue", () => {
     console.log("Waiting for available connection slot");
 });
 
-dbPool.on("release", (connection) => {
+dbConnect.on("release", (connection) => {
     console.log("Connection %d released", connection.threadId);
 });
 
 // Handle errors in the connection pool
-dbPool.on("error", (err) => {
+dbConnect.on("error", (err) => {
     console.error("Database pool error:", err);
     if (err.code === "PROTOCOL_CONNECTION_LOST") {
         console.log("Reconnecting to the database...");
@@ -55,7 +55,7 @@ dbPool.on("error", (err) => {
 // Connect to the database
 async function handleDisconnect() {
     try {
-        const connection = await getConnection(dbPool);
+        const connection = await getConnection(dbConnect);
         console.log("DB connection successful");
         // Perform your database operations here
         connection.release();
