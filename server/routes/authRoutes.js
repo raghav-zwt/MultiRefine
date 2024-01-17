@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/auth", webflowAuth);
 
-router.get("/callback", webflowAuthorized);
+router.post("/callback", webflowAuthorized);
 
 router.post("/webflowAuthorizedUser", webflowAuthorizedBy);
 
