@@ -95,6 +95,7 @@ const SiteDetail = () => {
             if (data?.data?.success) {
                 setLoading(false);
                 if (data?.data?.message === "Filter already exists") {
+                    console.log(data?.data?.message);
                     toast.error(data?.data?.message);
                 } else {
                     toast.success(data?.data?.message);
@@ -129,8 +130,6 @@ const SiteDetail = () => {
             }
             const siteCollectionData = collectionData.reduce((acc, val) => acc.concat(val), []);
 
-            console.log(siteCollectionData);
-
             const uniqueFields = new Set();
 
             siteCollectionData.map(async function (item) {
@@ -163,8 +162,6 @@ const SiteDetail = () => {
             },
         }));
     };
-
-    console.log(mappingOption)
 
     return (
         <>
@@ -429,8 +426,9 @@ const SiteDetail = () => {
                                                                                 <Select
                                                                                     className="w-100 w_collection_options"
                                                                                     required
+                                                                                    placeholder="Select Image"
                                                                                     name='select_image'
-                                                                                    defaultValue={mappingOption.select_image}
+                                                                                    defaultValue={mappingOption?.select_image}
                                                                                     onChange={(e) => handleInputChange(lab.label, 'select_image', e)}
                                                                                     options={uniqueFieldsDataOptions}
                                                                                 />
@@ -439,7 +437,8 @@ const SiteDetail = () => {
                                                                                     className="w-100 w_collection_options"
                                                                                     required
                                                                                     name='select_title'
-                                                                                    defaultValue={mappingOption.select_title}
+                                                                                    placeholder="Select Title"
+                                                                                    defaultValue={mappingOption?.select_title}
                                                                                     onChange={(e) => handleInputChange(lab.label, 'select_title', e)}
                                                                                     options={uniqueFieldsDataOptions}
                                                                                 />
@@ -448,7 +447,8 @@ const SiteDetail = () => {
                                                                                     className="w-100 w_collection_options"
                                                                                     required
                                                                                     name='select_category'
-                                                                                    defaultValue={mappingOption.select_category}
+                                                                                    placeholder="Select Category"
+                                                                                    defaultValue={mappingOption?.select_category}
                                                                                     onChange={(e) => handleInputChange(lab.label, 'select_category', e)}
                                                                                     options={uniqueFieldsDataOptions}
                                                                                 />
@@ -464,7 +464,8 @@ const SiteDetail = () => {
                                                                                 className="w-100 w_collection_options"
                                                                                 required
                                                                                 name='select_image'
-                                                                                defaultValue={mappingOption.select_image}
+                                                                                placeholder="Select Image"
+                                                                                defaultValue={mappingOption?.select_image}
                                                                                 onChange={(e) => handleInputChange(selectedOption?.label, 'select_image', e)}
                                                                                 options={uniqueFieldsDataOptions}
                                                                             />
@@ -473,7 +474,8 @@ const SiteDetail = () => {
                                                                                 className="w-100 w_collection_options"
                                                                                 required
                                                                                 name='select_title'
-                                                                                defaultValue={mappingOption.select_title}
+                                                                                placeholder="Select Title"
+                                                                                defaultValue={mappingOption?.select_title}
                                                                                 onChange={(e) => handleInputChange(selectedOption?.label, 'select_title', e)}
                                                                                 options={uniqueFieldsDataOptions}
                                                                             />
@@ -482,7 +484,8 @@ const SiteDetail = () => {
                                                                                 className="w-100 w_collection_options"
                                                                                 required
                                                                                 name='select_category'
-                                                                                defaultValue={mappingOption.select_category}
+                                                                                placeholder="Select Category"
+                                                                                defaultValue={mappingOption?.select_category}
                                                                                 onChange={(e) => handleInputChange(selectedOption?.label, 'select_category', e)}
                                                                                 options={uniqueFieldsDataOptions}
                                                                             />

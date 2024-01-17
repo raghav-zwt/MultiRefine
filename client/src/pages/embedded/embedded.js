@@ -136,7 +136,7 @@ const EmbeddedPage = () => {
             <style>
                 {data?.css}
             </style>
-            <div className='container-md'>
+            <div className='container-fluid'>
                 <div className='py-4'>
                     <div className="mb-4">
                         <div className="gap-4 d-flex justify-content-end agline-item-center">

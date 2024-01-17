@@ -22,7 +22,7 @@ const filterAddList = async (req, res) => {
                     });
                 }
                 if (data[0].count > 0) {
-                    return res.status(200).send({
+                    return res.status(400).send({
                         message: 'Filter already exists',
                         success: true,
                         data,
@@ -171,8 +171,8 @@ const filterUpdate = async (req, res) => {
             });
         }
 
-        const checkQuery = `SELECT COUNT(*) AS count FROM filter WHERE name = ? AND type = ? AND layout = ? AND collection = ? AND collection_category = ? AND collection_mapping = ?`;
-        const checkValues = [name, type, layout, collection, collection_category, collection_mapping];
+        const checkQuery = `SELECT COUNT(*) AS count FROM filter WHERE name = ? AND type = ? AND layout = ?`;
+        const checkValues = [name, type, layout];
 
         dbConnect.query(checkQuery, checkValues, (error, data) => {
             try {
@@ -184,7 +184,7 @@ const filterUpdate = async (req, res) => {
                     });
                 }
                 if (data[0].count > 0) {
-                    return res.status(200).send({
+                    return res.status(400).send({
                         message: 'Filter already exists',
                         success: true,
                         data,

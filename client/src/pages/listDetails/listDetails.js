@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import Layout from "../../layouts/layout.js";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import Loader from "../../assets/images/loader.gif";
 import { Link, useParams } from "react-router-dom";
-import Layout from "../../layouts/layout.js";
 import Select from 'react-select';
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify';
 
 const ListDetails = () => {
     const [loading, setLoading] = useState(false);
@@ -93,9 +93,12 @@ const ListDetails = () => {
                 date: formattedDate
             });
 
+            console.log(data)
+
             if (data?.data?.success) {
                 setLoading(false);
                 if (data?.data?.message === "Filter already exists") {
+                    console.log(data?.data?.message);
                     toast.error(data?.data?.message);
                 } else {
                     toast.success(data?.data?.message);
@@ -103,6 +106,7 @@ const ListDetails = () => {
                 }
             }
         } catch (error) {
+            console.log(error.response?.data?.message)
             toast.error(error?.response?.data?.message);
             setLoading(false);
         }
@@ -368,7 +372,7 @@ const ListDetails = () => {
                                                                 <div className='row'>
                                                                     {Array.isArray(selectedOption) && selectedOption?.length > 0 ? (
                                                                         selectedOption.map((lab) => (
-                                                                            <div className="col-lg-3 col-xlg-3 col-md-3">
+                                                                            <div key={lab.label} className="col-lg-3 col-xlg-3 col-md-3">
                                                                                 <div>
                                                                                     <h3 className="mb-4">{lab.label}</h3>
                                                                                     <label className="mb-2">Select Image</label>
@@ -376,7 +380,8 @@ const ListDetails = () => {
                                                                                         className="w-100 w_collection_options"
                                                                                         required
                                                                                         name='select_image'
-                                                                                        defaultValue={mappingOption?.[lab.label].select_image}
+                                                                                        placeholder="Select Image"
+                                                                                        defaultValue={mappingOption?.[lab.label]?.select_image}
                                                                                         onChange={(e) => handleInputChange(lab.label, 'select_image', e)}
                                                                                         options={uniqueFieldsDataOptions}
                                                                                     />
@@ -385,7 +390,8 @@ const ListDetails = () => {
                                                                                         className="w-100 w_collection_options"
                                                                                         required
                                                                                         name='select_title'
-                                                                                        defaultValue={mappingOption?.[lab.label].select_title}
+                                                                                        placeholder="Select Title"
+                                                                                        defaultValue={mappingOption?.[lab.label]?.select_title}
                                                                                         onChange={(e) => handleInputChange(lab.label, 'select_title', e)}
                                                                                         options={uniqueFieldsDataOptions}
                                                                                     />
@@ -394,7 +400,8 @@ const ListDetails = () => {
                                                                                         className="w-100 w_collection_options"
                                                                                         required
                                                                                         name='select_category'
-                                                                                        defaultValue={mappingOption?.[lab.label].select_category}
+                                                                                        placeholder="Select Category"
+                                                                                        defaultValue={mappingOption?.[lab.label]?.select_category}
                                                                                         onChange={(e) => handleInputChange(lab.label, 'select_category', e)}
                                                                                         options={uniqueFieldsDataOptions}
                                                                                     />
@@ -410,7 +417,8 @@ const ListDetails = () => {
                                                                                     className="w-100 w_collection_options"
                                                                                     required
                                                                                     name='select_image'
-                                                                                    defaultValue={mappingOption?.[selectedOption?.label].select_image}
+                                                                                    placeholder="Select Image"
+                                                                                    defaultValue={mappingOption?.[selectedOption?.label]?.select_image}
                                                                                     onChange={(e) => handleInputChange(selectedOption?.label, 'select_image', e)}
                                                                                     options={uniqueFieldsDataOptions}
                                                                                 />
@@ -419,7 +427,8 @@ const ListDetails = () => {
                                                                                     className="w-100 w_collection_options"
                                                                                     required
                                                                                     name='select_title'
-                                                                                    defaultValue={mappingOption?.[selectedOption?.label].select_title}
+                                                                                    placeholder="Select Title"
+                                                                                    defaultValue={mappingOption?.[selectedOption?.label]?.select_title}
                                                                                     onChange={(e) => handleInputChange(selectedOption?.label, 'select_title', e)}
                                                                                     options={uniqueFieldsDataOptions}
                                                                                 />
@@ -428,7 +437,8 @@ const ListDetails = () => {
                                                                                     className="w-100 w_collection_options"
                                                                                     required
                                                                                     name='select_category'
-                                                                                    defaultValue={mappingOption?.[selectedOption?.label].select_category}
+                                                                                    placeholder="Select Category"
+                                                                                    defaultValue={mappingOption?.[selectedOption?.label]?.select_category}
                                                                                     onChange={(e) => handleInputChange(selectedOption?.label, 'select_category', e)}
                                                                                     options={uniqueFieldsDataOptions}
                                                                                 />
