@@ -15,13 +15,13 @@ const app = express();
 
 dotenvFile;
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://multi-refine.vercel.app');
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.header('Access-Control-Allow-Credentials', 'true');
   next();
 });
-app.use(cors({ credentials: true, origin: ["*"] }));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,
