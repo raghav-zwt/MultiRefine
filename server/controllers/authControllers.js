@@ -76,12 +76,6 @@ const webflowAuthorizedBy = async (req, res) => {
 
         if (!webflowAuthorizedUser) {
             res.status(error.response ? error.response.status : 500).json({ message: 'Error in authorized' });
-        } else {
-            return res.status(200).send({
-                message: 'Access webflowAuthorizedUser',
-                success: true,
-                webflowAuthorizedUser
-            });
         }
 
         const date = new Date();
@@ -145,6 +139,7 @@ const webflowAuthorizedBy = async (req, res) => {
                                 message: "Access token verified",
                                 success: true,
                                 data,
+                                webflowAuthorizedUser
                             });
                         } catch (error) {
                             return res.status(404).json({
