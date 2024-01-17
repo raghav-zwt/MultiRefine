@@ -29,29 +29,29 @@ const Login = () => {
   }, []);
 
 
-  const fetchData = async () => {
+  async function fetchData() {
     try {
       setLoading(true);
-  
+
       const apiUrl = `${process.env.REACT_APP_API_URL}`;
       const response = await axios.post(`${apiUrl}/webflowAuthorizedUser`, { token });
-  
+
       console.log(response.data);
-  
+
       const { auth_id, email, firstName, lastName } = response.data;
-  
+
       console.log(auth_id, email, firstName, lastName);
-  
+
       setAuthorized(response.data);
       toast.success('Webflow user authorized, login here.');
-  
+
       const registerData = await axios.post(`${apiUrl}/register`, {
         id: auth_id,
         email,
         firstName,
         lastName
       });
-  
+
       console.log('==================> authorized 3', registerData);
       navigate('/');
     } catch (error) {
@@ -61,11 +61,12 @@ const Login = () => {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     if (token) {
       fetchData();
     }
+    // eslint-disable-next-line 
   }, [token]);
 
   console.log(authorized);
