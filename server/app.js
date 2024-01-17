@@ -15,14 +15,12 @@ const app = express();
 
 dotenvFile;
 
-const corsOptions = {
-  origin: 'https://multi-refine.vercel.app',
+
+app.use(cors({
+  origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
-};
-
-app.use(cors(corsOptions));
-
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,
