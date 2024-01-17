@@ -73,9 +73,7 @@ const Login = () => {
       }
     };
 
-    if (token) {
-      fetchData();
-    }
+    fetchData();
   }, [token, navigate]);
   console.log(authorized);
 
