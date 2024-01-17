@@ -47,7 +47,6 @@ const Login = () => {
         if (authorizedData) {
           const { auth_id, email, firstName, lastName } = authorizedData;
 
-
           console.log(auth_id, email, firstName, lastName)
 
           setAuthorized(authorizedData);
@@ -59,6 +58,8 @@ const Login = () => {
             firstName,
             lastName
           });
+
+          console.log("registerData", registerData)
 
           if (registerData) {
             console.log('==================> authorized 3', registerData);
