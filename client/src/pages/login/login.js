@@ -119,7 +119,7 @@ const Login = () => {
     }
 
     try {
-      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/login`, loginDetails, { withCredentials: true });
+      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/login`, loginDetails);
 
       try {
         const accessToken = await axios.post(`${process.env.REACT_APP_API_URL}/getToken/${data?.data[0].id}`);
@@ -144,7 +144,7 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message);
     }
   }
 
