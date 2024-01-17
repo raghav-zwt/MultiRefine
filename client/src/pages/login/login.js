@@ -79,7 +79,7 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const response = await axios.post(apiUrl, {
+      const response = await axios.get(apiUrl, {
         client_id: REACT_APP_CLIENT_ID,
         client_secret: REACT_APP_CLIENT_SECRET,
         redirect_URI: encodedRedirectUri,
