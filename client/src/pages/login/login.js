@@ -37,6 +37,9 @@ const Login = () => {
         const tokenApi = token;
 
         const response = await axios.post(apiUrl, { tokenApi });
+
+        console.log(response)
+
         const authorizedData = response.data;
 
         console.log(authorizedData)
