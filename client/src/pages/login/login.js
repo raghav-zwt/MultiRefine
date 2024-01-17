@@ -29,7 +29,8 @@ const Login = () => {
   }, []);
 
 
-  const fetchData = async () => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  async function fetchData() {
     try {
       setLoading(true);
 
@@ -60,14 +61,13 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     if (token) {
       fetchData();
     }
-  }, [token]);
-
+  }, [fetchData, token]);
 
   console.log(authorized);
 
