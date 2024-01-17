@@ -20,11 +20,10 @@ const Login = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const authorizationCode = params.get('code');
+
     if (authorizationCode) {
       exchangeCodeForToken(authorizationCode);
-    }
-
-    if (authorizationCode?.length < 64) {
+    } else if (authorizationCode?.length < 64) {
       toast.error("Webflow authorized code not found, try again.");
     }
   }, []);
@@ -33,19 +32,17 @@ const Login = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
+
         const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
         const tokenApi = token;
+
         const response = await axios.post(apiUrl, { tokenApi });
-        if (response.data) {
-          setAuthorized(response.data);
-          toast.success("Webflow user authorized, login here.");
+        const authorizedData = response.data;
 
-          console.log("==================> authorized", authorized);
-
-          const { auth_id, email, firstName, lastName } = authorized;
-
-
-          console.log("==================> authorized 1", auth_id, email, firstName, lastName);
+        if (authorizedData) {
+          const { auth_id, email, firstName, lastName } = authorizedData;
+          setAuthorized(authorizedData);
+          toast.success('Webflow user authorized, login here.');
 
           const registerData = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
             id: auth_id,
@@ -55,13 +52,13 @@ const Login = () => {
           });
 
           if (registerData) {
-            console.log("==================> authorized 3", registerData);
-            navigate("/");
+            console.log('==================> authorized 3', registerData);
+            navigate('/');
           }
         }
       } catch (error) {
         console.error('Error making API request:', error.message);
-        toast.error("Webflow user not authorized, login again.");
+        toast.error('Webflow user not authorized, login again.');
       } finally {
         setLoading(false);
       }
@@ -70,26 +67,32 @@ const Login = () => {
     if (token) {
       fetchData();
     }
-  }, [token, authorized, navigate]);
+  }, [token, navigate]);
   console.log(authorized);
+
   const exchangeCodeForToken = async (authorizationCode) => {
+    const apiUrl = `${process.env.REACT_APP_API_URL}/callback`;
+    const encodedRedirectUri = `${process.env.REACT_APP_API_URL}/login`;
+    const { REACT_APP_CLIENT_ID, REACT_APP_CLIENT_SECRET } = process.env;
+    const grantType = 'authorization_code';
+
     try {
       setLoading(true);
-      const apiUrl = `${process.env.REACT_APP_API_URL}/callback`;
-      const encodedRedirectUri = `${process.env.REACT_APP_API_URL}/login`;
+
       const response = await axios.post(apiUrl, {
-        client_id: process.env.REACT_APP_CLIENT_ID,
-        client_secret: process.env.REACT_APP_CLIENT_SECRET,
+        client_id: REACT_APP_CLIENT_ID,
+        client_secret: REACT_APP_CLIENT_SECRET,
         redirect_URI: encodedRedirectUri,
         code: authorizationCode,
-        grant_type: 'authorization_code',
+        grant_type: grantType,
       });
+
       const accessToken = response.data.access_token;
       localStorage.setItem('accessToken', accessToken);
       setToken(accessToken);
     } catch (error) {
       console.error('Error exchanging code for access token:', error.message);
-      toast.error("Access token not authorized, try again.");
+      toast.error('Access token not authorized, try again.');
     } finally {
       setLoading(false);
     }

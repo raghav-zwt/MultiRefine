@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
@@ -14,8 +13,6 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 
 dotenvFile;
-
-
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
