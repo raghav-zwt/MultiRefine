@@ -15,7 +15,7 @@ const app = express();
 
 dotenvFile;
 
-app.use(cors({ credentials: true, origin: ['https://multi-refine.vercel.app'] }));
+app.use(cors({ credentials: true, origin: ["*"] }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,
