@@ -28,53 +28,49 @@ const Login = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
 
-        const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
-        const tokenApi = token;
+      const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
+      const tokenApi = token;
 
-        const response = await axios.post(apiUrl, { tokenApi });
+      const response = await axios.post(apiUrl, { tokenApi });
 
-        console.log(response)
+      console.log(response)
 
-        const authorizedData = response.data;
+      const authorizedData = response.data;
 
-        console.log(authorizedData)
+      console.log(authorizedData)
 
-        if (authorizedData) {
-          const { auth_id, email, firstName, lastName } = authorizedData;
+      if (authorizedData) {
+        const { auth_id, email, firstName, lastName } = authorizedData;
 
 
-          console.log(auth_id, email, firstName, lastName)
+        console.log(auth_id, email, firstName, lastName)
 
-          setAuthorized(authorizedData);
-          toast.success('Webflow user authorized, login here.');
+        setAuthorized(authorizedData);
+        toast.success('Webflow user authorized, login here.');
 
-          const registerData = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
-            id: auth_id,
-            email,
-            firstName,
-            lastName
-          });
+        const registerData = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
+          id: auth_id,
+          email,
+          firstName,
+          lastName
+        });
 
-          if (registerData) {
-            console.log('==================> authorized 3', registerData);
-            navigate('/');
-          }
+        if (registerData) {
+          console.log('==================> authorized 3', registerData);
+          navigate('/');
         }
-      } catch (error) {
-        console.error('Error making API request:', error.message);
-        toast.error('Webflow user not authorized, login again.');
-      } finally {
-        setLoading(false);
       }
-    };
-
-    fetchData();
-  }, [token, navigate]);
+    } catch (error) {
+      console.error('Error making API request:', error.message);
+      toast.error('Webflow user not authorized, login again.');
+    } finally {
+      setLoading(false);
+    }
+  };
   console.log(authorized);
 
   const exchangeCodeForToken = async (authorizationCode) => {
@@ -97,6 +93,10 @@ const Login = () => {
       const accessToken = response.data.access_token;
       localStorage.setItem('accessToken', accessToken);
       setToken(accessToken);
+
+      if(token) {
+        fetchData();
+      }
     } catch (error) {
       console.error('Error exchanging code for access token:', error.message);
       toast.error('Access token not authorized, try again.');
