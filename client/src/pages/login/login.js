@@ -40,6 +40,8 @@ const Login = () => {
           setAuthorized(response.data);
           toast.success("Webflow user authorized, login here.");
 
+          console.log(authorized);
+
           const { auth_id, email, firstName, lastName } = authorized;
 
           const registerData = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
