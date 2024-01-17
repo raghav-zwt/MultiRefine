@@ -45,7 +45,7 @@ const Login = () => {
         console.log("authorizedData 1", authorizedData)
 
         if (authorizedData) {
-          const authInsert = authorizedData?.insertId
+          const authInsert = authorizedData?.data?.insertId
 
           const { email, firstName, lastName } = authorizedData?.webflowAuthorizedUser;
 
