@@ -28,57 +28,6 @@ const Login = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
-        const tokenApi = token;
-
-        const response = await axios.post(apiUrl, { tokenApi });
-
-        console.log(response)
-
-        const authorizedData = response.data;
-
-        console.log(authorizedData)
-
-        if (authorizedData) {
-          const { auth_id, email, firstName, lastName } = authorizedData;
-
-
-          console.log(auth_id, email, firstName, lastName)
-
-          setAuthorized(authorizedData);
-          toast.success('Webflow user authorized, login here.');
-
-          const registerData = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
-            id: auth_id,
-            email,
-            firstName,
-            lastName
-          });
-
-          if (registerData) {
-            console.log('==================> authorized 3', registerData);
-            navigate('/');
-          }
-        }
-      } catch (error) {
-        console.error('Error making API request:', error.message);
-        toast.error('Webflow user not authorized, login again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (token) {
-      fetchData();
-    }
-  }, [token, navigate]);
-  console.log(authorized);
-
   const exchangeCodeForToken = async (authorizationCode) => {
     const apiUrl = `${process.env.REACT_APP_API_URL}/callback`;
     const encodedRedirectUri = `${process.env.REACT_APP_API_URL}/login`;
@@ -92,13 +41,33 @@ const Login = () => {
         client_id: REACT_APP_CLIENT_ID,
         client_secret: REACT_APP_CLIENT_SECRET,
         redirect_URI: encodedRedirectUri,
-        code: authorizationCode,
+        code: authorizationCode, // Assuming authorizationCode is available in the scope
         grant_type: grantType,
       });
 
       const accessToken = response.data.access_token;
       localStorage.setItem('accessToken', accessToken);
       setToken(accessToken);
+
+      const authorizedData = response.data;
+      if (authorizedData) {
+        const { auth_id, email, firstName, lastName } = authorizedData;
+
+        setAuthorized(authorizedData);
+        toast.success('Webflow user authorized, login here.');
+
+        const registerData = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
+          id: auth_id,
+          email,
+          firstName,
+          lastName
+        });
+
+        if (registerData) {
+          console.log('==================> authorized 3', registerData);
+          navigate('/');
+        }
+      }
     } catch (error) {
       console.error('Error exchanging code for access token:', error.message);
       toast.error('Access token not authorized, try again.');
