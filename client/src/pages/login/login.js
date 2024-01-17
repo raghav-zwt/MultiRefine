@@ -42,18 +42,20 @@ const Login = () => {
 
         const authorizedData = response.data;
 
-        console.log("authorizedData 1",authorizedData)
+        console.log("authorizedData 1", authorizedData)
 
         if (authorizedData) {
-          const { auth_id, email, firstName, lastName } = authorizedData;
+          const authInsert = authorizedData?.insertId
 
-          console.log("authorizedData 2", auth_id, email, firstName, lastName)
+          const { email, firstName, lastName } = authorizedData?.webflowAuthorizedUser;
+
+          console.log("authorizedData 2", authInsert, email, firstName, lastName)
 
           setAuthorized(authorizedData);
           toast.success('Webflow user authorized, login here.');
 
           const registerData = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
-            id: auth_id,
+            id: authInsert,
             email,
             firstName,
             lastName
