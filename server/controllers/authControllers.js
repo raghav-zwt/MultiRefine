@@ -78,7 +78,7 @@ const webflowAuthorizedBy = async (req, res) => {
             res.status(error.response ? error.response.status : 500).json({ message: 'Error in authorized' });
         } else {
             return res.status(200).send({
-                message: 'Access token updated',
+                message: 'Access webflowAuthorizedUser',
                 success: true,
                 webflowAuthorizedUser
             });
