@@ -88,16 +88,9 @@ const ListDetails = () => {
                 date: formattedDate
             });
 
-            console.log(data)
-
             if (data?.data?.success) {
-                if (data?.data?.message === "Filter already exists") {
-                    console.log(data?.data?.message);
-                    toast.error(data?.data?.message);
-                } else {
-                    toast.success(data?.data?.message);
-                    navigate("/list")
-                }
+                toast.success(data?.data?.message);
+                navigate("/list")
             }
         } catch (error) {
             console.log(error.response?.data?.message)
@@ -323,6 +316,7 @@ const ListDetails = () => {
                                                 isMulti={type === 'Multiple'}
                                                 options={ListCollectionsOptions}
                                                 required
+                                                value={selectedOption}
                                                 defaultValue={selectedOption}
                                                 onChange={setSelectedOption}
                                             />
@@ -339,6 +333,7 @@ const ListDetails = () => {
                                                 required
                                                 defaultValue={selectedUniqueOption}
                                                 onChange={setSelectedUniqueOption}
+                                                value={selectedUniqueOption}
                                                 options={uniqueFieldsDataOptions}
                                                 isMulti={type === 'Multiple'}
                                             />
@@ -351,11 +346,11 @@ const ListDetails = () => {
                                             <div className="accordion" id="accordionExample">
                                                 <div className="accordion-item border-0">
                                                     <h2 className="accordion-header" id="headingThree">
-                                                        <button className="p-3 accordion-button bg-white text-black border-0 shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                        <button className="p-3 accordion-button bg-white text-black border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
                                                             <label className='box-title mb-0'>Map filter data</label>
                                                         </button>
                                                     </h2>
-                                                    <div id="collapseThree" className="accordion-collapse border-0 collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                                    <div id="collapseThree" className="accordion-collapse border-0 collapse show" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                                         <div className="accordion-body">
                                                             <div className='row'>
                                                                 {Array.isArray(selectedOption) && selectedOption?.length > 0 ? (

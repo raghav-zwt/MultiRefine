@@ -86,13 +86,8 @@ const SiteDetail = () => {
             });
 
             if (data?.data?.success) {
-                if (data?.data?.message === "Filter already exists") {
-                    console.log(data?.data?.message);
-                    toast.error(data?.data?.message);
-                } else {
-                    toast.success(data?.data?.message);
-                    navigate("/list");
-                }
+                toast.success(data?.data?.message);
+                navigate("/list");
             }
         } catch (error) {
             toast.error(error?.response?.data?.message);

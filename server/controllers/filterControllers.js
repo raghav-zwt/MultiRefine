@@ -162,9 +162,9 @@ const filterUpdate = async (req, res) => {
     try {
         const id = req.params.id;
 
-        const { name, type, layout, collection, collection_category,  collection_mapping, date } = req.body;
+        const { name, type, layout, collection, collection_category, collection_mapping, date } = req.body;
 
-        if (!name || !type || !layout || !collection || !collection_category || !date) {
+        if (!name || !type || !layout || !collection || !collection_category || !collection_mapping || !date) {
             return res.status(401).json({
                 message: 'All fields are required',
                 success: false,
