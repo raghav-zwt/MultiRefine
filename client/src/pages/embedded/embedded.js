@@ -30,7 +30,6 @@ const EmbeddedPage = () => {
             const lowerCaseSearchTerm = searchQuery.toLowerCase();
 
             const dataXcategory = data?.collection_category;
-
             if (Array.isArray(dataXcategory)) {
                 filteredList = filteredList.filter((item) =>
                     dataXcategory.some((xcate) =>
