@@ -145,12 +145,12 @@ const EmbeddedPage = () => {
             <div className='container-fluid'>
                 <div className='py-4'>
                     <div className="mb-4">
-                        <div className="gap-4 d-flex justify-content-end agline-item-center">
+                        <div className="gap-4 d-flex flex-wrap justify-content-end agline-item-center">
                             <div className='w-25 me-auto'>
                                 <input value={searchQuery}
                                     onChange={handleSearchChange} placeholder='Search...' className='multirefine-filter-search form-control' />
                             </div>
-                            <div className='d-flex gap-4'>
+                            <div className='d-flex flex-wrap gap-4'>
                                 {Array.isArray(data?.collection_category) && data?.collection_category.length >= 1 ? (
                                     data?.collection_category.map((category) => (
                                         <div className='d-flex gap-3 align-items-center' key={category.value}>
@@ -213,6 +213,7 @@ const EmbeddedPage = () => {
                             </div>
                             <button onClick={resetFilterBtn} className='reset-filter-btn'>reset</button>
                         </div>
+                        <label className="form-check-label mt-4 mb-0">Search : {searchQuery}</label>
                     </div>
                     <div className="mb-4">
                         {data?.layout === "List & Grid View" ? (<>
