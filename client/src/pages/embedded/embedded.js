@@ -28,10 +28,17 @@ const EmbeddedPage = () => {
         let filteredList = sportList;
         if (searchQuery) {
             const lowerCaseSearchTerm = searchQuery.toLowerCase();
-            filteredList = filteredList.filter(
-                (item) => item.fieldData?.name.toLowerCase().includes(lowerCaseSearchTerm) ||
-                    item.fieldData?.slug.toLowerCase().includes(lowerCaseSearchTerm)
-            );
+
+            const dataXcategory = data?.collection_category;
+
+            if (Array.isArray(dataXcategory)) {
+                filteredList = filteredList.filter((item) =>
+                    dataXcategory.some((xcate) =>
+                        item.fieldData?.[xcate.value].toLowerCase().includes(lowerCaseSearchTerm) ||
+                        item.fieldData?.name.toLowerCase().includes(lowerCaseSearchTerm)
+                    )
+                );
+            }
         }
         Object.entries(selectedCategories).forEach(([categoryName, categoryValue]) => {
             if (categoryValue) {
@@ -46,7 +53,7 @@ const EmbeddedPage = () => {
         return list.filter((item) => `${item.fieldData?.[propertyName]}` === propertyValue);
     }
 
-    const filteredList = useMemo(getFilteredList, [searchQuery, selectedCategories, sportList]);
+    const filteredList = useMemo(getFilteredList, [searchQuery, selectedCategories, sportList, data?.collection_category]);
 
     function handleCategoryChange(event, categoryName) {
         setSelectedCategories({
@@ -147,7 +154,8 @@ const EmbeddedPage = () => {
                             <div className='d-flex gap-4'>
                                 {Array.isArray(data?.collection_category) && data?.collection_category.length >= 1 ? (
                                     data?.collection_category.map((category) => (
-                                        <div key={category.value}>
+                                        <div className='d-flex gap-3 align-items-center' key={category.value}>
+                                            <label className="form-check-label mb-0">{category.value}</label>
                                             <select
                                                 name={`category-list-${category.value}`}
                                                 id={`category-list-${category.value}`}
@@ -175,7 +183,8 @@ const EmbeddedPage = () => {
                                         </div>
                                     ))
                                 ) : (
-                                    <div>
+                                    <div className='d-flex gap-3 align-items-center'>
+                                        <label className="form-check-label mb-0">{data?.collection_category?.value}</label>
                                         <select
                                             name={`category-list-${data?.collection_category?.value}`}
                                             id={`category-list-${data?.collection_category?.value}`}
