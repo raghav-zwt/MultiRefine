@@ -34,3 +34,7 @@
     margin: 0 auto;
     padding: 30px;
 }
+
+.NotFound-Box img {
+    width: 90px;
+}
