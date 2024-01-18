@@ -38,18 +38,12 @@ const Login = () => {
 
         const response = await axios.post(apiUrl, { tokenApi });
 
-        console.log("response", response)
-
         const authorizedData = response.data;
-
-        console.log("authorizedData 1", authorizedData)
 
         if (authorizedData) {
           const authInsert = authorizedData?.data?.insertId
 
           const { email, firstName, lastName } = authorizedData?.webflowAuthorizedUser;
-
-          console.log("authorizedData 2", authInsert, email, firstName, lastName)
 
           setAuthorized(authorizedData);
           toast.success('Webflow user authorized, login here.');
@@ -61,10 +55,7 @@ const Login = () => {
             lastName
           });
 
-          console.log("registerData", registerData)
-
           if (registerData) {
-            console.log('==================> authorized 3', registerData);
             navigate('/');
           }
         }
@@ -175,12 +166,10 @@ const Login = () => {
                     setPassword(e.target.value)
                   }} placeholder="password" required />
                 </div>
-                <div className="input-group row">
-                  <div className="row">
-                    <Link to="https://webflow.com">
-                      Login With Webflow
-                    </Link>
-                  </div>
+                <div className="input-group mb-3">
+                  <Link to="https://webflow.com">
+                    Login With Webflow
+                  </Link>
                 </div>
                 <div className="input-group">
                   <button type="submit" >
