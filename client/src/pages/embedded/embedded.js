@@ -3,6 +3,7 @@ import "./embedded.css";
 import { useLocation } from 'react-router-dom';
 import axios from "axios";
 import { EmbeddedItem } from "./embedded-item.js"
+import notFound from "../../assets/images/notFound.png";
 
 const EmbeddedPage = () => {
 
@@ -229,7 +230,13 @@ const EmbeddedPage = () => {
                         </>)}
                         <div className='multirefine-filter-row row gy-4'>
                             {displayedItems.length === 0 ? (
-                                <h4 className='text-center No-data-found mb-0'>No data found</h4>
+                                <>
+                                    <div className='NotFound-Box'>
+                                        <img src={notFound} alt='notFound' />
+                                        <h4 className='my-2 text-center No-data-found'>No results found.</h4>
+                                        <p className="mb-0">Please try different keywords.</p>
+                                    </div>
+                                </>
                             ) : (
                                 displayedItems.map((element, index) => (
                                     <EmbeddedItem {...element} {...data} isOn={isOn} collectionMapping={data?.collection_mapping} key={index} />

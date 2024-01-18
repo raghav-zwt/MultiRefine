@@ -25,3 +25,12 @@
     border: none;
     background: none;
 }
+
+.NotFound-Box {
+    color: #000;
+    text-align: center;
+    margin: 0;
+    width: 400px;
+    margin: 0 auto;
+    padding: 30px;
+}
