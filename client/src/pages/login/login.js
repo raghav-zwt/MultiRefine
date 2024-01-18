@@ -177,7 +177,7 @@ const Login = () => {
                 </div>
                 <div className="input-group row">
                   <div className="row">
-                    <Link to={`${process.env.REACT_APP_API_URL}/auth`}>
+                    <Link to="https://webflow.com">
                       Login With Webflow
                     </Link>
                   </div>
