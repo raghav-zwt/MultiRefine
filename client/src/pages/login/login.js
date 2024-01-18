@@ -112,7 +112,7 @@ const Login = () => {
 
   const LoginSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     const loginDetails = {
       email,
       password
@@ -128,11 +128,13 @@ const Login = () => {
           localStorage.setItem("accessToken", accessToken?.data?.data[0].access_token);
         }
       } catch (error) {
+        setLoading(false);
         console.error("Error fetching access token:", error);
       }
 
       if (data.success) {
         toast.success(data.message);
+        setLoading(false);
         setAuth({
           ...auth,
           auth_id: data.data[0].auth_id,
@@ -144,6 +146,7 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error?.response?.data?.message);
     }
   }
