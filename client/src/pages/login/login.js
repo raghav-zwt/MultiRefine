@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios"
 import Loader from "../../assets/images/loader.gif"
@@ -177,9 +177,9 @@ const Login = () => {
                 </div>
                 <div className="input-group row">
                   <div className="row">
-                    <a href="/" target="_blank">
-                      Forgot password?
-                    </a>
+                    <Link to={`${process.env.REACT_APP_API_URL}/auth`} target="_blank">
+                      Login Webflow
+                    </Link>
                   </div>
                 </div>
                 <div className="input-group">
