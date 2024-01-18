@@ -146,6 +146,7 @@ const EmbeddedPage = () => {
             <div className='container-fluid'>
                 <div className='py-4'>
                     <div className="mb-4">
+                        <label className="form-check-label fs-4 mt-0 mb-4">Search : {searchQuery}</label>
                         <div className="gap-4 d-flex flex-wrap justify-content-end agline-item-center">
                             <div className='w-25 me-auto'>
                                 <input value={searchQuery}
@@ -214,7 +215,6 @@ const EmbeddedPage = () => {
                             </div>
                             <button onClick={resetFilterBtn} className='reset-filter-btn'>reset</button>
                         </div>
-                        <label className="form-check-label mt-4 mb-0">Search : {searchQuery}</label>
                     </div>
                     <div className="mb-4">
                         {data?.layout === "List & Grid View" ? (<>
