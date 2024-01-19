@@ -149,7 +149,7 @@ const EmbeddedPage = () => {
                         {searchQuery === "" ? "" : (
                             <>
                                 <button type="button" class="btn btn-primary mb-4">
-                                    Search results :<span class="badge badge-light">{searchQuery}</span>
+                                    Search results :<span class="badge fw-bold fs-3 badge-white ps-1 p-0">{searchQuery}</span>
                                 </button>
                             </>
                         )}
