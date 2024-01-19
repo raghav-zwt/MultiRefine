@@ -60,6 +60,7 @@ const EmbeddedPage = () => {
             ...selectedCategories,
             [categoryName]: event.target.value,
         });
+        setVisibleItemCount(8);
     }
 
     const handleToggle = () => {
