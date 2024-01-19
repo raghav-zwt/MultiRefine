@@ -3,6 +3,7 @@ import Footer from "./footer/footer.js";
 import SideBar from "./sidebar/sidebar.js"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const Layout = ({ children }) => {
   return (
@@ -12,6 +13,7 @@ const Layout = ({ children }) => {
       <main >
         <div className="page-wrapper">
           {children}
+          <SpeedInsights />
         </div>
       </main>
       <Footer />
