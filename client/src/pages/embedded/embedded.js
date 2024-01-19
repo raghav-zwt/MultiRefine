@@ -146,13 +146,26 @@ const EmbeddedPage = () => {
             <div className='container-fluid'>
                 <div className='py-4'>
                     <div className="mb-4">
-                        {searchQuery === "" ? "" : (
-                            <>
-                                <button type="button" class="btn btn-primary mb-4">
-                                    Search results :<span class="badge fw-bold fs-3 badge-white ps-1 p-0">{searchQuery}</span>
-                                </button>
-                            </>
-                        )}
+                        <div className='d-flex align-items-center'>
+                            {searchQuery === "" ? "" : (
+                                <>
+                                    <button type="button" class="btn btn-primary mb-4">
+                                        Search results :<span class="badge fw-bold fs-3 badge-white ps-1 p-0">{searchQuery}</span>
+                                    </button>
+                                </>
+                            )}
+                            <div className='selectedCategories-items ms-auto d-flex align-items-center gap-4'>
+                                {Object.entries(selectedCategories).map(([categoryName, selectedValue]) => (
+                                    <>
+                                        {selectedValue === "" ? "" : (
+                                            <button key={categoryName} type="button" class="btn btn-primary mb-4">
+                                                {categoryName} :<span class="badge fw-bold fs-3 badge-white ps-1 p-0">{selectedValue}</span>
+                                            </button>
+                                        )}
+                                    </>
+                                ))}
+                            </div>
+                        </div>
                         <div className="gap-4 d-flex flex-wrap justify-content-end agline-item-center">
                             <div className='w-25 me-auto'>
                                 <input value={searchQuery}
