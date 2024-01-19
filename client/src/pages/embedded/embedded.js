@@ -150,8 +150,8 @@ const EmbeddedPage = () => {
                         <div className='d-flex align-items-center'>
                             {searchQuery === "" ? "" : (
                                 <>
-                                    <button type="button" class="btn btn-primary mb-4">
-                                        Search results :<span class="badge fw-bold fs-3 badge-white ps-1 p-0">{searchQuery}</span>
+                                    <button type="button" className="btn btn-primary mb-4">
+                                        Search results :<span className="badge fw-bold fs-3 badge-white ps-1 p-0">{searchQuery}</span>
                                     </button>
                                 </>
                             )}
@@ -159,8 +159,8 @@ const EmbeddedPage = () => {
                                 {Object.entries(selectedCategories).map(([categoryName, selectedValue]) => (
                                     <>
                                         {selectedValue === "" ? "" : (
-                                            <button key={categoryName} type="button" class="btn btn-primary mb-4">
-                                                {categoryName} :<span class="badge fw-bold fs-3 badge-white ps-1 p-0">{selectedValue}</span>
+                                            <button key={categoryName} type="button" className="btn btn-primary mb-4">
+                                                {categoryName} :<span className="badge fw-bold fs-3 badge-white ps-1 p-0">{selectedValue}</span>
                                             </button>
                                         )}
                                     </>
@@ -233,10 +233,10 @@ const EmbeddedPage = () => {
                                     </div>
                                 )}
                             </div>
-                            <button onClick={resetFilterBtn} className='reset-filter-btn'>reset</button>
+                            <button onClick={resetFilterBtn} className='reset-filter-btn btn btn-primary'>Clear all</button>
                         </div>
                     </div>
-                    <div className="mb-4">
+                    <div className="">
                         {data?.layout === "List & Grid View" ? (<>
                             <div className='d-flex justify-content-end'>
                                 <div className="form-check form-switch mb-4">
@@ -254,7 +254,7 @@ const EmbeddedPage = () => {
                                     <div className='NotFound-Box'>
                                         <img src={notFound} alt='notFound' />
                                         <h4 className='my-2 text-center No-data-found'>No results found.</h4>
-                                        <p className="mb-0">Please try different keywords.</p>
+                                        <p className="mb-0 mt-4">Please try different keywords.</p>
                                     </div>
                                 </>
                             ) : (
@@ -278,6 +278,14 @@ const EmbeddedPage = () => {
                                 </div>
                             )
                         )}
+                        <div className='text-center mt-4'>
+                            <div className="filter_cmsload_counter">
+                                <div className="filter_cmsload_text">Showing </div>
+                                <div className="filter_cmsload_number">{displayedItems.length}</div>
+                                <div className="filter_cmsload_text">out of </div>
+                                <div className="filter_cmsload_number">{sportList.length}</div> results
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div >
