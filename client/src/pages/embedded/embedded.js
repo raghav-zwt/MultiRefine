@@ -146,7 +146,13 @@ const EmbeddedPage = () => {
             <div className='container-fluid'>
                 <div className='py-4'>
                     <div className="mb-4">
-                        <label className="form-check-label fs-4 mt-0 mb-4">Search : {searchQuery}</label>
+                        {searchQuery === "" ? "" : (
+                            <>
+                                <button type="button" class="btn btn-primary mb-4">
+                                    Search results :<span class="badge badge-light">{searchQuery}</span>
+                                </button>
+                            </>
+                        )}
                         <div className="gap-4 d-flex flex-wrap justify-content-end agline-item-center">
                             <div className='w-25 me-auto'>
                                 <input value={searchQuery}
