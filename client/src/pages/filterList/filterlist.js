@@ -67,8 +67,8 @@ const FilterList = () => {
                                     <table className="table no-wrap">
                                         <thead>
                                             <tr>
-                                                <th className="border-top-0">Webflow Site Name</th>
                                                 <th className="border-top-0">Filter Name</th>
+                                                <th className="border-top-0">Workspace Name</th>
                                                 <th className="border-top-0">Type</th>
                                                 <th className="border-top-0">Layout</th>
                                                 <th className="border-top-0">Date</th>
@@ -90,8 +90,8 @@ const FilterList = () => {
                                                             {Array.isArray(filterData) && filterData?.map((e) => (
                                                                 <>
                                                                     <tr key={e.id}>
-                                                                        <td className="txt-oflo">{e.site_name}</td>
                                                                         <td className="txt-oflo">{e.name}</td>
+                                                                        <td className="txt-oflo">{e.site_name}</td>
                                                                         <td><span className="">{e.type}</span></td>
                                                                         <td><span className="">{e.layout}</span></td>
                                                                         <td className="txt-oflo">{e.date.split('T')[0]}</td>

@@ -1,5 +1,4 @@
 import { dbConnect } from "../db/dbConnect.js"
-import axios from "axios";
 
 const filterAddList = async (req, res) => {
     try {

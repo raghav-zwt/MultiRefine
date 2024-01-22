@@ -38,6 +38,12 @@ const EmbeddedPage = () => {
                         item.fieldData?.name.toLowerCase().includes(lowerCaseSearchTerm)
                     )
                 );
+            } else {
+                filteredList = filteredList.filter((item) =>
+                    item.fieldData?.[dataXcategory]?.toLowerCase().includes(lowerCaseSearchTerm) ||
+                    item.fieldData?.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+                    item.fieldData?.slug.toLowerCase().includes(lowerCaseSearchTerm)
+                );
             }
         }
         Object.entries(selectedCategories).forEach(([categoryName, categoryValue]) => {
@@ -173,67 +179,72 @@ const EmbeddedPage = () => {
                                     onChange={handleSearchChange} placeholder='Search...' className='multirefine-filter-search form-control' />
                             </div>
                             <div className='d-flex flex-wrap gap-4'>
-                                {Array.isArray(data?.collection_category) && data?.collection_category.length >= 1 ? (
-                                    data?.collection_category.map((category) => (
-                                        <div className='d-flex gap-3 align-items-center' key={category.value}>
-                                            <label className="form-check-label mb-0">{category.value}</label>
-                                            <select
-                                                name={`category-list-${category.value}`}
-                                                id={`category-list-${category.value}`}
-                                                className='form-control category-list-items'
-                                                value={selectedCategories[category.value] || ''}
-                                                onChange={(event) => handleCategoryChange(event, category.value)}
-                                            >
-                                                <option value="">All</option>
-                                                {Array.isArray(sportList) &&
-                                                    sportList
-                                                        .filter((e, index, self) =>
-                                                            index === self.findIndex((t) => (
-                                                                `${t.fieldData?.[`${category.value}`]}` === `${e.fieldData?.[`${category.value}`]}`
-                                                            ))
-                                                        )
-                                                        .map((e) => (
-                                                            e.fieldData?.[`${category.value}`] !== undefined && (
-                                                                <option key={e.id} value={`${e.fieldData?.[`${category.value}`]}`}>
-                                                                    {`${e.fieldData?.[`${category.value}`]}`}
-                                                                </option>
+                                {data?.collection_category === null ? "" : (
+                                    <>
+                                        {Array.isArray(data?.collection_category) && data?.collection_category.length >= 1 ? (
+                                            data?.collection_category.map((category) => (
+                                                <div className='d-flex gap-3 align-items-center' key={category.value}>
+                                                    <label className="form-check-label mb-0">{category.value}</label>
+                                                    <select
+                                                        name={`category-list-${category.value}`}
+                                                        id={`category-list-${category.value}`}
+                                                        className='form-control category-list-items'
+                                                        value={selectedCategories[category.value] || ''}
+                                                        onChange={(event) => handleCategoryChange(event, category.value)}
+                                                    >
+                                                        <option value="">All</option>
+                                                        {Array.isArray(sportList) &&
+                                                            sportList
+                                                                .filter((e, index, self) =>
+                                                                    index === self.findIndex((t) => (
+                                                                        `${t.fieldData?.[`${category.value}`]}` === `${e.fieldData?.[`${category.value}`]}`
+                                                                    ))
+                                                                )
+                                                                .map((e) => (
+                                                                    e.fieldData?.[`${category.value}`] !== undefined && (
+                                                                        <option key={e.id} value={`${e.fieldData?.[`${category.value}`]}`}>
+                                                                            {`${e.fieldData?.[`${category.value}`]}`}
+                                                                        </option>
+                                                                    )
+                                                                ))
+                                                        }
+                                                    </select>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className='d-flex gap-3 align-items-center'>
+                                                <label className="form-check-label mb-0">{data?.collection_category?.value}</label>
+                                                <select
+                                                    name={`category-list-${data?.collection_category?.value}`}
+                                                    id={`category-list-${data?.collection_category?.value}`}
+                                                    className='form-control category-list-items'
+                                                    value={selectedCategories[data?.collection_category?.value] || ''}
+                                                    onChange={(event) => handleCategoryChange(event, data?.collection_category?.value)}
+                                                >
+                                                    <option value="">All</option>
+                                                    {Array.isArray(sportList) &&
+                                                        sportList
+                                                            .filter((e, index, self) =>
+                                                                index === self.findIndex((t) => (
+                                                                    `${t.fieldData?.[`${data?.collection_category?.value}`]}` === `${e.fieldData?.[`${data?.collection_category?.value}`]}`
+                                                                ))
                                                             )
-                                                        ))
-                                                }
-                                            </select>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className='d-flex gap-3 align-items-center'>
-                                        <label className="form-check-label mb-0">{data?.collection_category?.value}</label>
-                                        <select
-                                            name={`category-list-${data?.collection_category?.value}`}
-                                            id={`category-list-${data?.collection_category?.value}`}
-                                            className='form-control category-list-items'
-                                            value={selectedCategories[data?.collection_category?.value] || ''}
-                                            onChange={(event) => handleCategoryChange(event, data?.collection_category?.value)}
-                                        >
-                                            <option value="">All</option>
-                                            {Array.isArray(sportList) &&
-                                                sportList
-                                                    .filter((e, index, self) =>
-                                                        index === self.findIndex((t) => (
-                                                            `${t.fieldData?.[`${data?.collection_category?.value}`]}` === `${e.fieldData?.[`${data?.collection_category?.value}`]}`
-                                                        ))
-                                                    )
-                                                    .map((e) => (
-                                                        e.fieldData?.[`${data?.collection_category?.value}`] !== undefined && (
-                                                            <option key={e.id} value={`${e.fieldData?.[`${data?.collection_category?.value}`]}`}>
-                                                                {`${e.fieldData?.[`${data?.collection_category?.value}`]}`}
-                                                            </option>
-                                                        )
-                                                    ))
-                                            }
-                                        </select>
-                                    </div>
+                                                            .map((e) => (
+                                                                e.fieldData?.[`${data?.collection_category?.value}`] !== undefined && (
+                                                                    <option key={e.id} value={`${e.fieldData?.[`${data?.collection_category?.value}`]}`}>
+                                                                        {`${e.fieldData?.[`${data?.collection_category?.value}`]}`}
+                                                                    </option>
+                                                                )
+                                                            ))
+                                                    }
+                                                </select>
+                                            </div>
+                                        )}
+                                    </>
                                 )}
+
                             </div>
-                            <button onClick={resetFilterBtn} className='reset-filter-btn btn btn-primary'>Clear all</button>
+                            <button onClick={resetFilterBtn} className='reset-filter-btn btn btn-primary'>Reset all</button>
                         </div>
                     </div>
                     <div className="">

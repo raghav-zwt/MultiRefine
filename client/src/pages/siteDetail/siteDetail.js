@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { Link, useParams } from 'react-router-dom';
 import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
+import "./siteDetail.css"
 
 const SiteDetail = () => {
     const Bearer = localStorage.getItem("accessToken");
@@ -172,19 +173,19 @@ const SiteDetail = () => {
                                 <div className="accordion" id="accordionExample">
                                     <div className="accordion-item border-0">
                                         <h2 className="accordion-header d-flex align-items-center" id="headingOne">
-                                            <button className="accordion-button bg-white text-black border-0 shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <button className="accordion-button bg-white text-black border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                 <label className='box-title mb-0'>Site Filter List</label>
                                             </button>
-                                            <Link className='me-3 btn btn-primary' to={"/list"}>Details</Link>
+                                            <Link className='me-3 btn btn-primary All-Filter-list' to={"/list"}>All Filter list</Link>
                                         </h2>
-                                        <div id="collapseOne" className="accordion-collapse border-0 collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div id="collapseOne" className="accordion-collapse border-0 collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                             <div className="accordion-body">
                                                 <div className="table-responsive">
                                                     <table className="table no-wrap mb-0">
                                                         <thead>
                                                             <tr>
-                                                                <th className="border-top-0">Webflow Site Name</th>
                                                                 <th className="border-top-0">Filter Name</th>
+                                                                <th className="border-top-0">Workspace Name</th>
                                                                 <th className="border-top-0">Type</th>
                                                                 <th className="border-top-0">Layout</th>
                                                                 <th className="border-top-0">Date</th>
@@ -205,8 +206,8 @@ const SiteDetail = () => {
                                                                             {Array.isArray(siteList) && siteList?.map((e) => (
                                                                                 <>
                                                                                     <tr key={e.id}>
-                                                                                        <td className="txt-oflo">{e.site_name}</td>
                                                                                         <td className="txt-oflo">{e.name}</td>
+                                                                                        <td className="txt-oflo">{e.site_name}</td>
                                                                                         <td><span className="">{e.type}</span></td>
                                                                                         <td><span className="">{e.layout}</span></td>
                                                                                         <td className="txt-oflo">{e.date.split('T')[0]}</td>
@@ -377,7 +378,6 @@ const SiteDetail = () => {
                                     <h3 className="my-3 box-title">Select Collection Categories</h3>
                                     <Select
                                         className="w-100 w_collection_options"
-                                        required
                                         defaultValue={selectedUniqueOption}
                                         onChange={setSelectedUniqueOption}
                                         options={uniqueFieldsDataOptions}
@@ -426,7 +426,6 @@ const SiteDetail = () => {
                                                                             <label className="my-2">Select Category</label>
                                                                             <Select
                                                                                 className="w-100 w_collection_options"
-                                                                                required
                                                                                 name='select_category'
                                                                                 placeholder="Select Category"
                                                                                 defaultValue={mappingOption?.select_category}
@@ -463,7 +462,6 @@ const SiteDetail = () => {
                                                                         <label className="my-2">Select Category</label>
                                                                         <Select
                                                                             className="w-100 w_collection_options"
-                                                                            required
                                                                             name='select_category'
                                                                             placeholder="Select Category"
                                                                             defaultValue={mappingOption?.select_category}

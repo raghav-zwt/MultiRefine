@@ -330,7 +330,6 @@ const ListDetails = () => {
                                             <h3 className="my-3 box-title">Select Collection Categories</h3>
                                             <Select
                                                 className="w-100 w_collection_options"
-                                                required
                                                 defaultValue={selectedUniqueOption}
                                                 onChange={setSelectedUniqueOption}
                                                 value={selectedUniqueOption}
@@ -381,7 +380,6 @@ const ListDetails = () => {
                                                                                 <label className="my-2">Select Category</label>
                                                                                 <Select
                                                                                     className="w-100 w_collection_options"
-                                                                                    required
                                                                                     name='select_category'
                                                                                     placeholder="Select Category"
                                                                                     defaultValue={mappingOption?.[lab.label]?.select_category}
@@ -418,7 +416,6 @@ const ListDetails = () => {
                                                                             <label className="my-2">Select Category</label>
                                                                             <Select
                                                                                 className="w-100 w_collection_options"
-                                                                                required
                                                                                 name='select_category'
                                                                                 placeholder="Select Category"
                                                                                 defaultValue={mappingOption?.[selectedOption?.label]?.select_category}
