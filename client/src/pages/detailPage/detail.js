@@ -69,7 +69,7 @@ const DetailPage = () => {
 
     return (
         <>
-            <Layout>
+            <Layout title={""} description={""}>
                 <div className="page-breadcrumb bg-white">
                     <div className="row align-items-center">
                         <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12">

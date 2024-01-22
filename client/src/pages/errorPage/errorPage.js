@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const errorPage = () => {
-  
+
   return (
     <>
       <div className="error-box">
