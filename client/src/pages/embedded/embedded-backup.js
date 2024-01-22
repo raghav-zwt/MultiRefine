@@ -192,7 +192,7 @@ const EmbeddedPage = () => {
                                         {Array.isArray(data?.collection_category) && data?.collection_category.length >= 1 ? (
                                             data?.collection_category.map((category) => (
                                                 <div className='d-flex gap-3 align-items-center' key={category.value}>
-                                                    <label className="form-check-label mb-0">{category.value}</label>
+                                                    <label className="form-check-label mb-0">{category.value?.charAt(0).toUpperCase() + category.value?.slice(1)}</label>
                                                     <select
                                                         name={`category-list-${category.value}`}
                                                         id={`category-list-${category.value}`}
@@ -221,7 +221,7 @@ const EmbeddedPage = () => {
                                             ))
                                         ) : (
                                             <div className='d-flex gap-3 align-items-center'>
-                                                <label className="form-check-label mb-0">{data?.collection_category?.value}</label>
+                                                <label className="form-check-label mb-0">{data?.collection_category?.value?.charAt(0).toUpperCase() + data?.collection_category?.value?.slice(1)}</label>
                                                 <select
                                                     name={`category-list-${data?.collection_category?.value}`}
                                                     id={`category-list-${data?.collection_category?.value}`}
