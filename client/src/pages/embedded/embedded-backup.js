@@ -20,6 +20,7 @@ const EmbeddedPage = () => {
     const [sportList, setSportList] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState({});
     const [visibleItemCount, setVisibleItemCount] = useState(8);
+    const [isLoader, setIsLoader] = useState(false);
     const loadMoreIncrement = 8;
 
     useEffect(() => {
@@ -133,13 +134,13 @@ const EmbeddedPage = () => {
     const displayedItems = filteredList.slice(0, visibleItemCount);
 
     const handleLoadMore = async () => {
-        setIsLoading(true);
+        setIsLoader(true);
 
         await new Promise((resolve) => setTimeout(resolve, 500));
 
         setVisibleItemCount((prevCount) => prevCount + loadMoreIncrement);
 
-        setIsLoading(false);
+        setIsLoader(false);
     };
 
     const resetFilterBtn = async (e) => {
@@ -282,7 +283,7 @@ const EmbeddedPage = () => {
                                 ))
                             )}
                         </div>
-                        {isLoading ? (
+                        {isLoader ? (
                             <div className="text-center load-more mt-4">
                                 <div className="btn btn-primary">
                                     Loading...
