@@ -25,7 +25,7 @@ const HomePage = () => {
 
   return (
     <>
-      <Layout title={""} description={""}>
+      <Layout title={"Home"} description={""}>
         <div className="page-breadcrumb bg-white">
           <div className="row align-items-center">
             <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12">
