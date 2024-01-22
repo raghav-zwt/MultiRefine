@@ -35,15 +35,15 @@ const EmbeddedPage = () => {
             if (Array.isArray(dataXcategory)) {
                 filteredList = filteredList.filter((item) =>
                     dataXcategory.some((xcate) =>
-                        item.fieldData?.[xcate.value].toLowerCase().includes(lowerCaseSearchTerm) ||
-                        item.fieldData?.name.toLowerCase().includes(lowerCaseSearchTerm)
+                        item.fieldData?.[xcate.value]?.toLowerCase().includes(lowerCaseSearchTerm) ||
+                        item.fieldData?.name?.toLowerCase().includes(lowerCaseSearchTerm)
                     )
                 );
             } else {
                 filteredList = filteredList.filter((item) =>
                     item.fieldData?.[dataXcategory]?.toLowerCase().includes(lowerCaseSearchTerm) ||
-                    item.fieldData?.name.toLowerCase().includes(lowerCaseSearchTerm) ||
-                    item.fieldData?.slug.toLowerCase().includes(lowerCaseSearchTerm)
+                    item.fieldData?.name?.toLowerCase().includes(lowerCaseSearchTerm) ||
+                    item.fieldData?.slug?.toLowerCase().includes(lowerCaseSearchTerm)
                 );
             }
         }
