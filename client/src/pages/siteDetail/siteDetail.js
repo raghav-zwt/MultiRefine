@@ -36,17 +36,22 @@ const SiteDetail = () => {
         setLayout(event.target.value);
     };
 
-    useEffect(() => {
-        const SiteListCollections = async () => {
-            const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/filter/getSiteList`, {
-                site_id: `${site_id}`,
-            });
+    const SiteListCollections = async () => {
+        const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/filter/getSiteList`, {
+            site_id: `${site_id}`,
+        });
 
-            if (data.status === 200) {
-                setSiteList(data?.data?.data)
-            }
+        if (data.status === 200) {
+            setSiteList(data?.data?.data)
         }
+    }
 
+    useEffect(() => {
+        SiteListCollections();
+        // eslint-disable-next-line 
+    }, [])
+
+    useEffect(() => {
         const ListCollections = async () => {
             const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListCollections`, {
                 site_id: `${site_id}`,
@@ -58,7 +63,6 @@ const SiteDetail = () => {
             }
         }
 
-        SiteListCollections();
         ListCollections();
     }, [site_id, Bearer])
 
@@ -150,6 +154,20 @@ const SiteDetail = () => {
         }));
     };
 
+    const filterRemoveId = async (id) => {
+        try {
+            const data = await axios.delete(
+                `${process.env.REACT_APP_API_URL}/api/filter/remove/${id}`
+            );
+            if (data?.data?.success) {
+                toast.success(data?.data?.message);
+                SiteListCollections();
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+        }
+    };
+
     return (
         <>
             <Layout title={"Filter Details"} description={""}>
@@ -190,6 +208,7 @@ const SiteDetail = () => {
                                                                 <th className="border-top-0">Layout</th>
                                                                 <th className="border-top-0">Date</th>
                                                                 <th className="border-top-0">Collections</th>
+                                                                <th className="border-top-0">Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -212,6 +231,25 @@ const SiteDetail = () => {
                                                                                         <td><span className="">{e.layout}</span></td>
                                                                                         <td className="txt-oflo">{e.date.split('T')[0]}</td>
                                                                                         <td><span className="btn btn-info text-white">{e.collection.length >= 1 ? e.collection.length : 1}</span></td>
+                                                                                        <td className="d-flex align-items-center gap-2">
+                                                                                            <Link to={`/list/listdetails/${e.id}`} className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
+                                                                                            >Edit</Link>
+                                                                                            <button
+                                                                                                className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
+                                                                                                onClick={(el) => {
+                                                                                                    el.preventDefault();
+                                                                                                    filterRemoveId(e.id);
+                                                                                                }}
+                                                                                            >
+                                                                                                Delete
+                                                                                            </button>
+                                                                                            <Link
+                                                                                                to={`/detail/${e.id}?site_id=${e.site_id}`}
+                                                                                                className="btn btn-danger d-md-block pull-right waves-effect waves-light text-white"
+                                                                                            >
+                                                                                                Embedded & Css
+                                                                                            </Link>
+                                                                                        </td>
                                                                                     </tr>
                                                                                 </>
                                                                             ))}
