@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, useParams } from "react-router-dom";
 import Select from 'react-select';
+import Loader from '../../components/Loader.js';
 import { useNavigate } from "react-router-dom";
 
 const ListDetails = () => {
@@ -18,11 +19,13 @@ const ListDetails = () => {
     const [filtername, setFilterName] = useState("");
     const [type, setType] = useState("");
     const [layout, setLayout] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         const filterFetch = async () => {
             try {
+                setIsLoading(true);
                 const data = await axios.get(`${process.env.REACT_APP_API_URL}/api/filter/listDetails/${params.id}`);
 
                 if (data?.data?.success) {
@@ -43,6 +46,7 @@ const ListDetails = () => {
 
                             if (data?.status === 200) {
                                 setListCollections(data?.data?.collections);
+                                setIsLoading(false);
                             }
                         }
                         ListCollections();
@@ -50,6 +54,7 @@ const ListDetails = () => {
                 }
             } catch (error) {
                 console.log(error);
+                setIsLoading(false);
             }
         }
         filterFetch();
@@ -72,6 +77,7 @@ const ListDetails = () => {
 
     const filterUpdate = async (e) => {
         e.preventDefault()
+        setIsLoading(true);
         try {
             const currentDate = new Date();
             const formattedDate = currentDate.toISOString().split('T')[0]
@@ -90,11 +96,13 @@ const ListDetails = () => {
 
             if (data?.data?.success) {
                 toast.success(data?.data?.message);
+                setIsLoading(false);
                 navigate("/list")
             }
         } catch (error) {
             console.log(error.response?.data?.message)
             toast.error(error?.response?.data?.message);
+            setIsLoading(false);
         }
     }
 
@@ -152,6 +160,10 @@ const ListDetails = () => {
             },
         }));
     };
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <>

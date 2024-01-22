@@ -3,25 +3,38 @@ import Layout from "../layouts/layout.js"
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import slugify from "slugify";
+import Loader from '../components/Loader.js';
 
 const HomePage = () => {
 
   const Bearer = localStorage.getItem("accessToken");
   const [Site, setSite] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     const ListSite = async () => {
-      const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListSite`, {
-        Bearer: `${Bearer}`
-      });
+      try {
+        const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListSite`, {
+          Bearer: `${Bearer}`
+        });
 
-      if (data.status === 200) {
-        setSite(data?.data?.sites);
+        if (data.status === 200) {
+          setSite(data?.data?.sites);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
       }
     }
 
     ListSite();
   }, [Bearer])
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <>

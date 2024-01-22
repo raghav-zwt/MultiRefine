@@ -3,9 +3,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Link, useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios"
-import Loader from "../../assets/images/loader.gif"
 import "./login.css"
 import { UseAuth } from "../../context/AuthContext.js";
+import Loader from '../../components/Loader.js';
 
 const Login = () => {
 
@@ -15,7 +15,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -31,7 +31,7 @@ const Login = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
 
         const apiUrl = `${process.env.REACT_APP_API_URL}/webflowAuthorizedUser`;
         const tokenApi = token;
@@ -63,7 +63,7 @@ const Login = () => {
         console.error('Error making API request:', error.message);
         toast.error('Webflow user not authorized, login again.');
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -80,7 +80,7 @@ const Login = () => {
     const grantType = 'authorization_code';
 
     try {
-      setLoading(true);
+      setIsLoading(true);
 
       const response = await axios.post(apiUrl, {
         client_id: REACT_APP_CLIENT_ID,
@@ -97,13 +97,13 @@ const Login = () => {
       console.error('Error exchanging code for access token:', error.message);
       toast.error('Access token not authorized, try again.');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const LoginSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setIsLoading(true);
     const loginDetails = {
       email,
       password
@@ -119,13 +119,13 @@ const Login = () => {
           localStorage.setItem("accessToken", accessToken?.data?.data[0].access_token);
         }
       } catch (error) {
-        setLoading(false);
+        setIsLoading(false);
         console.error("Error fetching access token:", error);
       }
 
       if (data.success) {
         toast.success(data.message);
-        setLoading(false);
+        setIsLoading(false);
         setAuth({
           ...auth,
           auth_id: data.data[0].auth_id,
@@ -137,48 +137,46 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
-      setLoading(false);
+      setIsLoading(false);
       toast.error(error?.response?.data?.message);
     }
+  }
+
+  if (isLoading) {
+    return <Loader />;
   }
 
   return (
     <>
       <div className="main-wrapper">
-        <div>
-          {loading ? (
-            <img src={Loader} width={80} height={80} alt="loading..." />
-          ) : (
-            <div className="wrapper">
-              <form method="post"
-                encType="multipart/form-data" onSubmit={LoginSubmit}>
-                <div className="heading">
-                  <h2>Welcome!</h2>
-                  <p>Sign In to your account</p>
-                </div>
-                <div className="input-group">
-                  <input type="email" value={email} name="email" className="input-field" onChange={(e) => {
-                    setEmail(e.target.value)
-                  }} placeholder="email" required />
-                </div>
-                <div className="input-group">
-                  <input type="text" value={password} name="password" className="input-field" onChange={(e) => {
-                    setPassword(e.target.value)
-                  }} placeholder="password" required />
-                </div>
-                <div className="input-group mb-3">
-                  <Link to="https://webflow.com">
-                    Login With Webflow
-                  </Link>
-                </div>
-                <div className="input-group">
-                  <button type="submit" >
-                    Login
-                  </button>
-                </div>
-              </form>
+        <div className="wrapper">
+          <form method="post"
+            encType="multipart/form-data" onSubmit={LoginSubmit}>
+            <div className="heading">
+              <h2>Welcome!</h2>
+              <p>Sign In to your account</p>
             </div>
-          )}
+            <div className="input-group">
+              <input type="email" value={email} name="email" className="input-field" onChange={(e) => {
+                setEmail(e.target.value)
+              }} placeholder="email" required />
+            </div>
+            <div className="input-group">
+              <input type="text" value={password} name="password" className="input-field" onChange={(e) => {
+                setPassword(e.target.value)
+              }} placeholder="password" required />
+            </div>
+            <div className="input-group mb-3">
+              <Link to="https://webflow.com">
+                Login With Webflow
+              </Link>
+            </div>
+            <div className="input-group">
+              <button type="submit" >
+                Login
+              </button>
+            </div>
+          </form>
         </div>
       </div>
       <ToastContainer />

@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import axios from "axios";
 import { EmbeddedItem } from "./embedded-item.js"
 import notFound from "../../assets/images/notFound.png";
+import Loader from '../../components/Loader.js';
 
 const EmbeddedPage = () => {
 
@@ -13,8 +14,8 @@ const EmbeddedPage = () => {
     const [data, setData] = useState({ collection: [] });
     const [accessToken, setAccessToken] = useState([]);
     const [isOn, setIsOn] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const [allCollectionData, setAllCollectionData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [sportList, setSportList] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState({});
@@ -105,6 +106,7 @@ const EmbeddedPage = () => {
                             collection_id: collection.value,
                             Bearer: `${accessToken}`
                         });
+                        setIsLoading(false);
                         return response?.data?.items;
                     }));
                 } else {
@@ -112,11 +114,13 @@ const EmbeddedPage = () => {
                         collection_id: data.collection.value,
                         Bearer: `${accessToken}`
                     });
+                    setIsLoading(false);
                     collectionData = [response?.data?.items];
                 }
                 const flattenedCollectionData = collectionData.reduce((acc, val) => acc.concat(val), []);
                 setAllCollectionData(flattenedCollectionData);
             } catch (error) {
+                setIsLoading(false);
                 console.error('Error fetching data for collections', error);
             }
         };
@@ -143,6 +147,10 @@ const EmbeddedPage = () => {
         setSearchQuery("");
         setSelectedCategories("");
         setVisibleItemCount(8);
+    }
+
+    if (isLoading) {
+        return <Loader />;
     }
 
     return (

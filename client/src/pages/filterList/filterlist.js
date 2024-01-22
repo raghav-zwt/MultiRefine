@@ -3,14 +3,17 @@ import Layout from "../../layouts/layout.js"
 import { Link } from 'react-router-dom'
 import axios from "axios";
 import { toast } from 'react-toastify';
+import Loader from '../../components/Loader.js';
 
 const FilterList = () => {
 
     const localStorageAuth = localStorage.getItem("auth");
     const userID = JSON.parse(localStorageAuth)[0].id
     const [filterData, setFilterData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const getFilterList = async () => {
+        setIsLoading(true);
         try {
             const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/filter/list`, {
                 userID
@@ -18,6 +21,7 @@ const FilterList = () => {
 
             if (data?.data?.success) {
                 setFilterData(data?.data?.data);
+                setIsLoading(false);
             }
         } catch (error) {
             toast.error(error?.response?.data?.message);
@@ -25,6 +29,7 @@ const FilterList = () => {
     }
 
     const filterRemoveId = async (id) => {
+        setIsLoading(true);
         try {
             const data = await axios.delete(
                 `${process.env.REACT_APP_API_URL}/api/filter/remove/${id}`
@@ -32,6 +37,7 @@ const FilterList = () => {
             if (data?.data?.success) {
                 toast.success(data?.data?.message);
                 getFilterList();
+                setIsLoading(false);
             }
         } catch (error) {
             toast.error(error?.response?.data?.message);
@@ -42,6 +48,10 @@ const FilterList = () => {
         getFilterList();
         // eslint-disable-next-line
     }, []);
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <>

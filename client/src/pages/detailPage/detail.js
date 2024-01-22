@@ -7,11 +7,13 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { ClipboardCopy } from "../../components/ClipboardCopy.js";
 import MonacoEditor from '@monaco-editor/react';
+import Loader from '../../components/Loader.js';
 import "./detail.css"
 
 const DetailPage = () => {
     const [textareaData, setTextareaData] = useState("");
     const [getFilterCss, setgetFilterCss] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -19,12 +21,15 @@ const DetailPage = () => {
     const param = useParams();
 
     const fetchCss = async () => {
+        setIsLoading(true);
         try {
             const data = await axios.get(`${process.env.REACT_APP_API_URL}/api/filter/getFilterCss/${param.id}`);
             setgetFilterCss(data?.data?.data[0]);
             setTextareaData(data?.data?.data[0]?.css);
+            setIsLoading(false);
         } catch (error) {
             console.log(error);
+            setIsLoading(false);
         }
     }
 
@@ -34,6 +39,7 @@ const DetailPage = () => {
     }, [])
 
     const submitCss = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         try {
             if (textareaData === getFilterCss.css) {
@@ -45,15 +51,18 @@ const DetailPage = () => {
                 if (data?.data?.success) {
                     toast.success(data?.data?.message);
                     fetchCss();
+                    setIsLoading(false);
                 }
             }
         } catch (error) {
             console.log(error);
             toast.error(error?.response?.data?.message);
+            setIsLoading(false);
         }
     }
 
     const CssRemoveId = async (id) => {
+        setIsLoading(true);
         try {
             const data = await axios.put(
                 `${process.env.REACT_APP_API_URL}/api/filter/filterCssRemove/${id}`
@@ -61,11 +70,17 @@ const DetailPage = () => {
             if (data?.data?.success) {
                 toast.success(data?.data?.message);
                 fetchCss();
+                setIsLoading(false);
             }
         } catch (error) {
             toast.error(error?.response?.data?.message);
+            setIsLoading(false);
         }
     };
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <>

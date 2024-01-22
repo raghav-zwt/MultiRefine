@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import Select from 'react-select';
 import slugify from "slugify";
+import Loader from '../../components/Loader.js';
 
 const SitePage = () => {
 
+    const [isLoading, setIsLoading] = useState(true);
     const Bearer = localStorage.getItem("accessToken");
     const [Site, setSite] = useState([]);
     const [selectedOption, setSelectedOption] = useState(null);
@@ -17,6 +19,7 @@ const SitePage = () => {
     }));
 
     useEffect(() => {
+        setIsLoading(true);
         const ListSite = async () => {
             const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListSite`, {
                 Bearer: `${Bearer}`
@@ -24,6 +27,7 @@ const SitePage = () => {
 
             if (data.status === 200) {
                 setSite(data?.data?.sites);
+                setIsLoading(false);
             }
         }
 
@@ -33,6 +37,10 @@ const SitePage = () => {
     const slugifiedLabel = slugify(selectedOption?.label || '');
 
     const webID = `${selectedOption?.value}/${slugifiedLabel}`;
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <>

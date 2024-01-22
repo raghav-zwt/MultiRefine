@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { Link, useParams } from 'react-router-dom';
 import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
+import Loader from '../../components/Loader.js';
 import "./siteDetail.css"
 
 const SiteDetail = () => {
@@ -17,6 +18,8 @@ const SiteDetail = () => {
     const [filtername, setFilterName] = useState("");
     const [uniqueFieldsData, setuniqueFieldsData] = useState([]);
     const [selectedUniqueOption, setSelectedUniqueOption] = useState(null);
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const [mappingOption, setMappingOption] = useState({});
 
@@ -37,12 +40,14 @@ const SiteDetail = () => {
     };
 
     const SiteListCollections = async () => {
+        setIsLoading(true);
         const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/filter/getSiteList`, {
             site_id: `${site_id}`,
         });
 
         if (data.status === 200) {
             setSiteList(data?.data?.data)
+            setIsLoading(false);
         }
     }
 
@@ -52,6 +57,7 @@ const SiteDetail = () => {
     }, [])
 
     useEffect(() => {
+        setIsLoading(true);
         const ListCollections = async () => {
             const data = await axios.post(`${process.env.REACT_APP_API_URL}/api/ListCollections`, {
                 site_id: `${site_id}`,
@@ -60,6 +66,7 @@ const SiteDetail = () => {
 
             if (data.status === 200) {
                 setListCollections(data?.data?.collections);
+                setIsLoading(false);
             }
         }
 
@@ -72,6 +79,7 @@ const SiteDetail = () => {
     }));
 
     const filterSend = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         try {
             const currentDate = new Date();
@@ -92,10 +100,12 @@ const SiteDetail = () => {
 
             if (data?.data?.success) {
                 toast.success(data?.data?.message);
+                setIsLoading(false);
                 navigate("/list");
             }
         } catch (error) {
             toast.error(error?.response?.data?.message);
+            setIsLoading(false);
         }
     }
 
@@ -155,6 +165,7 @@ const SiteDetail = () => {
     };
 
     const filterRemoveId = async (id) => {
+        setIsLoading(true)
         try {
             const data = await axios.delete(
                 `${process.env.REACT_APP_API_URL}/api/filter/remove/${id}`
@@ -162,11 +173,17 @@ const SiteDetail = () => {
             if (data?.data?.success) {
                 toast.success(data?.data?.message);
                 SiteListCollections();
+                setIsLoading(false)
             }
         } catch (error) {
             toast.error(error?.response?.data?.message);
+            setIsLoading(false)
         }
     };
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <>
