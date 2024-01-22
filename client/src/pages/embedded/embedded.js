@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import axios from "axios";
 import { EmbeddedItem } from "./embedded-item.js"
 import notFound from "../../assets/images/notFound.png";
+import Select from 'react-select';
 import Loader from '../../components/Loader.js';
 
 const EmbeddedPage = () => {
@@ -66,7 +67,7 @@ const EmbeddedPage = () => {
     function handleCategoryChange(event, categoryName) {
         setSelectedCategories({
             ...selectedCategories,
-            [categoryName]: event.target.value,
+            [categoryName]: event.value,
         });
         setVisibleItemCount(8);
     }
@@ -194,45 +195,41 @@ const EmbeddedPage = () => {
                                             data?.collection_category.map((category) => (
                                                 <div className='d-flex gap-3 align-items-center' key={category.value}>
                                                     <label className="form-check-label mb-0">{category.value?.charAt(0).toUpperCase() + category.value?.slice(1)}</label>
-                                                    <select
+                                                    <Select
                                                         name={`category-list-${category.value}`}
                                                         id={`category-list-${category.value}`}
-                                                        className='form-control category-list-items'
-                                                        value={selectedCategories[category.value] || ''}
-                                                        onChange={(event) => handleCategoryChange(event, category.value)}
-                                                    >
-                                                        <option value="">All</option>
-                                                        {Array.isArray(sportList) &&
-                                                            sportList
-                                                                .filter((e, index, self) =>
+                                                        defaultValue={selectedCategories[category.value] || ''}
+                                                        className='category-list-items'
+                                                        onChange={(selectedOption) => handleCategoryChange(selectedOption, category?.value)}
+                                                        required
+                                                        options={[
+                                                            { label: 'All', value: '' },
+                                                            ...sportList
+                                                                .filter((e, index, self) => (
                                                                     index === self.findIndex((t) => (
                                                                         `${t.fieldData?.[`${category.value}`]}` === `${e.fieldData?.[`${category.value}`]}`
                                                                     ))
-                                                                )
-                                                                .map((e) => (
-                                                                    e.fieldData?.[`${category.value}`] !== undefined && (
-                                                                        <option key={e.id} value={`${e.fieldData?.[`${category.value}`]}`}>
-                                                                            {`${e.fieldData?.[`${category.value}`]}`}
-                                                                        </option>
-                                                                    )
                                                                 ))
-                                                        }
-                                                    </select>
+                                                                .filter((e) => e.fieldData?.[`${category.value}`] !== undefined)
+                                                                .map((e) => ({ label: `${e.fieldData?.[`${category.value}`]}`, value: `${e.fieldData?.[`${category.value}`]}` }))
+
+                                                        ]}
+                                                    />
                                                 </div>
                                             ))
                                         ) : (
                                             <div className='d-flex gap-3 align-items-center'>
                                                 <label className="form-check-label mb-0">{data?.collection_category?.value?.charAt(0).toUpperCase() + data?.collection_category?.value?.slice(1)}</label>
-                                                <select
+                                                <Select
                                                     name={`category-list-${data?.collection_category?.value}`}
                                                     id={`category-list-${data?.collection_category?.value}`}
-                                                    className='form-control category-list-items'
-                                                    value={selectedCategories[data?.collection_category?.value] || ''}
-                                                    onChange={(event) => handleCategoryChange(event, data?.collection_category?.value)}
-                                                >
-                                                    <option value="">All</option>
-                                                    {Array.isArray(sportList) &&
-                                                        sportList
+                                                    defaultValue={selectedCategories[data?.collection_category?.value] || ''}
+                                                    className='category-list-items'
+                                                    onChange={(selectedOption) => handleCategoryChange(selectedOption, data?.collection_category?.value)}
+                                                    required
+                                                    options={[
+                                                        { label: 'All', value: '' },
+                                                        ...sportList
                                                             .filter((e, index, self) =>
                                                                 index === self.findIndex((t) => (
                                                                     `${t.fieldData?.[`${data?.collection_category?.value}`]}` === `${e.fieldData?.[`${data?.collection_category?.value}`]}`
@@ -240,13 +237,12 @@ const EmbeddedPage = () => {
                                                             )
                                                             .map((e) => (
                                                                 e.fieldData?.[`${data?.collection_category?.value}`] !== undefined && (
-                                                                    <option key={e.id} value={`${e.fieldData?.[`${data?.collection_category?.value}`]}`}>
-                                                                        {`${e.fieldData?.[`${data?.collection_category?.value}`]}`}
-                                                                    </option>
+                                                                    { label: `${e.fieldData?.[`${data?.collection_category?.value}`]}`, value: `${e.fieldData?.[`${data?.collection_category?.value}`]}` }
                                                                 )
                                                             ))
-                                                    }
-                                                </select>
+
+                                                    ]}
+                                                />
                                             </div>
                                         )}
                                     </>
