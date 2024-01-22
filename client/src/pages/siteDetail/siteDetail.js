@@ -18,14 +18,11 @@ const SiteDetail = () => {
     const [filtername, setFilterName] = useState("");
     const [uniqueFieldsData, setuniqueFieldsData] = useState([]);
     const [selectedUniqueOption, setSelectedUniqueOption] = useState(null);
-
     const [isLoading, setIsLoading] = useState(true);
-
     const [mappingOption, setMappingOption] = useState({});
-
     const [siteList, setSiteList] = useState([]);
-
     const authData = localStorage.getItem("auth");
+    const [isfetch, setIsFetch] = useState(false);
 
     const params = useParams();
     const site_id = params.id;
@@ -110,6 +107,7 @@ const SiteDetail = () => {
     }
 
     const FilterFields = async (e) => {
+        setIsFetch(true);
         e.preventDefault();
         const selectedOptionValue = selectedOption;
         try {
@@ -120,6 +118,7 @@ const SiteDetail = () => {
                         collection_id: collection.value,
                         Bearer: `${Bearer}`
                     });
+                    setIsFetch(false);
                     return response?.data?.items;
                 }));
             } else {
@@ -127,6 +126,7 @@ const SiteDetail = () => {
                     collection_id: selectedOptionValue.value,
                     Bearer: `${Bearer}`
                 });
+                setIsFetch(false);
                 collectionData = [response?.data?.items];
             }
             const siteCollectionData = collectionData.reduce((acc, val) => acc.concat(val), []);
@@ -146,6 +146,7 @@ const SiteDetail = () => {
         } catch (error) {
             console.log(error);
             toast.error(error?.response?.data?.message);
+            setIsFetch(false);
         }
     }
 
@@ -425,7 +426,20 @@ const SiteDetail = () => {
                                         required
                                         options={ListCollectionsOptions}
                                     />
-                                    <button className='mt-3 btn btn-primary' onClick={FilterFields}>Fetch Collection Fields</button>
+                                    {selectedOption === null ? "" : (
+                                        <>
+                                            {isfetch ? (
+                                                <>
+                                                    <button className='mt-3 btn btn-primary'>Loading...</button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <button className='mt-3 btn btn-primary' onClick={FilterFields}>Fetch Filter Fields</button>
+                                                </>
+                                            )}
+
+                                        </>
+                                    )}
                                 </div>
                             </div>
                             <div className="col-lg-6 col-xlg-6 col-md-6">

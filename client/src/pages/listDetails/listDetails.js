@@ -21,6 +21,7 @@ const ListDetails = () => {
     const [layout, setLayout] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const [isfetch, setIsFetch] = useState(false);
 
     useEffect(() => {
         const filterFetch = async () => {
@@ -107,6 +108,7 @@ const ListDetails = () => {
     }
 
     const FilterFields = async (e) => {
+        setIsFetch(true);
         e.preventDefault();
         const selectedOptionValue = selectedOption;
         try {
@@ -117,6 +119,7 @@ const ListDetails = () => {
                         collection_id: collection.value,
                         Bearer: `${Bearer}`
                     });
+                    setIsFetch(false);
                     return response?.data?.items;
                 }));
             } else {
@@ -124,6 +127,7 @@ const ListDetails = () => {
                     collection_id: selectedOptionValue.value,
                     Bearer: `${Bearer}`
                 });
+                setIsFetch(false);
                 collectionData = [response?.data?.items];
             }
             const siteCollectionData = collectionData.reduce((acc, val) => acc.concat(val), []);
@@ -142,7 +146,8 @@ const ListDetails = () => {
 
             setuniqueFieldsData(Array.from(uniqueFields));
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            setIsFetch(false);
         }
     }
 
@@ -332,7 +337,20 @@ const ListDetails = () => {
                                                 defaultValue={selectedOption}
                                                 onChange={setSelectedOption}
                                             />
-                                            <button className='mt-3 btn btn-primary' onClick={FilterFields}>Filter Collection Fields</button>
+                                            {selectedOption === null ? "" : (
+                                                <>
+                                                    {isfetch ? (
+                                                        <>
+                                                            <button className='mt-3 btn btn-primary'>Loading...</button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <button className='mt-3 btn btn-primary' onClick={FilterFields}>Fetch Filter Fields</button>
+                                                        </>
+                                                    )}
+
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
