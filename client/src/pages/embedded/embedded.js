@@ -85,8 +85,8 @@ const EmbeddedPage = () => {
                 const responseData = response?.data?.data[0];
                 if (response?.data?.success && responseData) {
                     setData(responseData);
-                    setAccessToken(responseData.access_token);
-                    localStorage.setItem("accessToken", responseData.access_token);
+                    setAccessToken(responseData?.access_token);
+                    localStorage.setItem("accessToken", responseData?.access_token);
                 }
             } catch (error) {
                 console.error('Error fetching embedded data', error);
