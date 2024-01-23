@@ -10,11 +10,12 @@ const ProfilePage = () => {
   const UserId = auth[0].id;
   const [newPassword, setNewPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const passwordChange = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true)
     try {
       if (newPassword === confirmPassword) {
         const data = await axios.put(`${process.env.REACT_APP_API_URL}/api/profile/update/${UserId}`, {
@@ -24,14 +25,17 @@ const ProfilePage = () => {
         });
 
         if (data?.data?.success) {
-          toast.success(data?.data?.message)
+          toast.success(data?.data?.message);
+          setIsLoading(false);
         }
       } else {
         toast.error("new password & confirm password not match");
+        setIsLoading(false);
       }
     } catch (error) {
       toast.error(error?.response?.data?.message)
-      console.log(error)
+      console.log(error);
+      setIsLoading(false);
     }
   }
 
@@ -112,7 +116,11 @@ const ProfilePage = () => {
                   </div>
                   <div className="form-group mb-0">
                     <div className="col-sm-12">
-                      <button type='submit' className="btn btn-success">Update Password</button>
+                      {isLoading ? (
+                        <button className="btn btn-success">Updating...</button>
+                      ) : (
+                        <button type='submit' className="btn btn-primary">Update Password</button>
+                      )}
                     </div>
                   </div>
                 </form>
