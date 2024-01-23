@@ -3,7 +3,7 @@ import { dbConnect } from "../db/dbConnect.js"
 const filterAddList = async (req, res) => {
     try {
         const { user_id, site_id, site_name, name, type, layout, collection, collection_category, collection_mapping, multiselect_switch, date } = req.body;
-        if (!user_id || !site_id || !site_name || !name || !type || !layout || !collection || !collection_category || !collection_mapping || !multiselect_switch || !date) {
+        if (!user_id || !site_id || !site_name || !name || !type || !layout || !collection || !collection_category || !collection_mapping || !date) {
             return res.status(401).json({
                 message: 'All fields are required',
                 success: false,
@@ -163,7 +163,7 @@ const filterUpdate = async (req, res) => {
 
         const { name, type, layout, collection, collection_category, collection_mapping, multiselect_switch, date } = req.body;
 
-        if (!name || !type || !layout || !collection || !collection_category || !collection_mapping || !multiselect_switch || !date) {
+        if (!name || !type || !layout || !collection || !collection_category || !collection_mapping || !date) {
             return res.status(401).json({
                 message: 'All fields are required',
                 success: false,
