@@ -154,7 +154,7 @@ const EmbeddedPage = () => {
     const resetFilterBtn = async (e) => {
         e.preventDefault();
         setSearchQuery("");
-        setSelectedCategories("");
+        setSelectedCategories({});
         setVisibleItemCount(8);
     }
 
@@ -213,6 +213,7 @@ const EmbeddedPage = () => {
                                                 <div className='d-flex gap-3 align-items-center' key={category.value}>
                                                     <label className="form-check-label mb-0">{category.value?.charAt(0).toUpperCase() + category.value?.slice(1)}</label>
                                                     <Select
+                                                        key={`category-list-${category.value}`}
                                                         name={`category-list-${category.value}`}
                                                         id={`category-list-${category.value}`}
                                                         defaultValue={selectedCategories[category.value] || ''}
@@ -238,6 +239,7 @@ const EmbeddedPage = () => {
                                             <div className='d-flex gap-3 align-items-center'>
                                                 <label className="form-check-label mb-0">{data?.collection_category?.value?.charAt(0).toUpperCase() + data?.collection_category?.value?.slice(1)}</label>
                                                 <Select
+                                                    key={`category-list-${data?.collection_category?.value}`}
                                                     name={`category-list-${data?.collection_category?.value}`}
                                                     id={`category-list-${data?.collection_category?.value}`}
                                                     defaultValue={selectedCategories[data?.collection_category?.value] || ''}
