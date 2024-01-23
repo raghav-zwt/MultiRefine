@@ -59,7 +59,8 @@ const EmbeddedPage = () => {
     }
 
     function dynamicFilter(list, propertyName, propertyValue) {
-        return list.filter((item) => `${item.fieldData?.[propertyName]}` === propertyValue);
+        console.log(propertyValue.map((e) => e))
+        return list.filter((item) => propertyValue.includes(`${item.fieldData?.[propertyName]}`));
     }
 
     const filteredList = useMemo(getFilteredList, [searchQuery, selectedCategories, sportList, data?.collection_category]);
@@ -67,7 +68,7 @@ const EmbeddedPage = () => {
     function handleCategoryChange(event, categoryName) {
         setSelectedCategories({
             ...selectedCategories,
-            [categoryName]: event.value,
+            [categoryName]: event.map(element => element.value),
         });
         setVisibleItemCount(8);
     }
@@ -175,9 +176,11 @@ const EmbeddedPage = () => {
                                 {Object.entries(selectedCategories).map(([categoryName, selectedValue]) => (
                                     <>
                                         {selectedValue === "" ? "" : (
-                                            <button key={categoryName} type="button" className="btn btn-primary mb-4">
-                                                {categoryName} :<span className="badge fw-bold fs-3 badge-white ps-1 p-0">{selectedValue}</span>
-                                            </button>
+                                            selectedValue.map((e) => (
+                                                <button key={categoryName} type="button" className="btn btn-primary mb-4">
+                                                    {categoryName} :<span className="badge fw-bold fs-3 badge-white ps-1 p-0">{e}</span>
+                                                </button>
+                                            ))
                                         )}
                                     </>
                                 ))}
@@ -202,8 +205,8 @@ const EmbeddedPage = () => {
                                                         className='category-list-items'
                                                         onChange={(selectedOption) => handleCategoryChange(selectedOption, category?.value)}
                                                         required
+                                                        isMulti
                                                         options={[
-                                                            { label: 'All', value: '' },
                                                             ...sportList
                                                                 .filter((e, index, self) => (
                                                                     index === self.findIndex((t) => (
@@ -227,8 +230,8 @@ const EmbeddedPage = () => {
                                                     className='category-list-items'
                                                     onChange={(selectedOption) => handleCategoryChange(selectedOption, data?.collection_category?.value)}
                                                     required
+                                                    isMulti
                                                     options={[
-                                                        { label: 'All', value: '' },
                                                         ...sportList
                                                             .filter((e, index, self) =>
                                                                 index === self.findIndex((t) => (

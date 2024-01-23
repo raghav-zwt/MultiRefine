@@ -2,8 +2,8 @@ import { dbConnect } from "../db/dbConnect.js"
 
 const filterAddList = async (req, res) => {
     try {
-        const { user_id, site_id, site_name, name, type, layout, collection, collection_category, collection_mapping, date } = req.body;
-        if (!user_id || !site_id || !site_name || !name || !type || !layout || !collection || !collection_category || !collection_mapping || !date) {
+        const { user_id, site_id, site_name, name, type, layout, collection, collection_category, collection_mapping, multi_select_switch, date } = req.body;
+        if (!user_id || !site_id || !site_name || !name || !type || !layout || !collection || !collection_category || !collection_mapping || !multi_select_switch || !date) {
             return res.status(401).json({
                 message: 'All fields are required',
                 success: false,
@@ -27,8 +27,8 @@ const filterAddList = async (req, res) => {
                         data,
                     });
                 }
-                const insertQuery = "INSERT INTO filter (user_id, site_id, site_name, name, type, layout, collection, collection_category, collection_mapping, date) VALUES (?)";
-                const insertValue = [user_id, site_id, site_name, name, type, layout, collection, collection_category, collection_mapping, date]
+                const insertQuery = "INSERT INTO filter (user_id, site_id, site_name, name, type, layout, collection, collection_category, collection_mapping, multi_select_switch, date) VALUES (?)";
+                const insertValue = [user_id, site_id, site_name, name, type, layout, collection, collection_category, collection_mapping, multi_select_switch, date]
                 dbConnect.query(insertQuery, [insertValue], (error, data) => {
                     try {
                         if (error) {
@@ -161,9 +161,9 @@ const filterUpdate = async (req, res) => {
     try {
         const id = req.params.id;
 
-        const { name, type, layout, collection, collection_category, collection_mapping, date } = req.body;
+        const { name, type, layout, collection, collection_category, collection_mapping, multi_select_switch, date } = req.body;
 
-        if (!name || !type || !layout || !collection || !collection_category || !collection_mapping || !date) {
+        if (!name || !type || !layout || !collection || !collection_category || !collection_mapping || !multi_select_switch || !date) {
             return res.status(401).json({
                 message: 'All fields are required',
                 success: false,
@@ -189,8 +189,8 @@ const filterUpdate = async (req, res) => {
                         data,
                     });
                 }
-                const updateQuery = `UPDATE filter SET name = ?, type = ?, layout = ?, collection = ?, collection_category = ?, collection_mapping = ? , date = ? WHERE id = ${id}`;
-                dbConnect.query(updateQuery, [name, type, layout, collection, collection_category, collection_mapping, date], (error, data) => {
+                const updateQuery = `UPDATE filter SET name = ?, type = ?, layout = ?, collection = ?, collection_category = ?, collection_mapping = ?, multi_select_switch = ? , date = ? WHERE id = ${id}`;
+                dbConnect.query(updateQuery, [name, type, layout, collection, collection_category, collection_mapping, multi_select_switch, date], (error, data) => {
                     try {
                         if (error) {
                             console.log(error);
@@ -309,7 +309,7 @@ const embeddedCode = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const embeddedGet = `SELECT filter.id AS site_id, site_name, collection, collection_category, collection_mapping, type, layout, date, css, user.id AS user_id, user.hash_password, auth.access_token
+        const embeddedGet = `SELECT filter.id AS site_id, site_name, collection, collection_category, collection_mapping, type, layout, date, multi_select_switch, css, user.id AS user_id, user.hash_password, auth.access_token
         FROM filter
         JOIN user ON filter.user_id = user.id
         JOIN auth ON user.auth_id = auth.id

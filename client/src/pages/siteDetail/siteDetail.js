@@ -23,6 +23,7 @@ const SiteDetail = () => {
     const [siteList, setSiteList] = useState([]);
     const authData = localStorage.getItem("auth");
     const [isfetch, setIsFetch] = useState(false);
+    const [isChecked, setIsChecked] = useState(0);
 
     const params = useParams();
     const site_id = params.id;
@@ -92,6 +93,7 @@ const SiteDetail = () => {
                 collection: JSON.stringify(selectedOption),
                 collection_category: JSON.stringify(selectedUniqueOption),
                 collection_mapping: JSON.stringify(mappingOption),
+                multi_select_switch: isChecked,
                 date: formattedDate
             });
 
@@ -174,12 +176,16 @@ const SiteDetail = () => {
             if (data?.data?.success) {
                 toast.success(data?.data?.message);
                 SiteListCollections();
-                setIsLoading(false)
+                setIsLoading(false);
             }
         } catch (error) {
             toast.error(error?.response?.data?.message);
             setIsLoading(false)
         }
+    };
+
+    const handleCheckboxChange = () => {
+        setIsChecked((prevValue) => (prevValue === 0 ? 1 : 0));
     };
 
     if (isLoading) {
@@ -348,6 +354,16 @@ const SiteDetail = () => {
                                             >
                                                 Multiple
                                             </label>
+                                        </div>
+                                    </div>
+                                    <h3 className="box-title mt-4">Filter Select Type</h3>
+                                    <div
+                                        id="filterType"
+                                        className="d-flex flex-wrap align-items-center mt-4 gap-4">
+                                        <div className="form-check form-switch">
+                                            <input className="form-check-input" checked={isChecked}
+                                                onChange={handleCheckboxChange} type="checkbox" id="MultiSwitchCheckDefault" />
+                                            <label className="form-check-label" htmlFor="MultiSwitchCheckDefault">Multi Select</label>
                                         </div>
                                     </div>
                                 </div>
