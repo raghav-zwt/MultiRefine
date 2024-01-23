@@ -14,6 +14,7 @@ const ListDetails = () => {
     const [selectedUniqueOption, setSelectedUniqueOption] = useState(null);
     const [uniqueFieldsData, setuniqueFieldsData] = useState([]);
     const [mappingOption, setMappingOption] = useState({});
+    const [multiselectSwitchOption, setMultiselectSwitchOption] = useState("");
     const Bearer = localStorage.getItem("accessToken");
     const params = useParams();
     const [filtername, setFilterName] = useState("");
@@ -37,6 +38,7 @@ const ListDetails = () => {
                     setSelectedOption(data?.data?.data[0].collection)
                     setSelectedUniqueOption(data?.data?.data[0].collection_category)
                     setMappingOption(data?.data?.data[0].collection_mapping)
+                    setMultiselectSwitchOption(data?.data?.data[0].multiselect_switch)
 
                     if (siteId) {
                         const ListCollections = async () => {
@@ -92,6 +94,7 @@ const ListDetails = () => {
                 collection: JSON.stringify(selectedOption),
                 collection_category: JSON.stringify(selectedUniqueOption),
                 collection_mapping: JSON.stringify(mappingOption),
+                multiselect_switch: multiselectSwitchOption,
                 date: formattedDate
             });
 
@@ -164,6 +167,10 @@ const ListDetails = () => {
                 [fieldName]: selectedValue,
             },
         }));
+    };
+
+    const handleCheckboxChange = () => {
+        setMultiselectSwitchOption((prevValue) => (prevValue === 0 ? 1 : 0));
     };
 
     if (isLoading) {
@@ -255,6 +262,16 @@ const ListDetails = () => {
                                                 >
                                                     Multiple
                                                 </label>
+                                            </div>
+                                        </div>
+                                        <h3 className="box-title mt-4">Filter Select Type</h3>
+                                        <div
+                                            id="filterType"
+                                            className="d-flex flex-wrap align-items-center mt-4 gap-4">
+                                            <div className="form-check form-switch">
+                                                <input className="form-check-input" checked={multiselectSwitchOption === 1}
+                                                    onChange={handleCheckboxChange} type="checkbox" id="MultiSwitchCheckDefault" />
+                                                <label className="form-check-label" htmlFor="MultiSwitchCheckDefault">Multi Select</label>
                                             </div>
                                         </div>
                                     </div>
