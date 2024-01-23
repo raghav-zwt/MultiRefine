@@ -59,17 +59,23 @@ const EmbeddedPage = () => {
     }
 
     function dynamicFilter(list, propertyName, propertyValue) {
-        console.log(propertyValue.map((e) => e))
         return list.filter((item) => propertyValue.includes(`${item.fieldData?.[propertyName]}`));
     }
 
     const filteredList = useMemo(getFilteredList, [searchQuery, selectedCategories, sportList, data?.collection_category]);
 
     function handleCategoryChange(event, categoryName) {
-        setSelectedCategories({
-            ...selectedCategories,
-            [categoryName]: event.map(element => element.value),
-        });
+        if (data?.multiselect_switch === 1) {
+            setSelectedCategories({
+                ...selectedCategories,
+                [categoryName]: event.map(element => element.value),
+            });
+        } else {
+            setSelectedCategories({
+                ...selectedCategories,
+                [categoryName]: event.value,
+            });
+        }
         setVisibleItemCount(8);
     }
 
@@ -176,11 +182,19 @@ const EmbeddedPage = () => {
                                 {Object.entries(selectedCategories).map(([categoryName, selectedValue]) => (
                                     <>
                                         {selectedValue === "" ? "" : (
-                                            selectedValue.map((e) => (
-                                                <button key={categoryName} type="button" className="btn btn-primary mb-4">
-                                                    {categoryName} :<span className="badge fw-bold fs-3 badge-white ps-1 p-0">{e}</span>
-                                                </button>
-                                            ))
+                                            <>
+                                                {data?.multiselect_switch === 1 ? (
+                                                    selectedValue.map((e) => (
+                                                        <button key={categoryName} type="button" className="btn btn-primary mb-4">
+                                                            {categoryName} :<span className="badge fw-bold fs-3 badge-white ps-1 p-0">{e}</span>
+                                                        </button>
+                                                    ))
+                                                ) : (
+                                                    <button key={categoryName} type="button" className="btn btn-primary mb-4">
+                                                        {categoryName} :<span className="badge fw-bold fs-3 badge-white ps-1 p-0">{selectedValue}</span>
+                                                    </button>
+                                                )}
+                                            </>
                                         )}
                                     </>
                                 ))}
@@ -205,7 +219,7 @@ const EmbeddedPage = () => {
                                                         className='category-list-items'
                                                         onChange={(selectedOption) => handleCategoryChange(selectedOption, category?.value)}
                                                         required
-                                                        isMulti
+                                                        isMulti={data?.multiselect_switch === 1}
                                                         options={[
                                                             ...sportList
                                                                 .filter((e, index, self) => (
@@ -230,7 +244,7 @@ const EmbeddedPage = () => {
                                                     className='category-list-items'
                                                     onChange={(selectedOption) => handleCategoryChange(selectedOption, data?.collection_category?.value)}
                                                     required
-                                                    isMulti
+                                                    isMulti={data?.multiselect_switch === 1}
                                                     options={[
                                                         ...sportList
                                                             .filter((e, index, self) =>
