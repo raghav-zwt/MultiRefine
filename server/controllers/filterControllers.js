@@ -170,8 +170,8 @@ const filterUpdate = async (req, res) => {
             });
         }
 
-        const checkQuery = `SELECT COUNT(*) AS count FROM filter WHERE name = ? AND type = ? AND layout = ?`;
-        const checkValues = [name, type, layout];
+        const checkQuery = `SELECT COUNT(*) AS count FROM filter WHERE collection = ?`;
+        const checkValues = [collection];
 
         dbConnect.query(checkQuery, checkValues, (error, data) => {
             try {
