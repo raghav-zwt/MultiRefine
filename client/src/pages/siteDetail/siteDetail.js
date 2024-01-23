@@ -93,7 +93,7 @@ const SiteDetail = () => {
                 collection: JSON.stringify(selectedOption),
                 collection_category: JSON.stringify(selectedUniqueOption),
                 collection_mapping: JSON.stringify(mappingOption),
-                multi_select_switch: isChecked,
+                multiselect_switch: isChecked,
                 date: formattedDate
             });
 
