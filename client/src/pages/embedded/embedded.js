@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import "./embedded.css";
 import { useLocation } from 'react-router-dom';
 import axios from "axios";
@@ -151,8 +151,16 @@ const EmbeddedPage = () => {
         setIsLoader(false);
     };
 
+    const selectRefs = useRef({});
+
     const resetFilterBtn = async (e) => {
         e.preventDefault();
+        Object.values(selectRefs.current).forEach((selectRef) => {
+            console.log("Multi", selectRef)
+            if (selectRef && selectRef && typeof selectRef.clearValue === 'function') {
+                selectRef.clearValue();
+            }
+        });
         setSearchQuery("");
         setSelectedCategories({});
         setVisibleItemCount(8);
@@ -213,7 +221,8 @@ const EmbeddedPage = () => {
                                                 <div className='d-flex gap-3 align-items-center' key={category.value}>
                                                     <label className="form-check-label mb-0">{category.value?.charAt(0).toUpperCase() + category.value?.slice(1)}</label>
                                                     <Select
-                                                        key={`category-list-${category.value}`}
+                                                        ref={(ref) => (selectRefs.current[category.value] = ref)}
+                                                        key={`unique-select-key-category-list-${category.value}`}
                                                         name={`category-list-${category.value}`}
                                                         id={`category-list-${category.value}`}
                                                         defaultValue={selectedCategories[category.value] || ''}
@@ -239,7 +248,8 @@ const EmbeddedPage = () => {
                                             <div className='d-flex gap-3 align-items-center'>
                                                 <label className="form-check-label mb-0">{data?.collection_category?.value?.charAt(0).toUpperCase() + data?.collection_category?.value?.slice(1)}</label>
                                                 <Select
-                                                    key={`category-list-${data?.collection_category?.value}`}
+                                                    ref={(ref) => (selectRefs.current[data?.collection_category?.value] = ref)}
+                                                    key={`unique-select-key-category-list-${data?.collection_category?.value}`}
                                                     name={`category-list-${data?.collection_category?.value}`}
                                                     id={`category-list-${data?.collection_category?.value}`}
                                                     defaultValue={selectedCategories[data?.collection_category?.value] || ''}
