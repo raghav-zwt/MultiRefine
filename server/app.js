@@ -9,6 +9,8 @@ import filterRoutes from "./routes/filterRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import { dbConnect } from "./db/dbConnect.js";
 import { dotenvFile } from "./helper/dotenv.js"
+import errorhandler from "errorhandler";
+
 const PORT = process.env.PORT || 8080;
 const app = express();
 
@@ -27,6 +29,10 @@ app.use("", authRoutes);
 app.use("/api", webflowRoutes);
 app.use("/api/filter", filterRoutes);
 app.use("/api/profile", profileRoutes);
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(errorhandler())
+}
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${process.env.PORT || 8080}`);
