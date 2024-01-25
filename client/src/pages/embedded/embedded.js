@@ -228,6 +228,7 @@ const EmbeddedPage = () => {
                                                         id={`category-list-${category.value}`}
                                                         defaultValue={selectedCategories[category.value] || ''}
                                                         className='category-list-items'
+                                                        isClearable={false}
                                                         onChange={(selectedOption) => handleCategoryChange(selectedOption, category?.value)}
                                                         required
                                                         isMulti={data?.multiselect_switch === 1}
@@ -255,6 +256,7 @@ const EmbeddedPage = () => {
                                                     id={`category-list-${data?.collection_category?.value}`}
                                                     defaultValue={selectedCategories[data?.collection_category?.value] || ''}
                                                     className='category-list-items'
+                                                    isClearable={false}
                                                     onChange={(selectedOption) => handleCategoryChange(selectedOption, data?.collection_category?.value)}
                                                     required
                                                     isMulti={data?.multiselect_switch === 1}
