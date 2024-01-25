@@ -68,12 +68,12 @@ const EmbeddedPage = () => {
         if (data?.multiselect_switch === 1) {
             setSelectedCategories({
                 ...selectedCategories,
-                [categoryName]: event.map(element => element.value),
+                [categoryName]: event.map(element => element?.value),
             });
         } else {
             setSelectedCategories({
                 ...selectedCategories,
-                [categoryName]: event.value,
+                [categoryName]: event?.value,
             });
         }
         setVisibleItemCount(8);
@@ -155,8 +155,9 @@ const EmbeddedPage = () => {
 
     const resetFilterBtn = async (e) => {
         e.preventDefault();
+
         Object.values(selectRefs.current).forEach((selectRef) => {
-            console.log("Multi", selectRef)
+            console.log(selectRef)
             if (selectRef && selectRef && typeof selectRef.clearValue === 'function') {
                 selectRef.clearValue();
             }
@@ -269,7 +270,6 @@ const EmbeddedPage = () => {
                                                                     { label: `${e.fieldData?.[`${data?.collection_category?.value}`]}`, value: `${e.fieldData?.[`${data?.collection_category?.value}`]}` }
                                                                 )
                                                             ))
-
                                                     ]}
                                                 />
                                             </div>
