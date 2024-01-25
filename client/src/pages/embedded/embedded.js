@@ -167,6 +167,29 @@ const EmbeddedPage = () => {
         setVisibleItemCount(8);
     }
 
+    const handleRemoveCategory = (categoryName, valueToRemove) => {
+        if (data?.multiselect_switch === 1) {
+            setSelectedCategories(prevCategories => {
+                const filteredValues = prevCategories[categoryName].filter(value => value !== valueToRemove);
+                if (filteredValues.length === 0) {
+                    const { [categoryName]: _, ...remainingCategories } = prevCategories;
+                    return remainingCategories;
+                } else {
+                    return {
+                        ...prevCategories,
+                        [categoryName]: filteredValues,
+                    };
+                }
+            });
+        } else {
+            const updatedCategories = { ...selectedCategories };
+            delete updatedCategories[categoryName];
+            setSelectedCategories(updatedCategories);
+        }
+    };
+
+    const dataCollectionCategory = data?.collection_category?.value;
+
     if (isLoading) {
         return <Loader />;
     }
@@ -187,21 +210,23 @@ const EmbeddedPage = () => {
                                     </button>
                                 </>
                             )}
-                            <div className='selectedCategories-items ms-auto d-flex align-items-center gap-4'>
+                            <div className='selectedCategories-items ms-auto d-flex align-items-center gap-4 mb-4'>
                                 {Object.entries(selectedCategories).map(([categoryName, selectedValue]) => (
                                     <>
                                         {selectedValue === "" ? "" : (
                                             <>
                                                 {data?.multiselect_switch === 1 ? (
                                                     selectedValue.map((e) => (
-                                                        <button key={categoryName} type="button" className="btn btn-primary mb-4">
-                                                            {categoryName} :<span className="badge fw-bold fs-3 badge-white ps-1 p-0">{e}</span>
-                                                        </button>
+                                                        <div key={categoryName} type="button" className="border ps-2">
+                                                            {categoryName} :<span className="fw-bold fs-3 ps-1 p-0">{e}</span>
+                                                            <span className="ms-2 btn btn-primary" onClick={() => handleRemoveCategory(categoryName, e)}>X</span>
+                                                        </div>
                                                     ))
                                                 ) : (
-                                                    <button key={categoryName} type="button" className="btn btn-primary mb-4">
-                                                        {categoryName} :<span className="badge fw-bold fs-3 badge-white ps-1 p-0">{selectedValue}</span>
-                                                    </button>
+                                                    <div key={categoryName} type="button" className="border ps-2">
+                                                        {categoryName} :<span className="fw-bold fs-3 ps-1 p-0">{selectedValue}</span>
+                                                        <span className="ms-2 btn btn-primary" onClick={() => handleRemoveCategory(categoryName)}>X</span>
+                                                    </div>
                                                 )}
                                             </>
                                         )}
@@ -227,7 +252,10 @@ const EmbeddedPage = () => {
                                                         name={`category-list-${category.value}`}
                                                         id={`category-list-${category.value}`}
                                                         defaultValue={selectedCategories[category.value] || ''}
+                                                        placeholder={`Select ${category.value}`}
                                                         className='category-list-items'
+                                                        value={data?.multiselect_switch === 1 ? selectedCategories[category.value]?.map(val => ({ label: val, value: val })) || '' : ""}
+                                                        controlShouldRenderValue={false}
                                                         isClearable={false}
                                                         onChange={(selectedOption) => handleCategoryChange(selectedOption, category?.value)}
                                                         required
@@ -241,35 +269,37 @@ const EmbeddedPage = () => {
                                                                 ))
                                                                 .filter((e) => e.fieldData?.[`${category.value}`] !== undefined)
                                                                 .map((e) => ({ label: `${e.fieldData?.[`${category.value}`]}`, value: `${e.fieldData?.[`${category.value}`]}` }))
-
                                                         ]}
                                                     />
                                                 </div>
                                             ))
                                         ) : (
                                             <div className='d-flex gap-3 align-items-center'>
-                                                <label className="form-check-label mb-0">{data?.collection_category?.value?.charAt(0).toUpperCase() + data?.collection_category?.value?.slice(1)}</label>
+                                                <label className="form-check-label mb-0">{dataCollectionCategory?.charAt(0).toUpperCase() + dataCollectionCategory?.slice(1)}</label>
                                                 <Select
-                                                    ref={(ref) => (selectRefs.current[data?.collection_category?.value] = ref)}
-                                                    key={`unique-select-key-category-list-${data?.collection_category?.value}`}
-                                                    name={`category-list-${data?.collection_category?.value}`}
-                                                    id={`category-list-${data?.collection_category?.value}`}
-                                                    defaultValue={selectedCategories[data?.collection_category?.value] || ''}
+                                                    ref={(ref) => (selectRefs.current[dataCollectionCategory] = ref)}
+                                                    key={`unique-select-key-category-list-${dataCollectionCategory}`}
+                                                    name={`category-list-${dataCollectionCategory}`}
+                                                    id={`category-list-${dataCollectionCategory}`}
+                                                    defaultValue={selectedCategories[dataCollectionCategory] || ''}
                                                     className='category-list-items'
+                                                    placeholder={`Select ${dataCollectionCategory}`}
+                                                    value={data?.multiselect_switch === 1 ? selectedCategories[dataCollectionCategory]?.map(val => ({ label: val, value: val })) || '' : ""}
                                                     isClearable={false}
-                                                    onChange={(selectedOption) => handleCategoryChange(selectedOption, data?.collection_category?.value)}
+                                                    controlShouldRenderValue={false}
+                                                    onChange={(selectedOption) => handleCategoryChange(selectedOption, dataCollectionCategory)}
                                                     required
                                                     isMulti={data?.multiselect_switch === 1}
                                                     options={[
                                                         ...sportList
                                                             .filter((e, index, self) =>
                                                                 index === self.findIndex((t) => (
-                                                                    `${t.fieldData?.[`${data?.collection_category?.value}`]}` === `${e.fieldData?.[`${data?.collection_category?.value}`]}`
+                                                                    `${t.fieldData?.[`${dataCollectionCategory}`]}` === `${e.fieldData?.[`${dataCollectionCategory}`]}`
                                                                 ))
                                                             )
                                                             .map((e) => (
-                                                                e.fieldData?.[`${data?.collection_category?.value}`] !== undefined && (
-                                                                    { label: `${e.fieldData?.[`${data?.collection_category?.value}`]}`, value: `${e.fieldData?.[`${data?.collection_category?.value}`]}` }
+                                                                e.fieldData?.[`${dataCollectionCategory}`] !== undefined && (
+                                                                    { label: `${e.fieldData?.[`${dataCollectionCategory}`]}`, value: `${e.fieldData?.[`${dataCollectionCategory}`]}` }
                                                                 )
                                                             ))
                                                     ]}
@@ -278,7 +308,6 @@ const EmbeddedPage = () => {
                                         )}
                                     </>
                                 )}
-
                             </div>
                             <button onClick={resetFilterBtn} className='reset-filter-btn btn btn-primary'>Reset all</button>
                         </div>
