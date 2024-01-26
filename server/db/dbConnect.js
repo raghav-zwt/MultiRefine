@@ -15,12 +15,10 @@ const dbConnect = mysql.createPool({
     port: process.env.DB_PORT,
     waitForConnections: true,
     connectionLimit: 10,
-    maxIdle: 10,
-    connectTimeout: 30000,
-    idleTimeout: 60000,
+    connectTimeout: 10000,
+    idleTimeout: 10000,
     queueLimit: 0,
     enableKeepAlive: true,
-    keepAliveInitialDelay: 0,
 });
 
 
@@ -55,6 +53,23 @@ function getConnection(pool) {
         });
     });
 }
+
+function keepAlive() {
+    dbPool.getConnection((err, connection) => {
+        if (err) {
+            console.error('Error in keepAlive:', err);
+            return;
+        }
+        connection.ping((err) => {
+            if (err) {
+                console.error('Error pinging database:', err);
+            }
+            connection.release();
+        });
+    });
+}
+
+setInterval(keepAlive, 60000);
 
 handleDisconnect();
 
