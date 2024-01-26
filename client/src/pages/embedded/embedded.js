@@ -186,6 +186,7 @@ const EmbeddedPage = () => {
             delete updatedCategories[categoryName];
             setSelectedCategories(updatedCategories);
         }
+        setVisibleItemCount(8);
     };
 
     const dataCollectionCategory = data?.collection_category?.value;
