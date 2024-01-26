@@ -18,8 +18,8 @@
 }
 
 .category-list-items {
-  max-width: 350px;
-  width: 350px;
+  max-width: 250px;
+  width: 100%;
 }
 
 .NotFound-Box {
@@ -61,7 +61,7 @@
 }
 
 .multirefine-filoader {
-  transform: scale(0.90);
+  transform: scale(0.9);
   padding: 30px;
   justify-content: center;
   align-items: center;
