@@ -55,7 +55,7 @@ function getConnection(pool) {
 }
 
 function keepAlive() {
-    dbPool.getConnection((err, connection) => {
+    dbConnect.getConnection((err, connection) => {
         if (err) {
             console.error('Error in keepAlive:', err);
             return;
