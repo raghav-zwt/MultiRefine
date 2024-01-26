@@ -54,23 +54,6 @@ function getConnection(pool) {
     });
 }
 
-function keepAlive() {
-    dbConnect.getConnection((err, connection) => {
-        if (err) {
-            console.error('Error in keepAlive:', err);
-            return;
-        }
-        connection.ping((err) => {
-            if (err) {
-                console.error('Error pinging database:', err);
-            }
-            connection.release();
-        });
-    });
-}
-
-setInterval(keepAlive, 60000);
-
 handleDisconnect();
 
 export { dbConnect };
