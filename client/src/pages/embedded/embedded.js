@@ -85,6 +85,7 @@ const EmbeddedPage = () => {
 
     function handleSearchChange(event) {
         setSearchQuery(event.target.value);
+        setVisibleItemCount(8);
     }
 
     useEffect(() => {
