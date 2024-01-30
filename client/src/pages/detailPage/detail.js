@@ -8,6 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import { ClipboardCopy } from "../../components/ClipboardCopy.js";
 import MonacoEditor from '@monaco-editor/react';
 import Loader from '../../components/Loader.js';
+import CryptoJS from "crypto-js";
 import "./detail.css"
 
 const DetailPage = () => {
@@ -19,6 +20,10 @@ const DetailPage = () => {
     const handleShow = () => setShow(true);
 
     const param = useParams();
+
+    const enconded_user_id = encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify(getFilterCss.user_id), process.env.REACT_APP_CRYPTOJS).toString());
+
+    const enconded_id = encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify(getFilterCss.id), process.env.REACT_APP_CRYPTOJS).toString());
 
     const fetchCss = async () => {
         setIsLoading(true);
@@ -178,12 +183,12 @@ const DetailPage = () => {
                     <Modal.Body>
                         <div>
                             <h4 className="page-title">Shareable link</h4>
-                            <ClipboardCopy copyText={`${process.env.REACT_APP_URL}/embedded_code/user_id=${getFilterCss.user_id}&id=${getFilterCss.id}`} />
+                            <ClipboardCopy copyText={`${process.env.REACT_APP_URL}/embedded_code?user_id=${enconded_user_id}&id=${enconded_id}`} />
                         </div>
                         <h4 className="py-4 page-title mb-0 text-center">- OR -</h4>
                         <div>
                             <h4 className="page-title">Iframe code</h4>
-                            <ClipboardCopy copyText={`<iframe src="${process.env.REACT_APP_URL}/embedded_code/user_id=${getFilterCss.user_id}&id=${getFilterCss.id}" width="100%" height="100%" class="Multifilter-${getFilterCss.user_id}${getFilterCss.id}" title="Multifilter-${getFilterCss.user_id}${getFilterCss.id}"></iframe>`} />
+                            <ClipboardCopy copyText={`<iframe src="${process.env.REACT_APP_URL}/embedded_code?user_id=${enconded_user_id}&id=${enconded_id}" width="100%" height="100%" class="Multifilter-${getFilterCss.user_id}${getFilterCss.id}" title="Multifilter-${getFilterCss.user_id}${getFilterCss.id}"></iframe>`} />
                         </div>
                     </Modal.Body>
                     <Modal.Footer>

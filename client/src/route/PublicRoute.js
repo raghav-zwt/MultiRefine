@@ -32,7 +32,7 @@ const AppRoute = () => {
                     </PrivateRoute>
                 }
             />
-            <Route path="/embedded_code/:query" element={<Embedded />} />
+            <Route path="/embedded_code" element={<Embedded />} />
             <Route path="*" element={<ErrorPage />} />
         </Routes>
     )

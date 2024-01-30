@@ -6,12 +6,25 @@ import { EmbeddedItem } from "./embedded-item.js"
 import notFound from "../../assets/images/notFound.png";
 import Select from 'react-select';
 import Loader from '../../components/Loader.js';
+import CryptoJS from "crypto-js";
 
 const EmbeddedPage = () => {
 
     const location = useLocation();
-    const { pathname } = location;
-    const [, user_id, id] = pathname.match(/user_id=(\d+)&id=(\d+)/) || [];
+
+    const queryParams = new URLSearchParams(location.search);
+    const encrypt_user_id = queryParams.get('user_id');
+    const encrypt_id = queryParams.get('id');
+
+    const linkBytes_user_id = CryptoJS.AES.decrypt(encrypt_user_id, process.env.REACT_APP_CRYPTOJS);
+    const decryptedLink_user_id = linkBytes_user_id?.toString(CryptoJS.enc.Utf8);
+
+    const linkBytes_id = CryptoJS.AES.decrypt(encrypt_id, process.env.REACT_APP_CRYPTOJS);
+    const decryptedLink_id = linkBytes_id?.toString(CryptoJS.enc.Utf8);
+
+    const user_id = decryptedLink_user_id;
+    const id = decryptedLink_id
+
     const [data, setData] = useState({ collection: [] });
     const [accessToken, setAccessToken] = useState([]);
     const [isOn, setIsOn] = useState(false);
