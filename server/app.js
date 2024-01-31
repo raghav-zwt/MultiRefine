@@ -13,8 +13,8 @@ import errorhandler from "errorhandler";
 
 const PORT = process.env.PORT || 8080;
 const app = express();
-
-dotenv.config({ path: './private/.env' })
+console.log('PORT', PORT)
+//dotenv.config({ path: './private/.env' })
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -43,6 +43,8 @@ app.use("", authRoutes);
 app.use("/api", webflowRoutes);
 app.use("/api/filter", filterRoutes);
 app.use("/api/profile", profileRoutes);
+
+console.log('process.env.NODE_ENV', process.env.NODE_ENV )
 
 if (process.env.NODE_ENV === 'development') {
   app.use(errorhandler())
