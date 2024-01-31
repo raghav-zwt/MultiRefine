@@ -1,11 +1,8 @@
 import mysql from "mysql2";
 import dotenv from "dotenv";
-
-const dotenvResult = dotenv.config({ path: '.env' });
-if (dotenvResult.error) {
-    console.error("Error loading .env file:", dotenvResult.error);
-    throw dotenvResult.error;
-}
+dotenv.config({
+  path: "./private/.env",
+});
 
 const dbConnect = mysql.createPool({
     host: process.env.DB_HOST,
