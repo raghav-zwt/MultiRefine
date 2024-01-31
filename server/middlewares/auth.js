@@ -1,6 +1,4 @@
-import { dotenvFile } from "../helper/dotenv.js"
 import JWT from "jsonwebtoken";
-dotenvFile;
 
 const requireSignIn = async (req, res, next) => {
   try {

@@ -1,8 +1,5 @@
 import { dbConnect } from "../db/dbConnect.js";
-import { dotenvFile } from "../helper/dotenv.js"
 import { comparePassword, hashPassword } from "../middlewares/hashPassword.js";
-
-dotenvFile;
 
 const profileUpdate = async (req, res) => {
     try {

@@ -1,10 +1,7 @@
 import { dbConnect } from "../db/dbConnect.js";
-import { dotenvFile } from "../helper/dotenv.js"
 import { comparePassword, hashPassword } from "../middlewares/hashPassword.js";
 import jwt from "jsonwebtoken";
 import axios from "axios";
-
-dotenvFile;
 
 const clientID = process.env.WEBFLOW_CLIENT_KEY;
 
