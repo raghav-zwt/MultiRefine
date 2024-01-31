@@ -56,7 +56,7 @@ const ListDetails = () => {
                     }
                 }
             } catch (error) {
-                toast.error(error?.message);
+                toast.error(error?.response?.data?.message);
                 setIsLoading(false);
             }
         }
@@ -104,7 +104,7 @@ const ListDetails = () => {
                 navigate("/list")
             }
         } catch (error) {
-            toast.error(error?.message);
+            toast.error(error?.response?.data?.message);
             setIsLoading(false);
         }
     }
@@ -148,7 +148,7 @@ const ListDetails = () => {
 
             setuniqueFieldsData(Array.from(uniqueFields));
         } catch (error) {
-            toast.error(error?.message);
+            toast.error(error?.response?.data?.message);
             setIsFetch(false);
         }
     }

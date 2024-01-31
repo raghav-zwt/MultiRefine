@@ -33,7 +33,7 @@ const ProfilePage = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      toast.error(error?.message);
+      toast.error(error?.response?.data?.message);
       setIsLoading(false);
     }
   }

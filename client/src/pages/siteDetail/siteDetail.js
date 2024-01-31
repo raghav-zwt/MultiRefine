@@ -103,7 +103,7 @@ const SiteDetail = () => {
                 navigate("/list");
             }
         } catch (error) {
-            toast.error(error?.message);
+            toast.error(error?.response?.data?.message);
             setIsLoading(false);
         }
     }
@@ -146,7 +146,7 @@ const SiteDetail = () => {
 
             setuniqueFieldsData(Array.from(uniqueFields));
         } catch (error) {
-            toast.error(error?.message);
+            toast.error(error?.response?.data?.message);
             setIsFetch(false);
         }
     }
@@ -178,7 +178,7 @@ const SiteDetail = () => {
                 setIsLoading(false);
             }
         } catch (error) {
-            toast.error(error?.message);
+            toast.error(error?.response?.data?.message);
             setIsLoading(false)
         }
     };

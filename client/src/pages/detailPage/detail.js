@@ -33,7 +33,7 @@ const DetailPage = () => {
             setTextareaData(data?.data?.data[0]?.css);
             setIsLoading(false);
         } catch (error) {
-            toast.error(error?.message);
+            toast.error(error?.response?.data?.message);
             setIsLoading(false);
         }
     }
@@ -61,7 +61,7 @@ const DetailPage = () => {
             }
         } catch (error) {
             setIsLoading(false);
-            toast.error(error?.message);
+            toast.error(error?.response?.data?.message);
         }
     }
 
@@ -78,7 +78,7 @@ const DetailPage = () => {
             }
         } catch (error) {
             setIsLoading(false);
-            toast.error(error?.message);
+            toast.error(error?.response?.data?.message);
         }
     };
 
