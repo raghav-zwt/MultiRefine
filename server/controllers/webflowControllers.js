@@ -19,8 +19,8 @@ const Publishsite = async (req, res) => {
         const response = await axios(options);
         res.json(response.data);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Webflow api error.', success: false, data: data });
     }
 }
 
@@ -40,13 +40,14 @@ const ListSite = async (req, res) => {
         const response = await axios(options);
 
         if (!response) {
-            return res.status(401).send("Unauthorized");
+            const { status, data } = error.response || {};
+            return res.status(status || 500).json({ message: 'Webflow api unauthorized user.', success: false, data: data });
         }
 
         res.json(response.data);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Webflow api error.', success: false, data: data });
     }
 }
 
@@ -67,13 +68,14 @@ const GetSite = async (req, res) => {
         const response = await axios(options);
 
         if (!response) {
-            return res.status(401).send("Unauthorized");
+            const { status, data } = error.response || {};
+            return res.status(status || 500).json({ message: 'Webflow api unauthorized user.', success: false, data: data });
         }
 
         res.json(response.data);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Webflow api error.', success: false, data: data });
     }
 }
 
@@ -93,13 +95,14 @@ const ListCollections = async (req, res) => {
         const response = await axios(options);
 
         if (!response) {
-            return res.status(401).send("Unauthorized");
+            const { status, data } = error.response || {};
+            return res.status(status || 500).json({ message: 'Webflow api unauthorized user.', success: false, data: data });
         }
 
         res.json(response.data);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Webflow api error.', success: false, data: data });
     }
 }
 
@@ -119,13 +122,14 @@ const GetCollectionDetails = async (req, res) => {
         const response = await axios(options);
 
         if (!response) {
-            return res.status(401).send("Unauthorized");
+            const { status, data } = error.response || {};
+            return res.status(status || 500).json({ message: 'Webflow api unauthorized user.', success: false, data: data });
         }
 
         res.json(response.data);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Webflow api error.', success: false, data: data });
     }
 }
 
@@ -145,13 +149,14 @@ const ListCollectionItems = async (req, res) => {
         const response = await axios(options);
 
         if (!response) {
-            return res.status(401).send("Unauthorized");
+            const { status, data } = error.response || {};
+            return res.status(status || 500).json({ message: 'Webflow api unauthorized user.', success: false, data: data });
         }
 
         res.json(response.data);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Webflow api error.', success: false, data: data });
     }
 }
 
@@ -173,13 +178,14 @@ const GetCollectionItem = async (req, res) => {
         const response = await axios(options);
 
         if (!response) {
-            return res.status(401).send("Unauthorized");
+            const { status, data } = error.response || {};
+            return res.status(status || 500).json({ message: 'Webflow api unauthorized user.', success: false, data: data });
         }
 
         res.json(response.data);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Webflow api error.', success: false, data: data });
     }
 }
 

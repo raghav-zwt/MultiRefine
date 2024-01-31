@@ -28,8 +28,6 @@ const webflowAuthorized = async (req, res) => {
         const { code, client_id, client_secret, redirect_uri, grant_type } = req.body;
         const encodedRedirectUri = redirect_uri;
 
-        console.log(code);
-
         if (!code) {
             res.status(error.response.status || 500).json({ message: 'Code not found during authentication' });
         };
@@ -42,15 +40,12 @@ const webflowAuthorized = async (req, res) => {
             grant_type,
         });
 
-        console.log('Token Response:', tokenResponse.data);
-
         const accessToken = tokenResponse.data.access_token;
 
         res.json({ access_token: accessToken });
     } catch (error) {
-        console.error('Error exchanging code for access token:', error.message);
-        console.log('Error Response:', error.response.data);
-        res.status(error.response.status || 500).json({ message: 'Error during authentication' });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error during authentication', success: false, data: data });
     }
 };
 
@@ -75,7 +70,8 @@ const webflowAuthorizedBy = async (req, res) => {
         const webflowAuthorizedUser = response.data;
 
         if (!webflowAuthorizedUser) {
-            res.status(error.response ? error.response.status : 500).json({ message: 'Error in authorized' });
+            const { status, data } = error.response || {};
+            return res.status(status || 500).json({ message: 'Error in authorized.', success: false, data: data });
         }
 
         const date = new Date();
@@ -86,12 +82,8 @@ const webflowAuthorizedBy = async (req, res) => {
         dbConnect.query(checkQuery, checkValues, (error, data) => {
             try {
                 if (error) {
-                    console.log(error);
-                    return res.status(404).send({
-                        message: "Error in query",
-                        success: false,
-                        error
-                    });
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Error in query', success: false, data: data });
                 }
 
                 if (data[0].count > 0) {
@@ -101,12 +93,8 @@ const webflowAuthorizedBy = async (req, res) => {
                     dbConnect.query(updateQuery, updateValues, (error, data) => {
                         try {
                             if (error) {
-                                console.log(error);
-                                return res.status(404).json({
-                                    message: "Error updating access token.",
-                                    success: false,
-                                    error
-                                });
+                                const { status, data } = error.response || {};
+                                return res.status(status || 500).json({ message: 'Error updating access token.', success: false, data: data });
                             }
 
                             return res.status(200).send({
@@ -114,10 +102,8 @@ const webflowAuthorizedBy = async (req, res) => {
                                 success: true,
                             });
                         } catch (error) {
-                            return res.status(404).json({
-                                message: "Error updating access token.",
-                                success: false,
-                            });
+                            const { status, data } = error.response || {};
+                            return res.status(status || 500).json({ message: 'Error updating access token.', success: false, data: data });
                         }
                     });
                 } else {
@@ -127,12 +113,8 @@ const webflowAuthorizedBy = async (req, res) => {
                     dbConnect.query(insertQuery, insertValues, (error, data) => {
                         try {
                             if (error) {
-                                console.log(error);
-                                return res.status(404).json({
-                                    message: "Error in query.",
-                                    success: false,
-                                    error
-                                });
+                                const { status, data } = error.response || {};
+                                return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                             }
 
                             return res.status(201).send({
@@ -142,24 +124,20 @@ const webflowAuthorizedBy = async (req, res) => {
                                 webflowAuthorizedUser
                             });
                         } catch (error) {
-                            return res.status(404).json({
-                                message: "Access token not verified.",
-                                success: false,
-                            });
+                            const { status, data } = error.response || {};
+                            return res.status(status || 500).json({ message: 'Access token not verified.', success: false, data: data });
                         }
                     });
                 }
             } catch (error) {
-                return res.status(400).send({
-                    message: 'Access token already created, check again',
-                    success: false
-                });
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Access token already created, check again.', success: false, data: data });
             }
         });
 
     } catch (error) {
-        console.error('Error fetching Webflow user data:', error);
-        res.status(error.response ? error.response.status : 500).json({ message: 'Error fetching user data' });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error fetching user data.', success: false, data: data });
     }
 };
 
@@ -208,11 +186,8 @@ const webflowRegister = async (req, res) => {
         dbConnect.query(sqlInsert, [sqlValues], async function (error, data) {
             try {
                 if (error) {
-                    console.log(error);
-                    return res.status(404).json({
-                        message: "Error in query.",
-                        success: false,
-                    });
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                 };
 
                 const token = await jwt.sign(
@@ -232,10 +207,8 @@ const webflowRegister = async (req, res) => {
                     token
                 });
             } catch (error) {
-                return res.status(404).json({
-                    message: "Webflow user not register.",
-                    success: false,
-                });
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Webflow user not register.', success: false, data: data });
             }
         })
     } catch (error) {
@@ -249,8 +222,6 @@ const webflowLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        console.log(email, password)
-
         if (!email || !password) {
             return res.status(400).json({
                 message: "All fields are required",
@@ -262,7 +233,8 @@ const webflowLogin = async (req, res) => {
 
         dbConnect.query(emailQuery, [email], async function (error, data) {
             if (error) {
-                console.log(error);
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
             }
 
             if (data.length === 0) {
@@ -316,8 +288,8 @@ const webflowLogin = async (req, res) => {
         })
 
     } catch (error) {
-        console.error('Error login', error.message);
-        res.status(error.response ? error.response.status : 500).json({ message: 'Error login' });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error Login.', success: false, data: data });
     }
 }
 
@@ -328,10 +300,8 @@ const getToken = async (req, res) => {
 
         dbConnect.query(sqlToken, async function (error, data) {
             if (error) {
-                return res.status(400).json({
-                    message: "Error in access token",
-                    success: false
-                })
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Error in access token.', success: false, data: data });
             }
             return res.status(200).send({
                 message: "access token",
@@ -340,7 +310,8 @@ const getToken = async (req, res) => {
             })
         })
     } catch (error) {
-        res.status(error.response ? error.response.status : 500).json({ message: 'Error token' });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error Token.', success: false, data: data });
     }
 }
 

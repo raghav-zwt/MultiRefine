@@ -11,10 +11,8 @@ const profileUpdate = async (req, res) => {
         const { NewPassword, OldPassword, ConfirmPassword } = req.body;
 
         if (!UserId, !NewPassword || !OldPassword || !ConfirmPassword) {
-            return res.status(400).json({
-                message: 'All fields are required',
-                success: false,
-            });
+            const { status, data } = error.response || {};
+            return res.status(status || 500).json({ message: 'All fields are required.', success: false, data: data });
         }
 
         const sqlPassword = `SELECT * FROM user WHERE id = ?`;
@@ -22,18 +20,13 @@ const profileUpdate = async (req, res) => {
         dbConnect.query(sqlPassword, [UserId], async function (error, data) {
             try {
                 if (error) {
-                    console.log(error);
-                    return res.status(400).json({
-                        message: 'Error in query',
-                        success: false,
-                    });
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                 }
 
                 if (NewPassword === data[0].password) {
-                    return res.status(400).json({
-                        message: "Password same as older, change new.",
-                        success: false
-                    })
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Password same as older, change new.', success: false, data: data });
                 }
 
                 const hashPasswordCheck = await comparePassword(OldPassword, data[0].hash_password)
@@ -43,10 +36,8 @@ const profileUpdate = async (req, res) => {
                     const generatePassword = await hashPassword(NewPassword);
 
                     if (!generatePassword) {
-                        return res.status(400).json({
-                            message: "Password not generated, try again.",
-                            success: false
-                        })
+                        const { status, data } = error.response || {};
+                        return res.status(status || 500).json({ message: 'Password not generated, try again.', success: false, data: data });
                     }
 
                     const updatePassword = `UPDATE user SET password = ?, hash_password = ? WHERE id = ${UserId}`;
@@ -54,50 +45,34 @@ const profileUpdate = async (req, res) => {
                     dbConnect.query(updatePassword, [NewPassword, generatePassword], async function (error, data) {
                         try {
                             if (error) {
-                                console.log(error);
-                                return res.status(400).json({
-                                    message: 'Error in query',
-                                    success: false,
-                                });
+                                const { status, data } = error.response || {};
+                                return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                             }
 
                             return res.status(200).json({
-                                message: 'password updated',
+                                message: 'Password updated successfully.',
                                 success: true,
                                 data
                             });
 
                         } catch (error) {
-                            console.log(error);
-                            return res.status(400).json({
-                                message: 'Password not match',
-                                success: false,
-                                error
-                            });
+                            const { status, data } = error.response || {};
+                            return res.status(status || 500).json({ message: 'Password not match.', success: false, data: data });
                         }
                     });
                 } else {
-                    return res.status(400).json({
-                        message: 'Password not match',
-                        success: false,
-                    });
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Password not match.', success: false, data: data });
                 }
 
             } catch (error) {
-                console.log(error);
-                return res.status(400).send({
-                    message: "Error in change password",
-                    success: false,
-                    error
-                });
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Error in change password.', success: false, data: data });
             }
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).send({
-            message: "Error in filter",
-            success: false,
-        });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error in password.', success: false, data: data });
     }
 }
 

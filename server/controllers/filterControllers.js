@@ -14,11 +14,8 @@ const filterAddList = async (req, res) => {
         dbConnect.query(checkQuery, checkValues, (error, data) => {
             try {
                 if (error) {
-                    console.log(error);
-                    return res.status(404).send({
-                        message: "Error in query",
-                        success: false,
-                    });
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                 }
                 if (data[0].count > 0) {
                     return res.status(400).send({
@@ -32,36 +29,27 @@ const filterAddList = async (req, res) => {
                 dbConnect.query(insertQuery, [insertValue], (error, data) => {
                     try {
                         if (error) {
-                            console.log(error);
-                            return res.status(404).json({
-                                message: "Error in query",
-                                success: false,
-                            });
+                            const { status, data } = error.response || {};
+                            return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                         };
                         return res.status(201).send({
-                            message: "filter created",
+                            message: "filter created successfully.",
                             success: true,
                             data,
                         });
                     } catch (error) {
-                        return res.status(404).json({
-                            message: "filter error",
-                            success: false,
-                        });
+                        const { status, data } = error.response || {};
+                        return res.status(status || 500).json({ message: 'Filter error.', success: false, data: data });
                     }
                 })
             } catch (error) {
-                return res.status(400).send({
-                    message: 'Filter allready created, check again',
-                    success: false
-                })
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Filter allready created, check again.', success: false, data: data });
             }
         });
     } catch (error) {
-        return res.status(400).send({
-            message: 'Error in filter create, try again',
-            success: false,
-        });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error in filter create, try again.', success: false, data: data });
     }
 }
 
@@ -74,29 +62,22 @@ const userFilterList = async (req, res) => {
         dbConnect.query(sqlQuery, (error, data) => {
             try {
                 if (error) {
-                    console.log(error);
-                    return res.status(404).json({
-                        message: "Error in query",
-                        success: false,
-                    });
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                 };
                 return res.status(200).send({
-                    message: "filter list fetch successfully",
+                    message: "Data fetched successfully.",
                     success: true,
                     data,
                 });
             } catch (error) {
-                return res.status(404).json({
-                    message: "error in filter",
-                    success: false,
-                });
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Error in filter.', success: false, data: data });
             }
         })
     } catch (error) {
-        return res.status(400).send({
-            message: 'Error in filter list, try again',
-            success: false,
-        });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error in filter list, try again.', success: false, data: data });
     }
 }
 
@@ -108,24 +89,18 @@ const filterRemove = async (req, res) => {
 
         dbConnect.query(sqlDelete, valueDelete, function (error, data) {
             if (error) {
-                console.log(error);
-                return res.status(404).json({
-                    message: "Error in query",
-                    success: false,
-                });
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
             };
             return res.status(200).send({
-                message: "filter deleted",
+                message: "filter deleted successfully.",
                 success: true,
                 data,
             });
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).send({
-            message: "Error in filter",
-            success: false,
-        });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error in filter.', success: false, data: data });
     }
 }
 
@@ -136,24 +111,18 @@ const userDetails = async (req, res) => {
         const valueGet = [[id]];
         dbConnect.query(sqlGet, valueGet, function (error, data) {
             if (error) {
-                console.log(error);
-                return res.status(404).json({
-                    message: "Error in query",
-                    success: false,
-                });
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
             };
             return res.status(200).send({
-                message: "filter fetch",
+                message: "Data fetched successfully.",
                 success: true,
                 data,
             });
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).send({
-            message: "Error in filter",
-            success: false,
-        });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error in filter.', success: false, data: data });
     }
 }
 
@@ -176,11 +145,8 @@ const filterUpdate = async (req, res) => {
         dbConnect.query(checkQuery, checkValues, (error, data) => {
             try {
                 if (error) {
-                    console.log(error);
-                    return res.status(404).send({
-                        message: "Error in query",
-                        success: false,
-                    });
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                 }
                 if (data[0].count > 0) {
                     return res.status(400).send({
@@ -193,37 +159,28 @@ const filterUpdate = async (req, res) => {
                 dbConnect.query(updateQuery, [name, type, layout, collection, collection_category, collection_mapping, multiselect_switch, date], (error, data) => {
                     try {
                         if (error) {
-                            console.log(error);
-                            return res.status(404).json({
-                                message: "Error in query",
-                                success: false,
-                            });
+                            const { status, data } = error.response || {};
+                            return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                         };
                         return res.status(200).send({
-                            message: "filter updated",
+                            message: "filter updated successfully.",
                             success: true,
                             data,
                         });
                     } catch (error) {
-                        return res.status(404).json({
-                            message: "filter error",
-                            success: false,
-                        });
+                        const { status, data } = error.response || {};
+                        return res.status(status || 500).json({ message: 'Error in filter.', success: false, data: data });
+
                     }
                 })
             } catch (error) {
-                return res.status(400).send({
-                    message: 'Filter allready created, check again',
-                    success: false
-                })
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Filter allready created, check again.', success: false, data: data });
             }
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).send({
-            message: "Error in filter",
-            success: false,
-        });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error in filter.', success: false, data: data });
     }
 }
 
@@ -238,32 +195,22 @@ const filterCss = async (req, res) => {
         dbConnect.query(insertCss, [insertCssValue], async function (error, data) {
             try {
                 if (error) {
-                    console.log(error);
-                    return res.status(400).json({
-                        message: "Error in query",
-                        success: false,
-                        error
-                    });
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                 }
                 return res.status(200).send({
-                    message: "Css added",
+                    message: "CSS added successfully.",
                     success: true,
                     data
                 });
             } catch (error) {
-                console.log(error);
-                return res.status(400).json({
-                    message: "Error in insert css",
-                    success: false,
-                    error
-                });
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Error in insert css.', success: false, data: data });
             }
         })
     } catch (error) {
-        return res.status(400).send({
-            message: "Error in filter",
-            success: false,
-        });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error in filter.', success: false, data: data });
     }
 }
 
@@ -276,32 +223,23 @@ const getFilterCss = async (req, res) => {
         dbConnect.query(getCss, async function (error, data) {
             try {
                 if (error) {
-                    console.log(error);
-                    return res.status(400).json({
-                        message: "Error in query",
-                        success: false,
-                        error
-                    });
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                 }
                 return res.status(200).send({
-                    message: "Css fetch",
+                    message: "Data fetched successfully.",
                     success: true,
                     data
                 });
             } catch (error) {
-                return res.status(400).send({
-                    message: "Error in filter",
-                    success: false,
-                    error
-                });
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Error in filter.', success: false, data: data });
             }
         });
 
     } catch (error) {
-        return res.status(400).send({
-            message: "Error in get filter data",
-            success: false,
-        });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error in get filter data.', success: false, data: data });
     }
 }
 
@@ -318,34 +256,22 @@ const embeddedCode = async (req, res) => {
         dbConnect.query(embeddedGet, async function (error, data) {
             try {
                 if (error) {
-                    console.log(error);
-                    return res.status(400).json({
-                        message: "Error in query",
-                        success: false,
-                        error
-                    });
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                 }
                 return res.status(200).send({
-                    message: "data fetch",
+                    message: "Data fetched successfully.",
                     success: true,
                     data
                 });
             } catch (error) {
-                console.log(error);
-                return res.status(400).json({
-                    message: "Error in embedded code",
-                    success: false,
-                    error
-                });
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Error in embedded code.', success: false, data: data });
             }
         })
     } catch (error) {
-        console.log(error);
-        return res.status(400).send({
-            message: "Error in embedded code",
-            success: false,
-            error
-        });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error in embedded code.', success: false, data: data });
     }
 }
 
@@ -358,32 +284,23 @@ const getSiteList = async (req, res) => {
         dbConnect.query(siteData, [site_id], async function (error, data) {
             try {
                 if (error) {
-                    console.log(error);
-                    return res.status(400).json({
-                        message: "Error in query",
-                        success: false,
-                        error
-                    });
+                    const { status, data } = error.response || {};
+                    return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
                 }
                 return res.status(200).send({
-                    message: "site fetch",
+                    message: "Data fetched successfully.",
                     success: true,
                     data
                 });
             } catch (error) {
-                return res.status(400).send({
-                    message: "Error in site filter",
-                    success: false,
-                    error
-                });
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Error in site filter.', success: false, data: data });
             }
         });
 
     } catch (error) {
-        return res.status(400).send({
-            message: "Error in get filter data",
-            success: false,
-        });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error in get filter data.', success: false, data: data });
     }
 }
 
@@ -395,24 +312,18 @@ const cssRemove = async (req, res) => {
 
         dbConnect.query(sqlDelete, valueDelete, function (error, data) {
             if (error) {
-                console.log(error);
-                return res.status(404).json({
-                    message: "Error in query",
-                    success: false,
-                });
+                const { status, data } = error.response || {};
+                return res.status(status || 500).json({ message: 'Error in query execution.', success: false, data: data });
             };
             return res.status(200).send({
-                message: "Css remove",
+                message: "CSS removed successfully.",
                 success: true,
                 data,
             });
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).send({
-            message: "Error in filter",
-            success: false,
-        });
+        const { status, data } = error.response || {};
+        return res.status(status || 500).json({ message: 'Error in filter.', success: false, data: data });
     }
 }
 
