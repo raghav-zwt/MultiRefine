@@ -18,10 +18,24 @@ dotenv.config({ path: './private/.env' })
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+
 app.use(helmet());
 app.use(cookieParser());
 app.use(morgan("dev"));
+
+var whitelist = ['multi-refine.vercel.app']
+var corsOptions = {
+  origin: function (origin, callback) {
+    console.log('origin', origin, whitelist)
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+app.use(cors(corsOptions));
 
 dbConnect;
 
