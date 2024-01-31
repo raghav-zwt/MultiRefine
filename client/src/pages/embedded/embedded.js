@@ -7,6 +7,7 @@ import notFound from "../../assets/images/notFound.png";
 import Select from 'react-select';
 import Loader from '../../components/Loader.js';
 import CryptoJS from "crypto-js";
+import { toast } from 'react-toastify';
 
 const EmbeddedPage = () => {
 
@@ -112,7 +113,7 @@ const EmbeddedPage = () => {
                     localStorage.setItem("accessToken", responseData?.access_token);
                 }
             } catch (error) {
-                console.error('Error fetching embedded data', error);
+                toast.error(error?.message);
             }
         };
 
@@ -171,7 +172,6 @@ const EmbeddedPage = () => {
         e.preventDefault();
 
         Object.values(selectRefs.current).forEach((selectRef) => {
-            console.log(selectRef)
             if (selectRef && selectRef && typeof selectRef.clearValue === 'function') {
                 selectRef.clearValue();
             }

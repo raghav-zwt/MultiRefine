@@ -50,7 +50,6 @@ const webflowAuthorized = async (req, res) => {
 };
 
 const webflowAuthorizedBy = async (req, res) => {
-    console.log(req.body);
     try {
         const token = req.body.tokenApi;
 
@@ -178,8 +177,6 @@ const webflowRegister = async (req, res) => {
             "hash_password": generatePassword
         }
 
-        console.log(authLogin);
-
         const sqlInsert = "INSERT INTO user (auth_id, email, first_name, last_name, password, hash_password) VALUES (?)"
         const sqlValues = [authLogin.auth_id, authLogin.email, authLogin.first_name, authLogin.last_name, authLogin.password, authLogin.hash_password]
 
@@ -218,7 +215,6 @@ const webflowRegister = async (req, res) => {
 }
 
 const webflowLogin = async (req, res) => {
-    console.log(req.body)
     try {
         const { email, password } = req.body;
 

@@ -5,7 +5,6 @@ import { comparePassword, hashPassword } from "../middlewares/hashPassword.js";
 dotenvFile;
 
 const profileUpdate = async (req, res) => {
-    console.log(req.body);
     try {
         const UserId = req.params.id;
         const { NewPassword, OldPassword, ConfirmPassword } = req.body;

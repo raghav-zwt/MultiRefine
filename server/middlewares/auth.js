@@ -11,12 +11,8 @@ const requireSignIn = async (req, res, next) => {
     req.user = decode;
     next();
   } catch (error) {
-    console.log(error);
-    return res.status(400).json({
-      success: false,
-      message: "Error in login",
-      error,
-    });
+    const { status, data } = error.response || {};
+    return res.status(status || 500).json({ message: 'Error in login.', success: false, data: data });
   }
 };
 

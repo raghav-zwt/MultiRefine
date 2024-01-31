@@ -21,8 +21,6 @@ const EmbeddedPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
 
-    console.log(sportList);
-
     useEffect(() => {
         setSportList(allCollectionData);
     }, [allCollectionData]);

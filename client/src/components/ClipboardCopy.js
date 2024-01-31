@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify"
 
 function ClipboardCopy({ copyText }) {
     const [isCopied, setIsCopied] = useState(false);
@@ -20,7 +21,7 @@ function ClipboardCopy({ copyText }) {
                 }, 1500);
             })
             .catch((err) => {
-                console.log(err);
+                toast.error("Error in copy");
             });
     }
 

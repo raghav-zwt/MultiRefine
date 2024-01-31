@@ -24,7 +24,7 @@ const FilterList = () => {
                 setIsLoading(false);
             }
         } catch (error) {
-            toast.error(error?.response?.data?.message);
+            toast.error(error?.message);
         }
     }
 
@@ -40,7 +40,7 @@ const FilterList = () => {
                 setIsLoading(false);
             }
         } catch (error) {
-            toast.error(error?.response?.data?.message);
+            toast.error(error?.message);
         }
     };
 

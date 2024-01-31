@@ -56,7 +56,7 @@ const ListDetails = () => {
                     }
                 }
             } catch (error) {
-                console.log(error);
+                toast.error(error?.message);
                 setIsLoading(false);
             }
         }
@@ -104,8 +104,7 @@ const ListDetails = () => {
                 navigate("/list")
             }
         } catch (error) {
-            console.log(error.response?.data?.message)
-            toast.error(error?.response?.data?.message);
+            toast.error(error?.message);
             setIsLoading(false);
         }
     }
@@ -149,7 +148,7 @@ const ListDetails = () => {
 
             setuniqueFieldsData(Array.from(uniqueFields));
         } catch (error) {
-            console.log(error);
+            toast.error(error?.message);
             setIsFetch(false);
         }
     }

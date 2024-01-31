@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import slugify from "slugify";
 import Loader from '../components/Loader.js';
+import { toast } from "react-toastify";
 
 const HomePage = () => {
 
@@ -24,7 +25,7 @@ const HomePage = () => {
           setIsLoading(false);
         }
       } catch (error) {
-        console.log(error);
+        toast.error(error?.message);
         setIsLoading(false);
       }
     }

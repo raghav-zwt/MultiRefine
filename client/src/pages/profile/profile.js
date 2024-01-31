@@ -29,12 +29,11 @@ const ProfilePage = () => {
           setIsLoading(false);
         }
       } else {
-        toast.error("new password & confirm password not match");
+        toast.error("new password & confirm password not match.");
         setIsLoading(false);
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message)
-      console.log(error);
+      toast.error(error?.message);
       setIsLoading(false);
     }
   }

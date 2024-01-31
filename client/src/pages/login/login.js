@@ -10,7 +10,6 @@ import Loader from '../../components/Loader.js';
 const Login = () => {
 
   const [token, setToken] = useState(null);
-  const [authorized, setAuthorized] = useState([]);
   const [auth, setAuth] = UseAuth([]);
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
@@ -45,7 +44,6 @@ const Login = () => {
 
           const { email, firstName, lastName } = authorizedData?.webflowAuthorizedUser;
 
-          setAuthorized(authorizedData);
           toast.success('Webflow user authorized, login here.');
 
           const registerData = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
@@ -71,7 +69,6 @@ const Login = () => {
       fetchData();
     }
   }, [token, navigate]);
-  console.log(authorized);
 
   const exchangeCodeForToken = async (authorizationCode) => {
     const apiUrl = `${process.env.REACT_APP_API_URL}/callback`;
@@ -138,7 +135,7 @@ const Login = () => {
       }
     } catch (error) {
       setIsLoading(false);
-      toast.error(error?.response?.data?.message);
+      toast.error(error?.message);
     }
   }
 

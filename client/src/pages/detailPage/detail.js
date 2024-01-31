@@ -33,7 +33,7 @@ const DetailPage = () => {
             setTextareaData(data?.data?.data[0]?.css);
             setIsLoading(false);
         } catch (error) {
-            console.log(error);
+            toast.error(error?.message);
             setIsLoading(false);
         }
     }
@@ -54,15 +54,14 @@ const DetailPage = () => {
                     cssData: textareaData
                 });
                 if (data?.data?.success) {
-                    toast.success(data?.data?.message);
-                    fetchCss();
                     setIsLoading(false);
+                    fetchCss();
+                    toast.success(data?.data?.message);
                 }
             }
         } catch (error) {
-            console.log(error);
-            toast.error(error?.response?.data?.message);
             setIsLoading(false);
+            toast.error(error?.message);
         }
     }
 
@@ -70,16 +69,16 @@ const DetailPage = () => {
         setIsLoading(true);
         try {
             const data = await axios.put(
-                `${process.env.REACT_APP_API_URL}/api/filter/filterCssRemove/${id}`
+                `${process.env.REACT_APP_API_URL}/api/filter/filterCssRemve/${id}`
             );
             if (data?.data?.success) {
-                toast.success(data?.data?.message);
-                fetchCss();
                 setIsLoading(false);
+                fetchCss();
+                toast.success(data?.data?.message);
             }
         } catch (error) {
-            toast.error(error?.response?.data?.message);
             setIsLoading(false);
+            toast.error(error?.message);
         }
     };
 
